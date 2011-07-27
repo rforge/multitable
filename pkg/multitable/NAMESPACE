@@ -1,0 +1,31 @@
+######################################
+#
+# NAMESPACE FOR multitable
+#
+######################################
+
+# functions
+
+export(data.list, fc.data.list, bm, nvar, varnames, data.list.mold, as.data.list, repdim)
+
+# S3 methods
+
+S3method(print, data.list)
+S3method(dim, data.list)
+S3method("dim<-", data.list)
+S3method(dimnames, data.list)
+S3method("dimnames<-", data.list)
+S3method("[", data.list)
+S3method("$<-",data.list)
+S3method("[[<-",data.list)
+S3method(aperm, factor)
+S3method(as.data.frame, data.list)
+S3method(as.list, data.list)
+S3method(as.data.list, list)
+S3method(as.data.list, data.frame)
+
+
+# import other packages
+
+#import()
+
