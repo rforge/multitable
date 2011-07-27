@@ -43,7 +43,9 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> No content added. </p>
+<p> Many ecologists and other scientists face a particular kind of data management issue, arising from data sets that cannot be expressed as a single table, matrix, or array.  The prototypical example of this issue, called the fourth-corner problem (Legendre et al. 1997), comes from trait-based studies of ecological communities in which the ecologist must manage three tables:  a sites-by-species table of community data, a sites-by-environmental variables table, and a species-by-traits table.  Such a data set cannot be expressed in a single table (e.g. an object of class data frame or array) without either (1) summarizing or (2) repeating chunks of data; hence, the problem is inherently multi-tabular.  
+
+The multitable project involves the development of R tools supporting the analysis of such multiple-table data.  The specific objective of the multitable project is to develop new classes of objects that make handling multiple-table data sets easier, and seamlessly integrate with existing R model fitting functions.  The framework being developed is based on a separation of data management and data analysis.  Once multiple-table data are organized into a special multiple-table R object (i.e. the data management step) they can be passed to plotting and model fitting functions (i.e. the data analysis step), just as we would pass data frames to such functions in R.  Having separated analysis from data management, analyzing multiple tables becomes conceptually equivalent to analyzing single tables.</p>
 
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
