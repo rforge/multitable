@@ -23,7 +23,7 @@ S3method(as.data.frame, data.list)
 S3method(as.list, data.list)
 S3method(as.data.list, list)
 S3method(as.data.list, data.frame)
-
+S3method(str, data.list)
 
 # import other packages
 

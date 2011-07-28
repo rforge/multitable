@@ -17,7 +17,8 @@ data.list.mold(x)
 
 \method{as.data.list}{data.frame}(x)
 
-\method{as.data.frame}{data.list}(x, row.names = NULL, optional = FALSE, scheme = "repeat", mold, ...)
+\method{as.data.frame}{data.list}(x, row.names = NULL, 
+optional = FALSE, scheme = "repeat", mold, ...)
 
 \method{as.list}{data.list}(x, drop.attr = TRUE, ...)
 }
@@ -31,6 +32,8 @@ data.list.mold(x)
   \item{...}{Additional arguments (passed to the default method in \code{as.data.frame.data.list}).}
 }
 \details{
+See vignette on coercing data lists into data frames.
+
 By default, \code{as.data.frame.data.list} works in two steps.  First, a \code{mold} of the coercion process is created with \code{data.list.mold}.  The \code{mold} is a list of vectors, each with \code{\link{length}} equal to the number of rows in the coerced data frame.  Each vector is associated with a particular variable in \code{x} and contains indices that point to the elements of that variable.  Second, the \code{mold} is 'filled with' (i.e. used to subscript) \code{x} thereby producing the coerced data frame.
 
 If data lists are to be coerced iteratively (e.g. repeated random subscripting and coercion), then speed can be enhanced by creating a \code{mold} explicitly with \code{data.list.mold} and then passing it to \code{as.data.frame.data.list} through the \code{mold} argument.  Because the \code{mold} will be the same for any data list of the same 'shape', the \code{mold} only needs to be created once before the iterations thereby reducing the need to iteratively create the \code{mold}.

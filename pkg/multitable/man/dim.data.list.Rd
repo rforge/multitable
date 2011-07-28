@@ -2,9 +2,9 @@
 \alias{dim.data.list}
 \alias{repdim}
 \alias{dim<-.data.list}
-\title{Extracting and assigning replication dimension information from data list objects}
+\title{Replication dimensions of a data list}
 \description{
-The title says it all.
+Retrieve or set the replication dimension of a data list object.
 }
 \usage{
 repdim(x)
@@ -16,4 +16,15 @@ repdim(x)
 \arguments{
   \item{x}{A data list.}
   \item{value}{An value for \code{value} will result in an error.}
+}
+\details{
+For extraction, \code{repdim} and \code{dim.data.list} are identical.
+
+Currently, \code{dim<-.data.list} simply returns an error because in the vast majority of cases it will not make sense to set the replication dimensions in this way.
+}
+\value{
+The \code{repdim} attribute of \code{x} (see \code{\link{data.list}} for information on this attribute).
+}
+\seealso{
+\code{\link{dim}}; \code{\link{dimnames.data.list}}.
 }
