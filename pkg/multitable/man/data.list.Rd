@@ -29,6 +29,8 @@ Data frames supplied via \code{x} are handled somewhat differently from vectors,
 
 During the production of a data list, one variable is singled out as the 'benchmark' variable.  See \code{\link{bm}} for further details on the benchmark concept.  Note that the dimensions of each variable are permuted such that their order matches that of the benchmark.
 
+If \code{rep.dim.names} is missing, then \code{data.list} tries to automatically generate dimension names (with a warning).  This is risky because there is no guarantee that \code{data.list} will decide upon the desired pattern of dimension sharing.
+
 The \code{fc.data.list} function is a wrapper for \code{data.list} for classic 'fourth-corner' data sets.  Such data consist of one matrix (\code{Y}) and two data frames (\code{X}, \code{Z}).  The matrix is typically a sites-by-species matrix of community data, while the data frames contain predictor variables for the sites and species respectively.  In particular, \code{X} (\code{Z}) is a data frame with as many rows as the size of the first (second) dimension of \code{Y}.  The names for the two replication dimensions of a fourth-corner data set are typically "sites" and "species", hence the default for \code{rep.dim.names}.  But this default can be changed.
 }
 \value{

@@ -1,6 +1,10 @@
 data.list <-
 function(x,rep.dim.names,check=TRUE){
 	if(!is.list(x)) stop("x must be a list")
+	if(missing(rep.dim.names)){
+		warning("dimensions automatically matched!")
+		rep.dim.names <- make.rep.dim.names(x)
+	}
 	if(!is.list(rep.dim.names)) stop("rep.dim.names must be a list")
 	if(length(x)!=length(rep.dim.names)) stop("x and rep.dim.names must be the same length")
 	if(check.full.rep(rep.dim.names)) stop(
@@ -91,3 +95,24 @@ function(x,rep.dim.names){
 	return(list(x=x.alt,rep.dim.names=rep.dim.names.alt))
 }
 
+make.rep.dim.names <- function(x){
+	indims <- lapply(x,get.input.dims)
+	wfr <- which.max(sapply(indims,length))
+	indims.wfr <- indims[[wfr]]
+	rep.dim.names <- list()
+	if(length(indims.wfr)>26) stop("way too many dimensions to be determined automatically!")
+	for(i in seq_along(indims)){
+		rep.dim.names[[i]] <- letters[match(indims[[i]],indims.wfr)]
+	}
+	return(rep.dim.names)
+}
+
+get.input.dims <- function(xi){
+	if(is.null(dim(xi)) & is.atomic(xi)) return(length(xi))
+	else if(is.recursive(xi) & is.atomic(xi[[1]])){
+		if(is.null(dim(xi[[1]]))) return(length(xi[[1]]))
+		else return(dim(xi[[1]]))
+	}
+	else if(is.recursive(xi)) stop("recursive tables must contain only atomic elements")
+	else return(dim(xi))
+}
