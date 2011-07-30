@@ -35,6 +35,9 @@ function(rep.dim.names){
 
 check.dims <-
 function(x,bm,repdim){
+	if(is.null(names(x$x))){
+		names(x$x) <- paste("variable",seq_along(x$x))
+	}
 	rdn.bm <- x$rep.dim.names[[bm]]
 	for(i in seq_along(x$x)[-bm]){
 		for(j in seq_along(x$rep.dim.names[[i]])){
@@ -100,6 +103,9 @@ make.rep.dim.names <- function(x){
 	wfr <- which.max(sapply(indims,length))
 	indims.wfr <- indims[[wfr]]
 	rep.dim.names <- list()
+	if(length(unique(indims.wfr)) < length(indims.wfr)){
+		stop("some dimensions are of same length and therefore require specification of rep.dim.names")
+	}
 	if(length(indims.wfr)>26) stop("way too many dimensions to be determined automatically!")
 	for(i in seq_along(indims)){
 		rep.dim.names[[i]] <- letters[match(indims[[i]],indims.wfr)]
