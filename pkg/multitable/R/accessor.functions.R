@@ -22,7 +22,7 @@ dimnames.data.list <- function(x) dimnames(bm(x))
 
 "dimnames<-.data.list" <- function(x,value){
 	for(i in seq_along(x)){
-		dimnames(x[[i]]) <- value[attr(x[[i]],"subsetdim")]
+		attr(x[[i]],"dimnames") <- value[attr(x[[i]],"subsetdim")]
 	}
 	return(x)
 }

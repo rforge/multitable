@@ -20,6 +20,7 @@ function(...,dnames,match.dnames,check=TRUE){
 	attr(x,"bm") <- bm
 	attr(x,"repdim") <- repdim
 	class(x) <- "data.list"
+	if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x),function(di)seq_len(di))
 	return(x)
 }
 
