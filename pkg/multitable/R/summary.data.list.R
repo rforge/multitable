@@ -3,7 +3,7 @@ str.data.list <- function(object, give.attr = FALSE, ...){
 }
 
 summary.data.list <- function(object, ...){
-	x <- unclass(x)
+	x <- unclass(object)
 	out <- list()
 	out$dims <- sapply(x,attr,"subsetdim")
 	out$modes <- sapply(x,mode)
