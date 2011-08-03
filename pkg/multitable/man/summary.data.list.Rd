@@ -6,12 +6,11 @@
 Summarize and compactly display the structure of a data list object.
 }
 \usage{
-\method{summary}{data.list}(x)
+\method{summary}{data.list}(object, ...)
 
 \method{str}{data.list}(object, give.attr = FALSE, ...)
 }
 \arguments{
-  \item{x}{A data list object}
   \item{object}{A data list object}
   \item{give.attr}{See documentation for \code{\link{str}}}
   \item{...}{Potential further arguments (see \code{\link{str}})}
