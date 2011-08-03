@@ -6,7 +6,7 @@
 
 # functions
 
-export(data.list, fc.data.list, bm, nvar, varnames, data.list.mold, as.data.list, repdim)
+export(data.list, fc.data.list, bm, nvar, varnames, data.list.mold, as.data.list, repdim, aperm.data.list, variablize)
 
 # S3 methods
 
@@ -24,6 +24,11 @@ S3method(as.list, data.list)
 S3method(as.data.list, list)
 S3method(as.data.list, data.frame)
 S3method(str, data.list)
+S3method(summary, data.list)
+S3method(aperm, data.list)
+S3method(variablize, default)
+S3method(variablize, factor)
+S3method(variablize, data.list)
 
 # import other packages
 

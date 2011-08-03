@@ -13,8 +13,10 @@ function(...,dnames,match.dnames,check=TRUE){
 	if(is.null(names(x$x))) names(x$x) <- paste("V",seq_along(x$x),sep="")
 	if(check) check.dims(x,bm,repdim)
 	x <- subsetdim(x,bm,repdim)
+	match.dnames <- x$match.dnames
 	x <- x$x
 	x <- make.dimnames.consistent(x,bm)
+	attr(x,"match.dnames") <- match.dnames
 	attr(x,"bm") <- bm
 	attr(x,"repdim") <- repdim
 	class(x) <- "data.list"
@@ -104,7 +106,7 @@ make.match.dnames <- function(x,dnames){
 	if(length(unique(indims.wfr)) < length(indims.wfr)){
 		stop("Some dimensions are of same length and therefore require specification of match.dnames. Type ?data.list and see the details section of the help file for data.list.")
 	}
-	if(missing(dnames)) dnames <- paste("D",seq_along(indims),sep="")
+	if(missing(dnames)) dnames <- paste("D",seq_along(indims.wfr),sep="")
 	for(i in seq_along(indims)){
 		match.dnames[[i]] <- dnames[match(indims[[i]],indims.wfr)]
 	}

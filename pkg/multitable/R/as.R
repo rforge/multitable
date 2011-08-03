@@ -1,15 +1,15 @@
 as.data.list <-
-function(x) UseMethod("as.data.list")
+function(x,...) UseMethod("as.data.list")
 
 as.data.list.list <-
-function(x){
-	if(!all(lapply(x,length)==length(x[[1]]))) stop("all list elements must be the same length for coersion to a data list")
-	for(i in seq_along(x)) dim(x[[i]]) <- NULL
-	data.list(list(x),list("reps"))
+function(x,dnames,match.dnames,...){
+	if(!missing(dnames)) x$dnames <- dnames
+	if(!missing(match.dnames)) x$match.dnames <- match.dnames
+	do.call(data.list,x)
 }
 
 as.data.list.data.frame <-
-function(x) data.list(list(as.list(x)),list("reps"))
+function(x,...) data.list(x,...)
 
 as.list.data.list <-
 function(x, drop.attr=TRUE, ...){

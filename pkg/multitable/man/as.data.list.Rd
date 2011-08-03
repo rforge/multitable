@@ -9,13 +9,13 @@
 \description{
 These functions coerce lists and data frame objects to data lists and vice versa.}
 \usage{
-as.data.list(x)
+as.data.list(x, ...)
 
 data.list.mold(x)
 
-\method{as.data.list}{list}(x)
+\method{as.data.list}{list}(x, dnames, match.dnames, ...)
 
-\method{as.data.list}{data.frame}(x)
+\method{as.data.list}{data.frame}(x, ...)
 
 \method{as.data.frame}{data.list}(x, row.names = NULL, 
 optional = FALSE, scheme = "repeat", mold, ...)
@@ -25,6 +25,8 @@ optional = FALSE, scheme = "repeat", mold, ...)
 \arguments{
   \item{x}{An object. Either a data.list, data.frame, or list.}
   \item{mold}{A list typically obtained as output from \code{\link{data.list.mold}}.  See details.}
+  \item{dnames}{Passed to \code{\link{data.list}}.}
+  \item{match.dnames}{Passed to \code{\link{data.list}}.}
   \item{row.names}{Passed to the default method after some processing.}
   \item{optional}{Passed to the default method after some processing.}
   \item{scheme}{Type of coercion.  Currently, only "repeat" is allowed but others may follow.}

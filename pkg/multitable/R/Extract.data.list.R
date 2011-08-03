@@ -40,7 +40,7 @@ function(x,...){
 	xi.attr <- attributes(x[[i]])
 	x <- as.list(x,drop.attr=FALSE)
 	x[[i]] <- value
-	attributes(x[[i]]) <- c(attributes(x[[i]]),xi.attr)
+	if(!is.null(value)) attributes(x[[i]]) <- c(attributes(x[[i]]),xi.attr)
 	class(x) <- "data.list"
 	return(x)
 }
@@ -49,7 +49,7 @@ function(x,...){
 	xi.attr <- attributes(x[[i]])
 	x <- as.list(x,drop.attr=FALSE)
 	x[[i]] <- value
-	attributes(x[[i]]) <- c(attributes(x[[i]]),xi.attr)
+	if(!is.null(value)) attributes(x[[i]]) <- c(attributes(x[[i]]),xi.attr)
 	class(x) <- "data.list"
 	return(x)
 }
