@@ -51,7 +51,7 @@
 
 \section{Introduction}
 
-\subsection[Traits et \'{e}cologie]{Traits et \'{e}cologie des communaut\'{e}s}
+\subsection[Traits and ecology]{Traits and the ecology of communities}
 \frame{\tableofcontents[currentsection,currentsubsection]}
 
 %%%%%
@@ -76,11 +76,11 @@
 \end{frame}
 %%%%%
 
-\subsection{Exemple illustratif}
+\subsection{Illustrative example}
 \frame{\tableofcontents[currentsection,currentsubsection]}
 
 \begin{frame}
-\frametitle{Quatri\`{e}me coin}
+\frametitle{Fourth corner}
 \small
 % latex table generated in R 2.10.1 by xtable 1.5-6 package
 % Tue Feb  8 08:19:58 2011
@@ -104,7 +104,7 @@ site 1 & 0.1 & 2.1 & 0.1 & 1.5  \\
 \end{frame}
 
 \begin{frame}
-\frametitle{Quatri\`{e}me coin}
+\frametitle{Fourth corner}
 \small
 % latex table generated in R 2.10.1 by xtable 1.5-6 package
 % Tue Feb  8 08:19:58 2011
@@ -128,7 +128,7 @@ site 1 & 0.1 & 2.1 & 0.1 & 1.5 & -0.3 \\
 \end{frame}
 
 \begin{frame}
-\frametitle{Quatri\`{e}me coin}
+\frametitle{Fourth corner}
 \small
 % latex table generated in R 2.10.1 by xtable 1.5-6 package
 % Tue Feb  8 08:19:58 2011
@@ -154,7 +154,7 @@ site 1 & 0.1 & 2.1 & 0.1 & 1.5 & -0.3 \\
 \end{frame}
 
 \begin{frame}
-\frametitle{Quatri\`{e}me coin}
+\frametitle{Fourth corner}
 \small
 % latex table generated in R 2.10.1 by xtable 1.5-6 package
 % Tue Feb  8 08:19:58 2011
@@ -172,24 +172,168 @@ site 1 & 0.1 & 2.1 & 0.1 & 1.5 & -0.3 \\
   site 7 & -2.6 & -1.4 & 1.8 & 4.1 & 2.0 \\ 
   site 8 & -0.0 & 1.5 & 2.3 & 2.3 & 0.7 \\ 
    \hline
-  trait & -1.0 & -1.0 & 1.0 & 1.0 & \textcolor{red}{???} \\ 
+  trait & -1.0 & -1.0 & 1.0 & 1.0 & \textcolor{red}{\textbf{??}} \\ 
    \hline
 \end{tabular}
 \end{center}
 \end{table}\normalsize 
 \begin{textblock}{100}(10.2,-0.5)
-\textcolor{red}{$\uparrow$}
+\textcolor{red}{$\mathbf{\uparrow}$}
 \end{textblock}
 \begin{textblock}{100}(11,-1.25)
-\textcolor{red}{$\leftarrow$}
+\textcolor{red}{$\mathbf{\leftarrow}$}
 \end{textblock}
 \begin{textblock}{100}(9.3,-1.25)
-\textcolor{red}{$\rightarrow$}
+\textcolor{red}{$\mathbf{\rightarrow}$}
 \end{textblock}
 \end{frame}
 
+\subsection{Complex example}
+\frame{\tableofcontents[currentsection,currentsubsection]}
 
 
+
+\subsection{Data management}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+\begin{frame}
+\frametitle{Linear algebra as data management}
+\begin{center}
+\includegraphics[scale=0.6]{fangcheng}
+\end{center}
+%\vspace{0.5cm}
+\footnotesize{Ancient Chinese text ($\sim$150 BCE)}
+\end{frame}
+
+\begin{frame}
+\frametitle{Linear algebra as data management}
+\begin{center}
+\includegraphics[scale=0.6]{fangchengmodern}
+\end{center}
+%\vspace{0.5cm}
+\footnotesize{Hart (2009)}
+\end{frame}
+
+\begin{frame}
+\frametitle{Linear algebra as data management}
+\begin{center}
+\includegraphics[scale=0.6]{fangchengmoderngeneral}
+\end{center}
+%\vspace{0.5cm}
+\footnotesize{Hart (2009)}
+\end{frame}
+
+\begin{frame}
+\frametitle{Linear algebra as data management}
+\begin{center}
+\begin{equation}
+\begin{split}
+\mathbf{Y} &= \mathbf{XB} \\
+\uncover<2->{\mathbf{X^{T}Y} &= \mathbf{X^{T}XB}} \\
+\uncover<3->{\mathbf{(X^{T}X)}^{-1}\mathbf{X^{T}Y} &= \mathbf{B}} \\
+\end{split}
+\end{equation}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\includegraphics[scale=0.6]{vectors2dataframe}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\includegraphics[scale=0.6]{dataframe2function1}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\includegraphics[scale=0.6]{dataframe2function2}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\includegraphics[scale=0.6]{dataframe2function3}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\includegraphics[scale=0.6]{dataframe2function4}
+\end{center}
+\end{frame}
+
+\setlength{\tabcolsep}{2.5pt}
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\begin{tabular}{ccccccc}
+DATA FRAME&+&FORMULA&+&FUNCTION&=&ANALYSIS \\
+\\
+\end{tabular}
+\end{center}
+\end{frame}
+\setlength{\tabcolsep}{6pt}
+
+\setlength{\tabcolsep}{2.5pt}
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\begin{tabular}{ccccccc}
+\textbf{DATA FRAME}&+&FORMULA&+&FUNCTION&=&ANALYSIS \\
+data management \\
+\end{tabular}
+\end{center}
+\end{frame}
+\setlength{\tabcolsep}{6pt}
+
+\setlength{\tabcolsep}{2.5pt}
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\begin{tabular}{ccccccc}
+DATA FRAME&+&\textbf{FORMULA}&+&FUNCTION&=&ANALYSIS \\
+&&ecological ideas \\
+\end{tabular}
+\end{center}
+\end{frame}
+\setlength{\tabcolsep}{6pt}
+
+\setlength{\tabcolsep}{2.5pt}
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\begin{tabular}{ccccccc}
+DATA FRAME&+&FORMULA&+&\textbf{FUNCTION}&=&ANALYSIS \\
+&&&&algorithms \\
+\end{tabular}
+\end{center}
+\end{frame}
+\setlength{\tabcolsep}{6pt}
+
+\setlength{\tabcolsep}{2.5pt}
+\begin{frame}
+\frametitle{The R paradigm of data management}
+\begin{center}
+\begin{tabular}{ccccccc}
+DATA FRAME&+&FORMULA&+&FUNCTION&=&\textbf{ANALYSIS} \\
+ \\
+\end{tabular}
+\end{center}
+\end{frame}
+\setlength{\tabcolsep}{6pt}
+
+\section{Methods}
+
+\section{Results}
 
 \begin{comment}
 
