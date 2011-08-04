@@ -1,0 +1,5 @@
+\beamer@endinputifotherversion {3.07pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@subsectionintoc {1}{1}{Traits et \'{e}cologie des communaut\'{e}s}{2}{0}{1}
+\beamer@subsectionintoc {1}{2}{Exemple illustratif}{5}{0}{1}

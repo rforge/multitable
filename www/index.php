@@ -31,7 +31,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <div id="wrap"><img id="frontphoto" alt="" src="multitablelogo.png" style="padding-top: 8px;" />	
 
-<h2>General multiple-table data management</h2>
+<h2>General multiple-table data management in R</h2>
 	
 <p>Our objective is to develop classes of objects that (1) make handling multiple-table data sets easier and (2) seamlessly integrate with existing R plotting and model-fitting functions; our philosophy is to keep data management and data analysis separate.
 <!-- end of project description -->
