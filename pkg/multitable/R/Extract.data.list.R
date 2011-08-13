@@ -8,7 +8,7 @@ function(x,...){
 	for(i in 3:nmc){
 		if(mc[[i]] != substitute()){
 			indi <- eval(mc[[i]],envir=parent.frame())
-			if(is.logical(indi)) indi <- seq_along(indi)[indi]
+			if(is.logical(indi)) indi <- which(indi) #seq_along(indi)[indi]
 			if(is.character(indi)){
 				indi <- match(indi,dim.names[[i-2]])
 				if(!all(complete.cases(indi))){

@@ -16,6 +16,7 @@ function(x, drop.attr=TRUE, ...){
 	out <- unclass(x)
 	if(drop.attr){
 		for(i in seq_along(x)) attr(out[[i]],"subsetdim") <- NULL
+		attr(out,"match.dnames") <- NULL
 		attr(out,"bm") <- NULL
 		attr(out,"repdim") <- NULL
 	}
