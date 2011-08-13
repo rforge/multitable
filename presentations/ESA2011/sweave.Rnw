@@ -1,0 +1,218 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{fullpage}
+
+\newcommand{\R}{{\sf R}}
+\newcommand{\code}[1]{\texttt{#1}}
+\title{Template}
+\author{SC Walker}
+
+\newcounter{exercise}
+\numberwithin{exercise}{section}
+\newcommand{\exnumber}{\addtocounter{exercise}{1} \theexercise \thinspace}
+
+\begin{document}
+
+<<echo=FALSE>>=
+rm(list=ls())
+@
+
+<<>>=
+library(multitable)
+library(lattice)
+library(tensor)
+library(MASS)
+@
+
+\newpage
+
+<<echo=FALSE>>=
+rm(list=ls())
+
+n <- 5
+m <- 3
+sd.e <- 1
+
+X <- round(rnorm(n),2)
+Z <- round(rnorm(m),2)
+C <- as.matrix(-1,1,1)
+b <- rnorm(m)
+b2 <- rnorm(m)
+Y <- (X%*%C%*%t(Z)) + (X%*%t(b)) + ((X^2)%*%t(b2)) + matrix(rnorm(n*m,sd=sd.e),n,m)
+Y <- round(Y,2)
+ab = Y
+tp = X
+bs = Z
+rownames(ab) <- names(tp) <- paste("site",LETTERS[1:n],sep="")
+colnames(ab) <- names(bs) <- paste("spp",LETTERS[1:m],sep="")
+@
+
+<<>>=
+ab
+@
+
+\newpage
+
+<<>>=
+tp
+@
+
+\newpage
+
+<<>>=
+bs
+@
+
+\newpage
+
+<<>>=
+dl <- data.list(abundance=ab,temperature=tp,bodysize=bs,dnames=c("sites","species"))
+dl
+@
+
+\newpage
+
+<<>>=
+summary(dl)
+@
+
+\newpage
+
+<<>>=
+str(dl)
+@
+
+\newpage
+
+<<>>=
+dl[1:3,]
+@
+
+\newpage
+
+<<>>=
+dl[,"sppB"]
+@
+
+\newpage
+
+<<>>=
+dl$temperature <- scale(dl$temperature)
+dl
+@
+
+\newpage
+
+<<>>=
+lm(abundance ~ temperature * bodysize,dl)
+@
+
+\newpage
+
+<<>>=
+rlm(abundance ~ temperature * bodysize,dl)
+@
+
+\newpage
+
+<<fig=TRUE>>=
+plot(abundance ~ temperature,dl)
+@
+
+\newpage
+
+<<>>=
+as.data.frame(dl)
+@
+
+\newpage
+
+<<>>=
+variablize(dl)
+@
+
+\newpage
+
+<<>>=
+variablize(aperm(dl,c(2,1)))
+@
+
+\newpage
+
+<<fig=TRUE,eps=FALSE,pdf=TRUE>>=
+xyplot(abundance ~ temperature | bodysize,data=as.data.frame(dl))
+@
+
+<<echo=FALSE>>=
+pdf("/users/stevenwalker/documents/multitable/multitable/presentations/ESA2011/sweave-019.pdf")
+xyplot(abundance ~ temperature | bodysize,data=as.data.frame(dl))
+dev.off()
+@
+
+\newpage
+
+<<echo=FALSE>>=
+rm(list=ls())
+
+library(multitable)
+library(lattice)
+
+Y <- array(0,c(16,12,3))
+Y[,,1] <- as.matrix(read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheCommB1.csv"))
+Y[,,2] <- as.matrix(read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheCommB2.csv"))
+Y[,,3] <- as.matrix(read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheCommB3.csv"))
+dimnames(Y)[[1]] <- c(rep("2007preyr",6),rep("2008mixed",4),rep("2008postmix",6))
+dimnames(Y)[[2]] <- names(read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheCommB1.csv"))
+dimnames(Y)[[3]] <- c("B1","B2","B3")
+
+X <- list()
+for(i in 1:7){
+	X[[i]] <- matrix(0,16,3)
+	X[[i]][,1] <- read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheEnvB1.csv")[[i]]
+	X[[i]][,2] <- read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheEnvB2.csv")[[i]]
+	X[[i]][,3] <- read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheEnvB3.csv")[[i]]
+}
+names(X) <- names(read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheEnvB1.csv"))
+
+
+W <- read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheTime.csv")
+Z <- read.csv("/Users/stevenwalker/Documents/Manuscripts/Bilinear/Data/Beatrix/CrocheTraits.csv")[,-1]
+@
+
+<<>>=
+dl <- data.list(Abundance=Y,X,W,Z,dnames=c("time","species","basin"))
+@
+
+\newpage
+
+<<>>=
+summary(dl)
+@
+
+\newpage
+
+<<>>=
+str(dl)
+@
+
+\newpage
+
+<<echo=FALSE>>=
+dimnames(dl)[[1]] <- paste(dimnames(dl)[[1]],c(1,2,3,4,5,6,1,2,3,4,1,2,3,4,5,6),sep="")
+dl$Length <- scale(dl$Length)
+@
+
+<<fig=TRUE,eps=FALSE,pdf=TRUE>>=
+xyplot(Abundance ~ Chl.CV..Fluoro. | Length, data=as.data.frame(dl))
+@
+
+<<>>=
+pdf("/users/stevenwalker/documents/multitable/multitable/presentations/ESA2011/sweave-026.pdf")
+xyplot(Abundance ~ Chl.CV..Fluoro. | Length, data=as.data.frame(dl))
+dev.off()
+@
+
+\end{document}

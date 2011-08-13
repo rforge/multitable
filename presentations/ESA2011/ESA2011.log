@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  4 AUG 2011 12:30
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  12 AUG 2011 23:15
 entering extended mode
 \write18 enabled.
  %&-line parsing enabled.
@@ -711,7 +711,116 @@ Grid set 16 x 16 = 22.7622pt x 17.07166pt
 \TPboxrulesize=\dimen187
 \TP@tbargs=\toks42
 \TP@prevdepth=\dimen188
+) (./Sweave.sty
+Package: Sweave 
+ (/usr/local/texlive/2008/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
+(/usr/local/texlive/2008/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Package: fancyvrb 2008/02/07
+
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz)
+\FV@CodeLineNo=\count152
+\FV@InFile=\read2
+\FV@TabBox=\box57
+\c@FancyVerbLine=\count153
+\FV@StepNumber=\count154
+\FV@OutFile=\write5
+)
+(/usr/local/texlive/2008/texmf-dist/tex/latex/upquote/upquote.sty
+Package: upquote 2003/08/11 v1.1 Covington's upright-quote modification to verb
+atim and verb
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
+Package textcomp Info: Sub-encoding information:
+(textcomp)               5 = only ISO-Adobe without \textcurrency
+(textcomp)               4 = 5 + \texteuro
+(textcomp)               3 = 4 + \textohm
+(textcomp)               2 = 3 + \textestimated + \textcurrency
+(textcomp)               1 = TS1 - \textcircled - \t
+(textcomp)               0 = TS1 (full)
+(textcomp)             Font families with sub-encoding setting implement
+(textcomp)             only a restricted character set as indicated.
+(textcomp)             Family '?' is the default used for unknown fonts.
+(textcomp)             See the documentation for details.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 71.
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+)
+LaTeX Info: Redefining \oldstylenums on input line 266.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 281.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 282.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 283.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 284.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 285.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 286.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 287.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 288.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 289.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 290.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 291.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 292.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 293.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 294.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 295.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 296.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 297.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 298.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 299.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 300.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 301.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 302.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 303.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 304.
+
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 305.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 306.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 307.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 308.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 309.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 310.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 311.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 312.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 313.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 314.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 315.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 316.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 317.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 318.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 319.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 320.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 321.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 322.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 323.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 324.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 325.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 326.
+))
+(/usr/local/texlive/2008/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+))
+(/usr/local/texlive/2008/texmf-dist/tex/latex/ae/ae.sty
+Package: ae 2001/02/12 1.3 Almost European Computer Modern
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+)
+LaTeX Font Info:    Try loading font information for T1+aer on input line 100.
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/ae/t1aer.fd
+File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
+))))
 (/usr/local/texlive/2008/texmf-dist/tex/latex/beamer/themes/theme/beamerthemeGo
 ettingen.sty
 Package: beamerthemeGoettingen 2007/01/28  (rcs-revision 1.7)
@@ -721,7 +830,10 @@ emesidebar.sty
 Package: beamerouterthemesidebar 2007/01/28  (rcs-revision 1.9)
 \beamer@sidebarwidth=\dimen189
 \beamer@headheight=\dimen190
-))
+LaTeX Font Info:    Try loading font information for T1+aess on input line 18.
+ (/usr/local/texlive/2008/texmf-dist/tex/latex/ae/t1aess.fd
+File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
+)))
 (/usr/local/texlive/2008/texmf-dist/tex/latex/beamer/themes/color/beamercolorth
 emerose.sty
 Package: beamercolorthemerose 2007/01/28  (rcs-revision 1.3)
@@ -730,36 +842,43 @@ Package: beamercolorthemerose 2007/01/28  (rcs-revision 1.3)
 emeseahorse.sty
 Package: beamercolorthemeseahorse 2007/01/28  (rcs-revision 1.4)
 )
-\c@exercise=\count152
+\c@exercise=\count155
  (./ESA2011.aux)
 \openout1 = `ESA2011.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 53.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 53.
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 53.
 
 (/usr/local/texlive/2008/texmf-dist/tex/context/base/supp-pdf.tex
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count153
+\scratchcounter=\count156
 \scratchdimen=\dimen191
-\scratchbox=\box57
-\nofMPsegments=\count154
-\nofMParguments=\count155
+\scratchbox=\box58
+\nofMPsegments=\count157
+\nofMParguments=\count158
 \everyMPshowfont=\toks43
-\MPscratchCnt=\count156
+\MPscratchCnt=\count159
 \MPscratchDim=\dimen192
-\MPnumerator=\count157
+\MPnumerator=\count160
 \everyMPtoPDFconversion=\toks44
 )
 *geometry auto-detecting driver*
@@ -803,235 +922,654 @@ driver: pdftex
 
 (1in=72.27pt, 1cm=28.45pt)
 -----------------------
-Package hyperref Info: Link coloring OFF on input line 49.
+Package hyperref Info: Link coloring OFF on input line 53.
 (/usr/local/texlive/2008/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 
 (/usr/local/texlive/2008/texmf-dist/tex/latex/oberdiek/refcount.sty
 Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
-\c@section@level=\count158
+\c@section@level=\count161
 )
-LaTeX Info: Redefining \ref on input line 49.
-LaTeX Info: Redefining \pageref on input line 49.
+LaTeX Info: Redefining \ref on input line 53.
+LaTeX Info: Redefining \pageref on input line 53.
 
 (./ESA2011.out) (./ESA2011.out)
-\@outlinefile=\write5
-\openout5 = `ESA2011.out'.
+\@outlinefile=\write6
+\openout6 = `ESA2011.out'.
 
-\AtBeginShipoutBox=\box58
+\AtBeginShipoutBox=\box59
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 49.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 53.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 49.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 53.
 \symnumbers=\mathgroup9
 \sympureletters=\mathgroup10
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 49.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 49.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 49.
+(Font)                  OT1/cmss/m/n --> T1/aer/m/n on input line 53.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 53.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 49.
+(Font)                  OT1/cmss/m/n --> T1/aess/m/n on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 49.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 49.
+(Font)                  OT1/cmss/bx/n --> T1/aess/m/n on input line 53.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 49.
+(Font)                  OT1/cmr/m/it --> T1/aess/m/it on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 49.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 49.
+(Font)                  OT1/cmr/bx/it --> T1/aess/m/it on input line 53.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 49.
+(Font)                  OT1/cmtt/m/n --> T1/aett/m/n on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 49.
+(Font)                  OT1/cmtt/m/n --> T1/aett/m/n on input line 53.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 49.
+(Font)                  T1/aess/m/n --> T1/aess/bx/n on input line 53.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 49.
+(Font)                  T1/aess/m/it --> T1/aess/bx/it on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmr/bx/n on input line 49.
+(Font)                  OT1/cmss/bx/n --> T1/aer/bx/n on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/bx/n on input line 49.
+(Font)                  T1/aess/bx/n --> T1/aess/bx/n on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 49.
+(Font)                  T1/aess/m/n --> T1/aess/bx/n on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 49.
+(Font)                  T1/aess/m/it --> T1/aess/bx/it on input line 53.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/bx/n on input line 49.
+(Font)                  T1/aett/m/n --> T1/aett/bx/n on input line 53.
 
 (/usr/local/texlive/2008/texmf-dist/tex/latex/translator/translator-theorem-dic
 tionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 ) (./ESA2011.nav)
+LaTeX Font Info:    Calculating math sizes for size <4> on input line 54.
+
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
-(Font)              size <5> substituted on input line 50.
+(Font)              size <5> substituted on input line 54.
 
+
+LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 54.
+(/usr/local/texlive/2008/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2002/01/19 v2.2g AMS font definitions
+)
+
+LaTeX Font Warning: Font shape `U/msa/m/n' in size <4> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `U/msa/m/n' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `U/msa/m/n' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+LaTeX Font Info:    Try loading font information for U+msb on input line 54.
+(/usr/local/texlive/2008/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2002/01/19 v2.2g AMS font definitions
+)
+
+LaTeX Font Warning: Font shape `U/msb/m/n' in size <4> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `U/msb/m/n' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `U/msb/m/n' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <2.79999> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <2> not available
+(Font)              size <5> substituted on input line 54.
+
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <4> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 54.
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <2.79999> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 54.
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <2> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 54.
 [1{/usr/local/texlive/2008/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
- <./uni_logo.png (PNG copy)>] (./ESA2011.toc) [2
+ <./uni_logo.png (PNG copy)>] (./ESA2011.toc
+LaTeX Font Info:    Try loading font information for T1+aett on input line 13.
+
+(/usr/local/texlive/2008/texmf-dist/tex/latex/ae/t1aett.fd
+File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
+)) [2
 
 ]
-<waterflea.jpg, id=132, 371.3875pt x 247.92625pt>
+<waterflea.jpg, id=191, 371.3875pt x 247.92625pt>
 File: waterflea.jpg Graphic file (type jpg)
- <use waterflea.jpg> [3
+ <use waterflea.jpg>
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <14.4> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 69.
+ [3
 
- <./waterflea.jpg>] <Yan.png, id=167, 379.4175pt x 254.9525pt>
+ <./waterflea.jpg>] <Yan.png, id=233, 379.4175pt x 254.9525pt>
 File: Yan.png Graphic file (type png)
  <use Yan.png> [4
 
  <./Yan.png (PNG copy)>] (./ESA2011.toc) [5
 
 ]
-LaTeX Font Info:    Try loading font information for U+msa on input line 104.
-
-(/usr/local/texlive/2008/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2002/01/19 v2.2g AMS font definitions
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 104.
-
-(/usr/local/texlive/2008/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2002/01/19 v2.2g AMS font definitions
-) [6
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <10> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 108.
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <7> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 108.
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <5> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 108.
+ [6
 
 ] [7
 
-]
-[8
-
-] [9
-
-] (./ESA2011.toc) [10
-
-] (./ESA2011.toc) [11
+] [8
 
 ]
-<fangcheng.jpg, id=453, 399.4122pt x 275.5896pt>
-File: fangcheng.jpg Graphic file (type jpg)
- <use fangcheng.jpg> [12
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <10.95> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 193.
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <8> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 193.
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <6> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 193.
+ [9
 
- <./fangcheng.jpg>] <fangchengmodern.png, id=488, 450.68375pt x 179.67125pt>
-File: fangchengmodern.png Graphic file (type png)
-
-<use fangchengmodern.png> [13
-
- <./fangchengmodern.png>]
-<fangchengmoderngeneral.png, id=525, 274.02374pt x 120.45pt>
-File: fangchengmoderngeneral.png Graphic file (type png)
-
-<use fangchengmoderngeneral.png> [14
-
- <./fangchengmoderngeneral.png>] [15
+] [10
 
 ]
-[16
+<dataframe.pdf, id=532, 73.79556pt x 112.44412pt>
+File: dataframe.pdf Graphic file (type pdf)
+ <use dataframe.pdf> [11
+
+ <./dataframe.pdf>] <BeatrixTableCartoon.pdf, id=581, 462.30098pt x 501.66801pt
+>
+File: BeatrixTableCartoon.pdf Graphic file (type pdf)
+
+<use BeatrixTableCartoon.pdf> [12
+
+ <./BeatrixTableCartoon.pdf>] (./ESA2011.toc)
+[13
+
+]
+LaTeX Font Info:    Font shape `T1/aess/m/it' in size <12> not available
+(Font)              Font shape `T1/aess/m/sl' tried instead on input line 302.
+ [14
+
+] [15
+
+] [16
 
 ] [17
 
-] <vectors2dataframe.pdf, id=660, 364.19528pt x 273.14645pt>
-File: vectors2dataframe.pdf Graphic file (type pdf)
+]
 
-<use vectors2dataframe.pdf> [18
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 351.
 
- <./vectors2dataframe.pdf>]
-<dataframe2function1.pdf, id=703, 364.19528pt x 273.14645pt>
+<dataframe2function1.pdf, id=852, 364.19528pt x 273.14645pt>
 File: dataframe2function1.pdf Graphic file (type pdf)
 
-<use dataframe2function1.pdf> [19
+<use dataframe2function1.pdf> [18
 
  <./dataframe2function1.pdf>]
-<dataframe2function2.pdf, id=747, 364.19528pt x 273.14645pt>
+<dataframe2function2.pdf, id=902, 364.19528pt x 273.14645pt>
 File: dataframe2function2.pdf Graphic file (type pdf)
 
-<use dataframe2function2.pdf> [20
+<use dataframe2function2.pdf> [19
 
  <./dataframe2function2.pdf>]
-<dataframe2function3.pdf, id=790, 364.19528pt x 273.14645pt>
+<dataframe2function3.pdf, id=953, 364.19528pt x 273.14645pt>
 File: dataframe2function3.pdf Graphic file (type pdf)
 
-<use dataframe2function3.pdf> [21
+<use dataframe2function3.pdf> [20
 
  <./dataframe2function3.pdf>]
-<dataframe2function4.pdf, id=833, 364.19528pt x 273.14645pt>
+<dataframe2function4.pdf, id=1003, 364.19528pt x 273.14645pt>
 File: dataframe2function4.pdf Graphic file (type pdf)
 
-<use dataframe2function4.pdf> [22
+<use dataframe2function4.pdf> [21
 
- <./dataframe2function4.pdf>]
-Overfull \hbox (6.03648pt too wide) in paragraph at lines 283--283
- [] 
- []
+ <./dataframe2function4.pdf>] [22
 
-[23
+] [23
 
 ]
-Overfull \hbox (20.01295pt too wide) in paragraph at lines 295--295
- [] 
- []
-
 [24
 
+] [25
+
+] [26
+
+] [27
+
+] [28
+
+] [29
+
+] [30
+
+] [31
+
+] [32
+
 ]
-Overfull \hbox (25.01637pt too wide) in paragraph at lines 307--307
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 465.
+
+
+Overfull \hbox (5.85323pt too wide) in paragraph at lines 484--484
  [] 
  []
 
-[25
+[33
 
 ]
-Overfull \hbox (11.70924pt too wide) in paragraph at lines 319--319
+Overfull \hbox (5.85323pt too wide) in paragraph at lines 484--484
  [] 
  []
 
-[26
+[34
 
 ]
-Overfull \hbox (11.29865pt too wide) in paragraph at lines 331--331
+Overfull \hbox (5.85323pt too wide) in paragraph at lines 484--484
  [] 
  []
 
-[27
+[35
 
-] <Rlogo.jpg, id=1040, 24.17056pt x 18.36963pt>
+]
+Overfull \hbox (5.85323pt too wide) in paragraph at lines 484--484
+ [] 
+ []
+
+[36
+
+]
+Overfull \hbox (5.85323pt too wide) in paragraph at lines 484--484
+ [] 
+ []
+
+[37
+
+] (./ESA2011.toc) [38
+
+]
+<forthcorner.pdf, id=1750, 165.41013pt x 219.95686pt>
+File: forthcorner.pdf Graphic file (type pdf)
+ <use forthcorner.pdf>
+[39
+
+ <./forthcorner.pdf>]
+File: forthcorner.pdf Graphic file (type pdf)
+ <use forthcorner.pdf> [40
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 523.
+
+<forthcorner2dataframeSUMMARIZE1.pdf, id=1840, 450.88966pt x 217.22218pt>
+File: forthcorner2dataframeSUMMARIZE1.pdf Graphic file (type pdf)
+
+<use forthcorner2dataframeSUMMARIZE1.pdf> [41
+
+ <./forthcorner2dataframeSUMMARIZE1.pdf>]
+<forthcorner2dataframeSUMMARIZE2.pdf, id=1890, 176.31448pt x 233.08484pt>
+File: forthcorner2dataframeSUMMARIZE2.pdf Graphic file (type pdf)
+
+<use forthcorner2dataframeSUMMARIZE2.pdf> [42
+
+ <./forthcorner2dataframeSUMMARIZE2.pdf>] <forthcorner2dataframeREPEAT.pdf, id=
+1940, 211.0196pt x 375.32231pt>
+File: forthcorner2dataframeREPEAT.pdf Graphic file (type pdf)
+
+<use forthcorner2dataframeREPEAT.pdf> [43
+
+ <./forthcorner2dataframeREPEAT.pdf>]
+<forthcorner2dataframeREPEAT3.pdf, id=1991, 211.0196pt x 375.32231pt>
+File: forthcorner2dataframeREPEAT3.pdf Graphic file (type pdf)
+
+<use forthcorner2dataframeREPEAT3.pdf> [44
+
+ <./forthcorner2dataframeREPEAT3.pdf>] <forthcorner2dataframeREPEAT2.pdf, id=23
+65, 211.0196pt x 375.32231pt>
+File: forthcorner2dataframeREPEAT2.pdf Graphic file (type pdf)
+
+<use forthcorner2dataframeREPEAT2.pdf> [45
+
+ <./forthcorner2dataframeREPEAT2.pdf>] <forthcorner2dataframeREPEAT1.pdf, id=27
+39, 211.0196pt x 375.32231pt>
+File: forthcorner2dataframeREPEAT1.pdf Graphic file (type pdf)
+
+<use forthcorner2dataframeREPEAT1.pdf> [46
+
+ <./forthcorner2dataframeREPEAT1.pdf>]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 576.
+
+[47
+
+] [48
+
+] <forthcornerVARIABLES.pdf, id=3193, 165.41013pt x 219.95686pt>
+File: forthcornerVARIABLES.pdf Graphic file (type pdf)
+
+<use forthcornerVARIABLES.pdf> [49
+
+ <./forthcornerVARIABLES.pdf>]
+<forthcornerREPLICATES.pdf, id=3244, 165.41013pt x 219.95686pt>
+File: forthcornerREPLICATES.pdf Graphic file (type pdf)
+
+<use forthcornerREPLICATES.pdf> [50
+
+ <./forthcornerREPLICATES.pdf>]
+File: forthcorner2dataframeREPEAT.pdf Graphic file (type pdf)
+
+<use forthcorner2dataframeREPEAT.pdf> [51
+
+] (./ESA2011.toc) [52
+
+]
+<bipartiteFC.pdf, id=3386, 386.77216pt x 244.75163pt>
+File: bipartiteFC.pdf Graphic file (type pdf)
+ <use bipartiteFC.pdf>
+[53
+
+ <./bipartiteFC.pdf>]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 647.
+
+File: bipartiteFC.pdf Graphic file (type pdf)
+<use bipartiteFC.pdf>
+Overfull \hbox (4.41237pt too wide) in paragraph at lines 659--659
+[][]  
+ []
+
+[54
+
+] [55
+
+] [56
+
+] [57
+
+] [58
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 696.
+
+<uncorr.pdf, id=3637, 505.89pt x 505.89pt>
+File: uncorr.pdf Graphic file (type pdf)
+ <use uncorr.pdf>
+Overfull \hbox (49.93689pt too wide) in paragraph at lines 717--717
+[][]  
+ []
+
+[59
+
+ <./uncorr.pdf>]
+File: uncorr.pdf Graphic file (type pdf)
+ <use uncorr.pdf>
+Overfull \hbox (49.93689pt too wide) in paragraph at lines 717--717
+[][]  
+ []
+
+[60
+
+]
+File: uncorr.pdf Graphic file (type pdf)
+ <use uncorr.pdf>
+Overfull \hbox (49.93689pt too wide) in paragraph at lines 717--717
+[][]  
+ []
+
+[61
+
+]
+File: uncorr.pdf Graphic file (type pdf)
+ <use uncorr.pdf>
+Overfull \hbox (49.93689pt too wide) in paragraph at lines 717--717
+[][]  
+ []
+
+[62
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 733.
+
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 745.
+
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 762.
+
+[63
+
+] [64
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 796.
+
+\openout3 = `ESA2011.vrb'.
+
+(./ESA2011.vrb <multitablelogo.png, id=3883, 182.6825pt x 225.84375pt>
+File: multitablelogo.png Graphic file (type png)
+
+<use multitablelogo.png> <Rforgelogo.png, id=3885, 210.7875pt x 54.2025pt>
+File: Rforgelogo.png Graphic file (type png)
+
+<use Rforgelogo.png>) [65
+
+ <./multitablelogo.png> <./Rforgelogo.png (PNG copy)>] (./ESA2011.toc) [66
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 855.
+
+\openout3 = `ESA2011.vrb'.
+
+(./ESA2011.vrb) [67
+
+]
+\openout3 = `ESA2011.vrb'.
+
+ (./ESA2011.vrb) [68
+
+]
+\openout3 = `ESA2011.vrb'.
+
+ (./ESA2011.vrb) [69
+
+] (./ESA2011.toc)
+[70
+
+]
+\openout3 = `ESA2011.vrb'.
+
+ (./ESA2011.vrb) [71
+
+]
+\openout3 = `ESA2011.vrb'.
+
+ (./ESA2011.vrb) [72
+
+]
+\openout3 = `ESA2011.vrb'.
+
+ (./ESA2011.vrb) [73
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 1072.
+
+(./ESA2011.toc) [74
+
+]
+\openout3 = `ESA2011.vrb'.
+
+ (./ESA2011.vrb) [75
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 1130.
+
+(./ESA2011.toc) [76
+
+]
+\openout3 = `ESA2011.vrb'.
+
+ (./ESA2011.vrb) [77
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 1191.
+
+(./ESA2011.toc) [78
+
+]
+File: BeatrixTableCartoon.pdf Graphic file (type pdf)
+ <use BeatrixTableCartoon.pdf> [79
+
+]
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 1212.
+
+
+LaTeX Warning: Characters dropped after `\end{comment}' on input line 1267.
+
+\openout3 = `ESA2011.vrb'.
+
+(./ESA2011.vrb <sweave-026.pdf, id=4556, 505.89pt x 505.89pt>
+File: sweave-026.pdf Graphic file (type pdf)
+
+<use sweave-026.pdf>) [80
+
+ <./sweave-026.pdf>] (./ESA2011.toc) [81
+
+] [82
+
+]
+[83
+
+] [84
+
+] [85
+
+] <Rlogo.jpg, id=4816, 24.17056pt x 18.36963pt>
 File: Rlogo.jpg Graphic file (type jpg)
- <use Rlogo.jpg> [28
+ <use Rlogo.jpg>
+File: multitablelogo.png Graphic file (type png)
+
+<use multitablelogo.png> [86
 
  <./Rlogo.jpg>]
-\tf@nav=\write6
-\openout6 = `ESA2011.nav'.
+\tf@nav=\write7
+\openout7 = `ESA2011.nav'.
 
-\tf@toc=\write7
-\openout7 = `ESA2011.toc'.
+\tf@toc=\write8
+\openout8 = `ESA2011.toc'.
 
-\tf@snm=\write8
-\openout8 = `ESA2011.snm'.
+\tf@snm=\write9
+\openout9 = `ESA2011.snm'.
 
  (./ESA2011.aux)
 
 LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 1.0pt have occurred.
+(Font)              up to 3.0pt have occurred.
 
  ) 
 Here is how much of TeX's memory you used:
- 13771 strings out of 493876
- 246684 string characters out of 1150567
- 335357 words of memory out of 3000000
- 16558 multiletter control sequences out of 10000+50000
- 24224 words of font info for 87 fonts, out of 3000000 for 5000
+ 15344 strings out of 493876
+ 269711 string characters out of 1150567
+ 351577 words of memory out of 3000000
+ 17883 multiletter control sequences out of 10000+50000
+ 78607 words of font info for 144 fonts, out of 3000000 for 5000
  714 hyphenation exceptions out of 8191
- 45i,17n,61p,342b,552s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmss10.pfb></usr/l
-ocal/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmss12.pfb></usr/local/texl
-ive/2008/texmf-dist/fonts/type1/bluesky/cm/cmss8.pfb></usr/local/texlive/2008/t
-exmf-dist/fonts/type1/bluesky/cm/cmss9.pfb></usr/local/texlive/2008/texmf-dist/
-fonts/type1/bluesky/cm/cmssbx10.pfb></usr/local/texlive/2008/texmf-dist/fonts/t
-ype1/bluesky/cm/cmssi12.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/blu
-esky/cm/cmsy10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/c
-msy8.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmsy9.pfb><
-/usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/ams/msam7.pfb>
-Output written on ESA2011.pdf (28 pages, 746167 bytes).
+ 45i,17n,63p,342b,612s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmex10.pfb></usr/l
+ocal/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmmi10.pfb></usr/local/texl
+ive/2008/texmf-dist/fonts/type1/bluesky/cm/cmsltt10.pfb></usr/local/texlive/200
+8/texmf-dist/fonts/type1/bluesky/cm/cmss10.pfb></usr/local/texlive/2008/texmf-d
+ist/fonts/type1/bluesky/cm/cmss12.pfb></usr/local/texlive/2008/texmf-dist/fonts
+/type1/bluesky/cm/cmss8.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/blu
+esky/cm/cmss9.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cm
+ssbx10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmssi10.p
+fb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmssi12.pfb></usr
+/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmssi8.pfb></usr/local/te
+xlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb></usr/local/texlive/200
+8/texmf-dist/fonts/type1/bluesky/cm/cmsy5.pfb></usr/local/texlive/2008/texmf-di
+st/fonts/type1/bluesky/cm/cmsy8.pfb></usr/local/texlive/2008/texmf-dist/fonts/t
+ype1/bluesky/cm/cmtt10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/blue
+sky/ams/msam7.pfb>
+Output written on ESA2011.pdf (86 pages, 1334956 bytes).
 PDF statistics:
- 1122 PDF objects out of 1200 (max. 8388607)
- 65 named destinations out of 1000 (max. 131072)
- 175 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 4950 PDF objects out of 5155 (max. 8388607)
+ 188 named destinations out of 1000 (max. 131072)
+ 297 words of extra memory for PDF output out of 10000 (max. 10000000)
 

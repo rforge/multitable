@@ -1,0 +1,7 @@
+\begin {Schunk}
+\begin{Sinput}
+> xyplot(Abundance ~ Chl.CV..Fluoro. | Length,
++ data = as.data.frame(dl))
+\end{Sinput}
+\end{Schunk}
+\includegraphics{sweave-026}

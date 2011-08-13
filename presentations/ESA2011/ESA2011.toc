@@ -2,8 +2,15 @@
 \select@language {english}
 \beamer@sectionintoc {1}{Introduction}{2}{0}{1}
 \beamer@subsectionintoc {1}{1}{Traits and the ecology of communities}{2}{0}{1}
-\beamer@subsectionintoc {1}{2}{Illustrative example}{5}{0}{1}
-\beamer@subsectionintoc {1}{3}{Complex example}{10}{0}{1}
-\beamer@subsectionintoc {1}{4}{Data management}{11}{0}{1}
-\beamer@sectionintoc {2}{Methods}{28}{0}{2}
-\beamer@sectionintoc {3}{Results}{28}{0}{3}
+\beamer@subsectionintoc {1}{2}{Statistical issues}{5}{0}{1}
+\beamer@subsectionintoc {1}{3}{The data management-analysis interface}{13}{0}{1}
+\beamer@sectionintoc {2}{Theory}{38}{0}{2}
+\beamer@subsectionintoc {2}{1}{Converting multiple tables to one single table}{38}{0}{2}
+\beamer@subsectionintoc {2}{2}{Analyzing data structure with bipartite graphs}{52}{0}{2}
+\beamer@sectionintoc {3}{Computational methods}{65}{0}{3}
+\beamer@subsectionintoc {3}{1}{Multiple tables in one R object: the data list}{66}{0}{3}
+\beamer@subsectionintoc {3}{2}{Subscripting multiple tables simultaneously}{70}{0}{3}
+\beamer@subsectionintoc {3}{3}{Using the simplest functions (e.g. \texttt {lm})}{74}{0}{3}
+\beamer@subsectionintoc {3}{4}{Coercing data lists to data frames}{76}{0}{3}
+\beamer@subsectionintoc {3}{5}{Real complex zooplankton community data}{78}{0}{3}
+\beamer@sectionintoc {4}{Conclusion}{81}{0}{4}
