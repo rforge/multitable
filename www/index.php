@@ -43,7 +43,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <p> Major features: (1) subscripting of multiple tables simultanenously, (2) coercion of multiple tables into a single data frame for use in standard R model fitting and plotting functions.</p>
 
 
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p> The <strong>project summary page</strong> can be found <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+
+<p> A presentation on the multitable package at the Ecological Society of America can be found <a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/www/ESA2011.pdf?root=multitable"><strong>here</strong></a>. </p>
 
 </body>
 </html>
