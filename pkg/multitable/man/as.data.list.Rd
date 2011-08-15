@@ -42,6 +42,6 @@ If data lists are to be coerced iteratively (e.g. repeated random subscripting a
 
 When coercing from a data list to a list, consider the \code{drop.attr} argument carefully.  The default (TRUE) removes any data list-related \code{\link{attributes}}, which means that coercion back to a data list will be difficult if not impossible without explicitly specifying the lost structure via a call to \code{\link{data.list}}.  When \code{drop.attr = FALSE}, \code{as.list.data.list} is equivalent to \code{\link{unclass}}.
 
-The functions \code{as.data.list.data.frame} and \code{as.data.list.list} are currently not very useful, but are present for completeness and the possibility that they may one day do something interesting.
+The \code{as.data.list.list} function is almost the same as \code{\link{data.list}}, except that it accepts a single \code{\link{list}} instead of a \code{...} argument.  The functions \code{as.data.list.data.frame} is currently not very useful, but is present for completeness and the possibility that it may one day do something interesting.
 }
 \value{The coerced object.}
