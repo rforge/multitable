@@ -12,6 +12,7 @@ function(a, perm, ...){
 
 aperm.data.list <- 
 function(a, perm, ...){
+	if(missing(perm)) perm <- rev(seq_along(dim(a)))
 	bm.a <- attr(a,"bm")
 	match.dnames <- attr(a,"match.dnames")
 	match.dnames[[bm.a]] <- match.dnames[[bm.a]][perm]
@@ -19,3 +20,5 @@ function(a, perm, ...){
 	l[[bm.a]] <- aperm(l[[bm.a]],perm)
 	as.data.list(l,match.dnames=match.dnames)
 }
+
+t.data.list <- function(x) aperm(x)

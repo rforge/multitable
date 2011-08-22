@@ -27,6 +27,11 @@ To form a valid data list, at least one of the objects in \code{...} must be rep
  
 During the production of a data list, one variable is singled out as the 'benchmark' variable.  See \code{\link{bm}} for further details on the benchmark concept.  Note that the dimensions of each variable are permuted such that their order matches that of the benchmark.
 }
+
+\note{
+The \code{data.list} function is largely a wrapper for \code{\link{as.data.list.default}} that lets objects be combined into a data list via a \code{...} argument, as is done in \code{\link{data.frame}}.
+}
+
 \value{
 A data list object which is a list with one element for each variable passed via \code{...} (note that each column in a data frame is treated as a separate variable, as is each element in a list).  Each variable is given a "subsetdim" attribute, which is a logical vector with each element corresponding to one of the dimensions in the benchmark variable.  TRUE elements specify that this variable is replicated along the corresponding dimension, and FALSE indicates otherwise.  The data list object itself also contains the following attributes
 \item{names}{Names of the variables}

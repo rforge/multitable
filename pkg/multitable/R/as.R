@@ -1,15 +1,31 @@
 as.data.list <-
 function(x,...) UseMethod("as.data.list")
 
-as.data.list.list <-
-function(x,dnames,match.dnames,...){
-	if(!missing(dnames)) x$dnames <- dnames
-	if(!missing(match.dnames)) x$match.dnames <- match.dnames
-	do.call(data.list,x)
+as.data.list.default <-
+function(x,dnames,match.dnames,check = TRUE,...){
+	if(!is.list(x)) x <- list(x)
+	if(missing(match.dnames)) match.dnames <- make.match.dnames(x,dnames)
+	if(!is.list(match.dnames)) stop("match.dnames must be a list")
+	if(length(x)!=length(match.dnames)) stop("match.dnames not the right length")
+	if(check.full.rep(match.dnames)) stop(
+		"at least one variable must be replicated along all dimensions"
+	)
+	x <- split.dfs(x,match.dnames)
+	bm <- which.fully.replicated(x$x)
+	repdim <- dim(x$x[[bm]])
+	if(is.null(names(x$x))) names(x$x) <- paste("V",seq_along(x$x),sep="")
+	if(check) check.dims(x,bm,repdim)
+	x <- subsetdim(x,bm,repdim)
+	match.dnames <- x$match.dnames
+	x <- x$x
+	x <- make.dimnames.consistent(x,bm)
+	attr(x,"match.dnames") <- match.dnames
+	attr(x,"bm") <- bm
+	attr(x,"repdim") <- repdim
+	class(x) <- "data.list"
+	if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x),function(di)seq_len(di))
+	return(x)
 }
-
-as.data.list.data.frame <-
-function(x,...) data.list(x,...)
 
 as.list.data.list <-
 function(x, drop.attr=TRUE, ...){
