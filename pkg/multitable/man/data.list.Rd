@@ -5,13 +5,14 @@
 Functions for creating a data list from vectors, matrices, arrays, data frames, lists, and information on how these objects are related.
 }
 \usage{
-data.list(..., dnames, match.dnames, check = TRUE)
+data.list(..., dnames, match.dnames, check = TRUE, unique = TRUE)
 }
 \arguments{
   \item{...}{A comma-separated collection of vectors, matrices, arrays, data frames, and lists.}
   \item{dnames}{An optional vector of character strings giving the names of the replication dimensions of the data list.  If \code{\link{missing}}, these names are either set to \code{c("D1","D2",...)} or determined from information passed to the \code{match.dnames} argument if it is not \code{\link{missing}}.}
   \item{match.dnames}{A (possibly named) list of vectors, each associated with the elements of \code{...}, giving character strings of the names of the replication dimensions of these data structures.  The only replication dimension of a data frame is along the rows, as columns of data frames are taken to be variables. Data frames are split into their component vectors in the returned data list.  If missing, it is determined automatically if possible.}
   \item{check}{If TRUE, the structure of the created data list is checked for consistency.}
+  \item{unique}{If TRUE, variable names are forced to be unique via \code{\link{make.names}}.}
 }
 \details{
 This function creates data lists, which are multiple-table extensions of \code{\link{data.frame}}s.  With the \code{data.frame} function, a collection of vectors (of identical length) containing data are combined into a single object that can be passed to model-fitting and plotting functions.  In contrast, the \code{data.list} function allows not just vectors of the same length in the collection but matrices and arrays with possibly different dimensions.  The rest of this details section assumes that the package vignette (DOESN'T EXIST YET!) has been read.  This vignette describes the conceptual framework of the data list.
