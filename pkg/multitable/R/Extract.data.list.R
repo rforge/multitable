@@ -54,3 +54,7 @@ function(x,...){
 	class(x) <- "data.list"
 	return(x)
 }
+
+#`[[.data.list` <- function(x,i)
+
+

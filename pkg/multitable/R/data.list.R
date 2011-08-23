@@ -46,6 +46,7 @@ function(match.dnames){
 	any(sapply(dims,function(x)any(is.na(x))))
 }
 
+### NOT USED OR EVEN DONE YET...MAY NOT EVER BE USED
 make.varnames <- function(x){
 	#vnames <- sapply(as.list(substitute(list(...)))[-1L],as.character)
 	deparse.names <- sapply(as.list(substitute(list(...)))[-1L],deparse)
@@ -125,10 +126,13 @@ function(x,bm,repdim){
 
 make.dimnames.consistent <-
 function(x,bm){
-	bm.dimnames <- attr(x[[bm]],"dimnames")
-	for(i in seq_along(x)){
-		attr(x[[i]],"dimnames") <- bm.dimnames[attr(x[[i]],"subsetdim")]
-	}
+	#bm.dimnames <- attr(x[[bm]],"dimnames")
+	#for(i in seq_along(x)){
+	#	attr(x[[i]],"dimnames") <- bm.dimnames[attr(x[[i]],"subsetdim")]
+	#}
+	#return(x)
+	dimnames(x) <- dimnames(bm(x))
+	if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x),function(di)seq_len(di))
 	return(x)
 }
 

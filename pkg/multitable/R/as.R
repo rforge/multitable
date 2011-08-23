@@ -18,12 +18,11 @@ function(x,dnames,match.dnames,check = TRUE,...){
 	x <- subsetdim(x,bm,repdim)
 	match.dnames <- x$match.dnames
 	x <- x$x
-	x <- make.dimnames.consistent(x,bm)
-	attr(x,"match.dnames") <- match.dnames
 	attr(x,"bm") <- bm
+	attr(x,"match.dnames") <- match.dnames
 	attr(x,"repdim") <- repdim
 	class(x) <- "data.list"
-	if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x),function(di)seq_len(di))
+	make.dimnames.consistent(x,bm)
 	return(x)
 }
 
