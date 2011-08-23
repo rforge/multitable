@@ -6,7 +6,7 @@
 
 # functions
 
-export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, repdim, aperm.data.list, variablize)
+export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, repdim, aperm.data.list, variablize, read.multitable)
 
 # S3 methods
 
@@ -30,7 +30,7 @@ S3method(variablize, default)
 S3method(variablize, factor)
 S3method(variablize, data.list)
 
-# import other packages
+#import other packages
 
-#import()
+#import(reshape2)
 
