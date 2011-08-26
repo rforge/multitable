@@ -7,7 +7,7 @@ function(x,dnames,match.dnames,check = TRUE,...){
 	if(missing(match.dnames)) match.dnames <- make.match.dnames(x,dnames)
 	if(!is.list(match.dnames)) stop("match.dnames must be a list")
 	if(length(x)!=length(match.dnames)) stop("match.dnames not the right length")
-	if(check.full.rep(match.dnames)) stop(
+	if(check.full.rep(match.dnames) && check) stop(
 		"at least one variable must be replicated along all dimensions"
 	)
 	x <- split.dfs(x,match.dnames)
@@ -17,11 +17,8 @@ function(x,dnames,match.dnames,check = TRUE,...){
 	if(check) check.dims(x,bm,repdim)
 	x <- subsetdim(x,bm,repdim)
 	match.dnames <- x$match.dnames
-	x <- x$x
-	attr(x,"bm") <- bm
-	attr(x,"match.dnames") <- match.dnames
-	attr(x,"repdim") <- repdim
-	class(x) <- "data.list"
+	x <- structure(x$x, bm = bm, match.dnames = match.dnames,
+		repdim = repdim, class = "data.list")
 	make.dimnames.consistent(x,bm)
 	return(x)
 }
@@ -44,6 +41,23 @@ function(x, row.names = NULL, optional = FALSE, scheme = "repeat", mold, ...){
 	out <- lapply(seq_along(x),function(i)x[[i]][mold[[i]]])
 	names(out) <- varnames(x)
 	as.data.frame(out, row.names = row.names, optional = optional,...)
+}
+
+as.matrix.data.list <- 
+function(x, ...){
+	fac <- mapply("||",sapply(x,is.factor),sapply(x,is.character))
+	if(all(!fac)||all(fac))
+		return(as.matrix(as.data.frame(x)))
+	x.attr <- attributes(x)
+	x <- unclass(x)
+	x.num <- structure(x[!fac],class="data.list",
+		match.dnames = x.attr$match.dnames[!fac],
+		repdim = x.attr$repdim)
+	x.fac <- structure(x[fac],class="data.list",
+		match.dnames = x.attr$match.dnames[fac],
+		repdim = x.attr$repdim)
+	list(x.num=as.matrix(as.data.frame(x.num)),
+		x.fac=as.matrix(as.data.frame(x.fac)))
 }
 
 data.list.mold <-

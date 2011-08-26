@@ -6,6 +6,6 @@ Date: 2011-07-17
 Author: Steve C Walker
 Maintainer: Steve C Walker <steve.walker@utoronto.ca>
 Description: This package extends the concept of a data frame to more general objects called data lists.  While data frames are lists of data vectors, data lists are lists of data arrays (i.e. vectors with dim attributes).  In data frames the number of...
+Imports: reshape2
 License: GPL-2
 LazyLoad: yes
-Depends: reshape2

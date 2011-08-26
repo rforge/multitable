@@ -2,6 +2,7 @@
 \alias{as.data.list}
 \alias{as.data.list.default}
 \alias{as.data.frame.data.list}
+\alias{as.matrix.data.list}
 \alias{as.list.data.list}
 \alias{data.list.mold}
 \title{Coercion to and from data lists}
@@ -16,6 +17,8 @@ data.list.mold(x)
 
 \method{as.data.frame}{data.list}(x, row.names = NULL, 
 optional = FALSE, scheme = "repeat", mold, ...)
+
+\method{as.matrix}{data.list}(x, ...)
 
 \method{as.list}{data.list}(x, drop.attr = TRUE, ...)
 }
@@ -41,5 +44,7 @@ If data lists are to be coerced iteratively (e.g. repeated random subscripting a
 When coercing from a data list to a list, consider the \code{drop.attr} argument carefully.  The default (TRUE) removes any data list-related \code{\link{attributes}}, which means that coercion back to a data list will be difficult if not impossible without explicitly specifying the lost structure via a call to \code{\link{data.list}}.  When \code{drop.attr = FALSE}, \code{as.list.data.list} is equivalent to \code{\link{unclass}}.
 
 The \code{as.data.list.default} function is designed to work on arrays, matrices, vectors, data.frames, and lists of such objects.
+
+The \code{as.matrix} method for data lists returns either a single matrix (if all variables are numeric or all variables are either factors or character); otherwise, two matrices are returned, one with the numeric and one with the factor variables respectively.  The matrices are returned by first coercing to data frames and then to matrices.  This method was created as a result of a suggestion by Philip Dixon.
 }
 \value{The coerced object.}
