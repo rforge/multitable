@@ -194,6 +194,7 @@ function(x, row.names = NULL, optional = FALSE, scheme = "repeat", mold, ...){
 	if(missing(mold)) mold <- data.list.mold(x)
 	out <- lapply(seq_along(x),function(i)x[[i]][mold[[i]]])
 	names(out) <- varnames(x)
+	if(is.null(row.names)) row.names <- attr(mold,"df.rownames")
 	as.data.frame(out, row.names = row.names, optional = optional,...)
 }
 
@@ -216,6 +217,7 @@ function(x, ...){
 
 data.list.mold <-
 function(x){
+	df.rownames <- as.vector(mouter(dimnames(x),FUN=paste,sep="."))
 	repdims <- dim(x)
 	xmold <- list()
 	for(i in seq_along(x)){
@@ -225,6 +227,6 @@ function(x){
 		xmold[[i]] <- aperm(array(xmold[[i]],repdims[prms]),order(prms))
 		dim(xmold[[i]]) <- NULL
 	}
-	return(xmold)
+	structure(xmold,df.rownames=df.rownames)
 }
 
