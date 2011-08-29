@@ -24,20 +24,32 @@ function(x,dnames,match.dnames,check = TRUE,...){
 }
 
 make.match.dnames <- function(x,dnames){
-	innames <- lapply(x,get.input.names)
-	
-	
-	
-	indims <- lapply(x,get.input.dims)
-	wfr <- which.max(sapply(indims,length))
-	indims.wfr <- indims[[wfr]]
 	match.dnames <- list()
-	if(length(unique(indims.wfr)) < length(indims.wfr)){
-		stop("Some dimensions are of same length and therefore require specification of match.dnames. Type ?data.list and see the details section of the help file for data.list.")
+	check <- FALSE
+	innames <- lapply(x,get.input.names)
+	ulinnames <- unlist(innames,recursive=FALSE)
+	notnullnames <- !sapply(ulinnames,is.null)
+	if(all(notnullnames)){
+		unique.dimnames <- unique(ulinnames)
+		mat.ndims <- lapply(innames,match,unique.dimnames)
+		indims.wfr <- sapply(unique.dimnames,length)
+		check <- TRUE
+	}
+	else{
+		indims <- lapply(x,get.input.dims)
+		wfr <- which.max(sapply(indims,length))
+		indims.wfr <- indims[[wfr]]
+		if(length(unique(indims.wfr)) < length(indims.wfr)){
+			stop("Some dimensions are unnamed and some are of the same length and therefore require specification of match.dnames. Type ?data.list and see the details section of the help file for data.list.")
+		}
+		mat.ndims <- lapply(indims,match,indims.wfr)
+		check <- FALSE
 	}
 	if(missing(dnames)) dnames <- paste("D",seq_along(indims.wfr),sep="")
-	for(i in seq_along(indims)){
-		match.dnames[[i]] <- dnames[match(indims[[i]],indims.wfr)]
+	match.dnames <- lapply(mat.ndims,function(ii)dnames[ii])
+	if(check.full.rep(match.dnames) && check){
+		names(x[[1]]) <- dimnames(x[[1]]) <- NULL
+		match.dnames <- make.match.dnames(x,dnames)
 	}
 	return(match.dnames)
 }
@@ -53,9 +65,9 @@ get.input.dims <- function(xi){
 }
 
 get.input.names <- function(xi){
-	if(is.null(dim(xi)) & is.atomic(xi)) return(names(xi))
+	if(is.null(dim(xi)) & is.atomic(xi)) return(list(names(xi)))
 	else if(is.recursive(xi) & is.atomic(xi[[1]])){
-		if(is.null(dim(xi[[1]]))) return(names(xi[[1]]))
+		if(is.null(dim(xi[[1]]))) return(list(names(xi[[1]])))
 		else return(dimnames(xi[[1]]))
 	}
 	else if(is.recursive(xi)) stop("recursive tables must contain only atomic elements")
