@@ -1,4 +1,4 @@
-dlcast <- function(x,dnames){
+dlcast <- function(x,dnames,fill=rep(NA,length(x))){
 	xnames <- lapply(x,names)
 	dims <- lapply(xnames,intersect,dnames)
 	vars <- setdiff(unlist(xnames),dnames)
@@ -14,7 +14,8 @@ dlcast <- function(x,dnames){
 		mtchs <- match(obs,full)
 		out[[i]] <- list()
 		for(j in seq_along(vars[[i]]))
-			out[[i]][[j]] <- make.arrays(vars[[i]][j],x[[i]],mtchs,dfull,dim.namesi)
+			out[[i]][[j]] <- make.arrays(vars[[i]][j],x[[i]],
+				mtchs,dfull,dim.namesi,fill[i])
 		names(out[[i]]) <- vars[[i]]
 	}
 	out <- as.data.list(out,match.dnames=dims)
@@ -32,8 +33,8 @@ get.dim.names <- function(dimsi,x){
 	dim.names
 }
 
-make.arrays <- function(vr,xi,mtchs,dfull,nms){
-	a <- array(NA,dim=dfull)
+make.arrays <- function(vr,xi,mtchs,dfull,nms,fill){
+	a <- array(fill,dim=dfull)
 	xv <- xi[[vr]]
 	a[mtchs] <- if(is.factor(xv)) as.character(xv) else xv
 	if(length(dfull)==1) names(a) <- nms[[1]]
