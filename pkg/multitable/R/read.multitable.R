@@ -10,3 +10,13 @@ read.multicsv <- function(files, dnames, tnames, fill = rep(NA,length(files)),..
 	
 read.multidelim <- function(files, dnames, tnames, fill = rep(NA,length(files)),...)
 	read.multitable(files, dnames, tnames, fill, sep="\t", ...)
+
+read.fourthcorner <- function(Y, X, Z, dnames=c("sites","species"), Yname="abundance",...){
+	Y <- as.matrix(read.table(Y, ...))
+	X <- read.table(X, ...)
+	Z <- read.table(Z, ...)
+	match.dnames <- list(dnames,dnames[1],dnames[2])
+	dl <- data.list(Y,X,Z,match.dnames=match.dnames)
+	names(dl)[1] <- Yname
+	return(dl)
+}
