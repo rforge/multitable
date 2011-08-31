@@ -1,4 +1,5 @@
 dlcast <- function(x,dnames,fill=rep(NA,length(x))){
+	if(!is.list(x) || is.data.frame(x)) x <- list(x)
 	xnames <- lapply(x,names)
 	dims <- lapply(xnames,intersect,dnames)
 	vars <- setdiff(unlist(xnames),dnames)

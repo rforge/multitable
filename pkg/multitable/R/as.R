@@ -3,7 +3,7 @@ function(x,...) UseMethod("as.data.list")
 
 as.data.list.default <-
 function(x,dnames,match.dnames,check = TRUE,...){
-	if(!is.list(x)) x <- list(x)
+	if((!is.list(x))||is.data.frame(x)) x <- list(x)
 	if(missing(match.dnames)) match.dnames <- make.match.dnames(x,dnames)
 	if(!is.list(match.dnames)) stop("match.dnames must be a list")
 	if(length(x)!=length(match.dnames)) stop("match.dnames not the right length")
@@ -29,7 +29,7 @@ make.match.dnames <- function(x,dnames){
 	innames <- lapply(x,get.input.names)
 	ulinnames <- unlist(innames,recursive=FALSE)
 	notnullnames <- !sapply(ulinnames,is.null)
-	if(all(notnullnames)){
+	if(all(notnullnames) && !is.null(ulinnames)){
 		unique.dimnames <- unique(ulinnames)
 		mat.ndims <- lapply(innames,match,unique.dimnames)
 		indims.wfr <- sapply(unique.dimnames,length)
