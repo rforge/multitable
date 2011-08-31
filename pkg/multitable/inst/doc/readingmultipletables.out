@@ -1,0 +1,10 @@
+\BOOKMARK [1][-]{section.1}{Reading fourth corner data}{}
+\BOOKMARK [1][-]{section.2}{Fourth corner data in long format}{}
+\BOOKMARK [1][-]{section.3}{More complex multiple-table data}{}
+\BOOKMARK [1][-]{section.4}{Creating data lists from existing R objects}{}
+\BOOKMARK [2][-]{subsection.4.1}{Standard fourth-corner data}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{Fourth-corner data in long format data frames}{section.4}
+\BOOKMARK [1][-]{section.5}{General principles for smooth data list creation}{}
+\BOOKMARK [2][-]{subsection.5.1}{How data list creation works}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{Make sure all of the dimensions of your input objects are consistently named}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{Manual dimension matching with match.dnames}{section.5}

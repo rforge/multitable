@@ -1,0 +1,12 @@
+"sites","years","temperature","precipitation"
+"arctic",2008,-30,20
+"subarctic",2008,0,40
+"midlatitude",2008,10,20
+"subtropical",2008,20,100
+"tropical",2008,50,150
+"equatorial",2008,30,200
+"arctic",2009,-37,21
+"subarctic",2009,3,41
+"subtropical",2009,25,99
+"tropical",2009,48,149
+"equatorial",2009,50,199
