@@ -6,7 +6,7 @@
 
 # functions
 
-export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, repdim, aperm.data.list, variablize, read.multitable, read.multicsv, read.multidelim, read.fourthcorner, dlcast)
+export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, repdim, aperm.data.list, variablize, read.multitable, read.multicsv, read.multidelim, read.fourthcorner, multifile.choose, dlcast)
 
 # S3 methods
 
