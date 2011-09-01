@@ -29,4 +29,27 @@
 \begin{document}
 \maketitle
 
+\begin{comment}
+$<-.data.list	Extract or replace parts of a data list object
+aperm.data.list	Data list transposition
+dim.data.list	Replication dimensions of a data list
+dim<-.data.list	Replication dimensions of a data list
+dimnames.data.list	Dimnames of a data list object
+dimnames<-.data.list	Dimnames of a data list object
+nvar	Number of variables in a data list object
+repdim	Replication dimensions of a data list
+str.data.list	Information about data list objects
+summary.data.list	Information about data list objects
+t.data.list	Data list transposition
+varnames	Data list variable names
+varnames<-	Data list variable names
+[.data.list	Extract or replace parts of a data list object
+[[<-.data.list	Extract or replace parts of a data list object
+\end{comment}
+
+\section{What is a data list?}
+\section{Subscripting data lists}
+\section{Transposing data lists}
+\section{Transforming variables}
+
 \end{document}
