@@ -42,7 +42,7 @@ The standard data management paradigm in \R\ is based on \code{data.frame} objec
 	node distance=0.2cm,
 	Y/.style={
 		rectangle,draw=blue!0,fill=blue!20,thick,
-		minimum width=8cm,minimum height=12cm,
+		minimum width=6cm,minimum height=12cm,
 		label=above:\Large species},
 	X/.style={
 		rectangle,draw=blue!0,fill=blue!20,thick,
@@ -52,7 +52,7 @@ The standard data management paradigm in \R\ is based on \code{data.frame} objec
 		}},
 	Z/.style={
 		rectangle,draw=blue!0,fill=blue!20,thick,
-		minimum width=8cm,minimum height=2cm},
+		minimum width=6cm,minimum height=2cm},
 	C/.style={
 		rectangle,draw=red!0,fill=red!0,thick,
 		minimum width=4cm,minimum height=2cm,
@@ -173,11 +173,12 @@ The \code{multitable} model of data management is illustrated in Figure \ref{fig
 		rectangle,draw=red!0,fill=red!20,thick,
 		rounded corners=2mm},
 	otpt/.style={
-		rectangle,draw=green!0,fill=green!20,thick,
+		rectangle,draw=blue!0,fill=blue!20,thick,
 		rounded corners=2mm},
 	plus/.style={},
 	tip/.style={
 		->,shorten >=1pt,line width=0.4mm}]
+\node[object new] (data files) 		at (3,1.5) {DATA FILES};
 \node[object new] (data list) 		at (0,1.5) {DATA LIST};
 \node[object stand] 	(data frame) 	at (0,0) {DATA FRAME};
 \node[object stand] 	(formula) 		at (3,0) {FORMULA};
@@ -187,8 +188,9 @@ The \code{multitable} model of data management is illustrated in Figure \ref{fig
 \node[plus] 					at (4.47,0) {\Large{+}};
 \node[plus] 					at (7.543,0) {\Large{=}};
 \draw[tip] (data list.south) -- (data frame.north);
+\draw[tip] (data files.west) -- (data list.east);
 \end{tikzpicture}
-\caption{The \code{multitable} paradigm for including multiple-table data into the standard \R\ workflow.  Data lists are used to organize and manipulate multiple-table data.  When such data are required for analysis, they are coerced into a data frame.  Once in data frame form, they can be used in analyses by combining them with formulas (to specify hypothetical relationships between variables) and functions (to call computational methods).} 
+\caption{The \code{multitable} paradigm for including multiple-table data (in red) into the standard \R\ workflow (in blue and green).  Data lists are used to organize and manipulate multiple-table data as a single \R\ object, even though it must be stored in multiple text-based data files.  When such data are required for analysis, they are coerced into a data frame.  Once in data frame form, they can be used in analyses by combining them with formulas (to specify hypothetical relationships between variables) and functions (to call computational methods).} 
 \label{fig:model}
 \end{figure}
 

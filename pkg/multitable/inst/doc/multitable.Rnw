@@ -32,7 +32,17 @@
 \begin{document}
 \maketitle
 
-The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two dimensional tables with rows  and columns representing replicates and variables respectively.  My experience in the field of community ecology has led me to data sets that do not easily fit within this paradigm.  A common example is the fourth-corner problem (refs?), in which three tables are collected: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Fig. \ref{fig:fourth}).  Such data are characterized by a conspicuous (lower-right) `fourth-corner', where there are no data.  And this fourth-corner problem will not go away if we somehow rearrange the data.  It is not possible to put such a data set into a data frame without large holes of missing values.  The fourth-corner problem is therefore inherently multi-tabular.  Hence, it is not obvious how best to include such data into an \R\ workflow.
+The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates and variables respectively.  Standard \R\ workflows require that all of the data to be analyzed is organized into a single data frame, and hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects; data frames and formulas are combined by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics).  This framework allows ecologists to concentrate on their primary interests---the relationships between ecological variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.
+
+However, research in my field of community ecology has led me to data sets that do not easily fit within a single data frame.  A common example is the fourth-corner problem (Legendre et al. 1997), in which three data tables are to be analyzed: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Fig. \ref{fig:fourth}).  Such data are characterized by a conspicuous (lower-right) `fourth-corner', where there are no data.  These fourth-corners of missing data are not caused by the usual problems (e.g. broken field equipment; budget restrictions; bad weather; dead subjects), but are part of the study design itself.  The fourth-corner problem is a special case of a general `multiple-table problem', which can be much more complex (e.g. could involve three-dimensional `cubes' of data, Fig. \ref{fig:beatrix}).  The challenge of analyzing such multiple-table data sets in \R\ is that it is not obvious how to organize them into a single\code{data.frame}, which is required in standard \R\ workflows.  Our goal with the \code{multitable} package is to provide tools for analyzing multiple-table data sets within this standard \R\ framework.
+
+
+
+
+
+
+
+%And this fourth-corner problem will not go away if we somehow rearrange the data.  It is not possible to put such a data set into a data frame without large holes of missing values.  The fourth-corner problem is therefore inherently multi-tabular.  Hence, it is not obvious how best to include such data into an \R\ workflow.
 
 
 \begin{figure}
@@ -75,8 +85,6 @@ The standard data management paradigm in \R\ is based on \code{data.frame} objec
 \caption{Fourth corner problem.} 
 \label{fig:fourth}
 \end{figure}
-
-One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There has been a fair amount of work in this direction, focusing on data with a fourth-corner problem (e.g. Chessel et al. 1996; Legendre et al. 1997; Ives and Godfray 2006; Dray and Legendre 2008; Pillar and Duarte 2010; Leibold et al. 2010; Ives and Helmus 2011).  However, this work does not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}).  One approach to such issues would be to build new data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be learned for each new structure.  The \code{multitable} package provides an alternative approach, by introducing a multiple-table generalization of data frames---called data lists---which can be analyzed with virtually any function that can be used to analyze a data frame.  Thus, instead of providing new methods of analysis, \code{multitable} provides new methods of data management.
 
 \begin{figure}
 \begin{tikzpicture} [
@@ -154,14 +162,19 @@ One possible solution is to develop new \R\ analysis functions---or new software
 \label{fig:beatrix}
 \end{figure}
 
+One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There has been a fair amount of work in this direction, focusing on data with a fourth-corner problem (e.g. Chessel et al. 1996; Legendre et al. 1997; Ives and Godfray 2006; Dray and Legendre 2008; Pillar and Duarte 2010; Leibold et al. 2010; Ives and Helmus 2011).  However, this work does not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}).  One approach to such issues would be to build new data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be learned for each new structure.  The \code{multitable} package provides an alternative approach, by introducing a multiple-table generalization of data frames---called data lists---which can be analyzed with virtually any function that can be used to analyze a data frame.  Thus, instead of providing new methods of analysis, \code{multitable} provides new methods of data management.
+
 There are several existing \R\ packages that are designed to make data management easier (e.g. \code{reshape2}; etc.??).  In particular, the \code{mefa} and \code{mefa4} packages have been developed to organize data with a slight generalization\footnote{Several community matrices---called segments---with identical dimensions are allowed in \code{mefa}.} of the fourth-corner problem.  The \code{multitable} package has much in common with \code{mefa}, but there are noticeable differences; for example, \code{mefa} provides more extensive tools for data summarization than \code{multitable}, while \code{multitable} is designed to handle more general data structures than \code{mefa}.  However, we recognize that \code{mefa} and \code{multitable} will be complementary, not competitive.
 
 The specific aim of the \code{multitable} package is to make multiple-table data analysis as similar as possible to single-table analysis in \R.  The standard single-table \R\ workflow involves organizing data into a data frame; expressing hypotheses about the relationships between variables in the data frames via \code{formula} objects; and combining data frames and formulas by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics).  This framework allows ecologists to concentrate on their primary interests---the relationships between ecological variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.  Our overarching design principle is to use this standard \R\ paradigm with multiple-table data, even though such data do not fit into data frames.
 
-\section{Organizing multiple-table data in data list objects}
+\section{The \code{multitable} model of data organization}
 
-The \code{multitable} model of data management is illustrated in Figure \ref{fig:model}.  
+The \code{multitable} model of data organization is illustrated in Figure \ref{fig:model}.  In blue are the elements of the standard \R\ workflow: data frames; formulas; functions; and analyses.  The \code{multitable} package seeks to facilitate the use of such workflows with multiple-table data by creating tools (arrows and red boxes) for organizing and manipulating such data.  Once data lists are ready for analysis \code{multitable} provides tools for coercing data lists into data frames, thereby entering the standard \R\ workflow.
 
+This model of data organization is made possible by new objects, called data lists.  These data list objects organize and relate data from multiple tables, which were stored in multiple text-based data files.  Once in data list form, handling multiple-table data is much like handling single-table data in data frames; in fact data lists are much like the data frames that you have come to love!
+
+Like data lists 
 
 \begin{figure}
 \begin{tikzpicture} [
@@ -172,11 +185,12 @@ The \code{multitable} model of data management is illustrated in Figure \ref{fig
 		rectangle,draw=red!0,fill=red!20,thick,
 		rounded corners=2mm},
 	otpt/.style={
-		rectangle,draw=green!0,fill=green!20,thick,
+		rectangle,draw=blue!0,fill=blue!20,thick,
 		rounded corners=2mm},
 	plus/.style={},
 	tip/.style={
 		->,shorten >=1pt,line width=0.4mm}]
+\node[object new] (data files) 		at (3,1.5) {DATA FILES};
 \node[object new] (data list) 		at (0,1.5) {DATA LIST};
 \node[object stand] 	(data frame) 	at (0,0) {DATA FRAME};
 \node[object stand] 	(formula) 		at (3,0) {FORMULA};
@@ -186,8 +200,9 @@ The \code{multitable} model of data management is illustrated in Figure \ref{fig
 \node[plus] 					at (4.47,0) {\Large{+}};
 \node[plus] 					at (7.543,0) {\Large{=}};
 \draw[tip] (data list.south) -- (data frame.north);
+\draw[tip] (data files.west) -- (data list.east);
 \end{tikzpicture}
-\caption{The \code{multitable} paradigm for including multiple-table data into the standard \R\ workflow.  Data lists are used to organize and manipulate multiple-table data.  When such data are required for analysis, they are coerced into a data frame.  Once in data frame form, they can be used in analyses by combining them with formulas (to specify hypothetical relationships between variables) and functions (to call computational methods).} 
+\caption{The \code{multitable} paradigm for including multiple-table data (in red) into the standard \R\ workflow (in blue).  Data lists are used to organize and manipulate multiple-table data as a single \R\ object, even though it must be stored in multiple text-based data files.  When such data are required for analysis, they are coerced into a data frame.  Once in data frame form, they can be used in analyses by combining them with formulas (to specify hypothetical relationships between variables) and functions (to call computational methods).} 
 \label{fig:model}
 \end{figure}
 

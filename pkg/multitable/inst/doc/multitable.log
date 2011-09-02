@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  1 SEP 2011 17:52
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  1 SEP 2011 22:02
 entering extended mode
 \write18 enabled.
  %&-line parsing enabled.
@@ -564,11 +564,6 @@ Underfull \hbox (badness 1082) in paragraph at lines 64--64
  []
 
 
-Overfull \hbox (36.38358pt too wide) in paragraph at lines 75--76
-[][] 
- []
-
-
 Overfull \hbox (56.13846pt too wide) in paragraph at lines 153--154
 [][] 
  []
@@ -581,10 +576,10 @@ LaTeX Warning: Float too large for page by 52.90814pt on input line 156.
 {/usr/local/texlive/2008/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2] [3] [4] [5] (./multitable.aux) ) 
 Here is how much of TeX's memory you used:
- 9781 strings out of 493876
- 165224 string characters out of 1150567
- 206273 words of memory out of 3000000
- 12795 multiletter control sequences out of 10000+50000
+ 9787 strings out of 493876
+ 165344 string characters out of 1150567
+ 206891 words of memory out of 3000000
+ 12801 multiletter control sequences out of 10000+50000
  36428 words of font info for 86 fonts, out of 3000000 for 5000
  714 hyphenation exceptions out of 8191
  47i,8n,60p,1392b,702s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -599,7 +594,7 @@ fonts/type1/bluesky/cm/cmss10.pfb></usr/local/texlive/2008/texmf-dist/fonts/typ
 e1/bluesky/cm/cmss17.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesk
 y/cm/cmtt10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmtt
 8.pfb>
-Output written on multitable.pdf (5 pages, 69481 bytes).
+Output written on multitable.pdf (5 pages, 69749 bytes).
 PDF statistics:
  65 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
