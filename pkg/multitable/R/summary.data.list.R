@@ -4,6 +4,7 @@ str.data.list <- function(object, give.attr = FALSE, ...){
 
 summary.data.list <- function(object, ...){
 	x <- unclass(object)
+	return(sapply(x,attr,"subsetdim"))
 	out <- list()
 	out$dims <- sapply(x,attr,"subsetdim")
 	out$modes <- sapply(x,mode)
