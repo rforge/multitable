@@ -28,7 +28,7 @@ variablize.factor <- function(x,...){
 }
 
 variablize.data.list <- function(x,...){
-	x <- as.list(x)[summary(x)$dims[1,]]
+	x <- as.list(x)[summary(x)[1,]]
 	for(i in seq_along(x))
 		x[[i]] <- variablize(x[[i]])
 	do.call(data.frame,x)

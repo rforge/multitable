@@ -20,6 +20,7 @@ function(x,dnames,match.dnames,check = TRUE,...){
 	x <- structure(x$x, bm = bm, match.dnames = match.dnames,
 		repdim = repdim, class = "data.list")
 	x <- make.dimnames.consistent(x,bm)
+	if(length(repdim)==1) return(as.data.frame(x))
 	return(x)
 }
 
@@ -28,9 +29,13 @@ make.match.dnames <- function(x,dnames){
 	check <- FALSE
 	innames <- lapply(x,get.input.names)
 	ulinnames <- unlist(innames,recursive=FALSE)
-	notnullnames <- !sapply(ulinnames,is.null)
+	notnullnames <- !sapply(innames,is.null)
 	if(all(notnullnames) && !is.null(ulinnames)){
 		unique.dimnames <- unique(ulinnames)
+		allunique <- length(unique.dimnames)==length(ulinnames)
+		morethanonevar <- length(x) > 1
+		if(allunique && morethanonevar)
+			stop("Resulting data list invalid:  some variables do not share any dimensions with other variables")
 		mat.ndims <- lapply(innames,match,unique.dimnames)
 		indims.wfr <- sapply(unique.dimnames,length)
 		check <- TRUE

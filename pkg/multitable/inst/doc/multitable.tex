@@ -466,6 +466,51 @@ REPLICATION DIMENSIONS:
 \end{Schunk}
 \noindent Notice also that for each different subset of the data, the new replication dimensions are printed after the data.
 
+\section{Transforming variables in data lists}
+
+Often we need to transform variables before passing data frames to functions.  This is easily done with variables in data lists as well.  For example, suppose we want to make a $\log(x+1)$ transformation of the abundance data.
+\begin{Schunk}
+\begin{Sinput}
+> fake.community$abundance <- log(fake.community$abundance + 1)
+> fake.community$abundance
+\end{Sinput}
+\begin{Soutput}
+, , capybara
+
+                2009     2008 1537
+midlatitude 1.609438 0.000000    0
+subtropical 0.000000 2.397895    0
+tropical    2.197225 0.000000    0
+equatorial  0.000000 2.079442    0
+arctic      0.000000 0.000000    0
+subarctic   0.000000 0.000000    0
+
+, , moss
+
+                2009     2008 1537
+midlatitude 0.000000 1.945910    0
+subtropical 0.000000 0.000000    0
+tropical    2.302585 0.000000    0
+equatorial  0.000000 1.386294    0
+arctic      1.791759 0.000000    0
+subarctic   0.000000 0.000000    0
+
+, , vampire
+
+            2009 2008      1537
+midlatitude    0    0 0.0000000
+subtropical    0    0 0.6931472
+tropical       0    0 0.0000000
+equatorial     0    0 0.0000000
+arctic         0    0 0.0000000
+subarctic      0    0 0.0000000
+
+attr(,"subsetdim")
+  sites   years species 
+   TRUE    TRUE    TRUE 
+\end{Soutput}
+\end{Schunk}
+
 \section{Simple analysis functions}
 
 Data lists can be passed `as is' to many standard functions in \R\ that normally take data frames.  In the next section I will define this class of functions in more detail, but for now consider this simple example.  Perhaps we want to explore whether the interaction between body size and temperature has an influence on abundance.  As a first attempt at model building, we fit a linear model using \code{lm}.
@@ -479,7 +524,7 @@ lm(formula = abundance ~ (body.size * temperature), data = fake.community)
 
 Coefficients:
           (Intercept)              body.size            temperature  body.size:temperature  
-            5.9804492             -0.0314760              0.1728702             -0.0009098  
+            1.5718991             -0.0082732              0.0477659             -0.0002514  
 \end{Soutput}
 \end{Schunk}
 And this works just as well with mixtures of categorical and numerical data.
@@ -493,9 +538,9 @@ lm(formula = abundance ~ -1 + (homeotherm * temperature), data = fake.community)
 
 Coefficients:
             homeothermN              homeothermY              temperature  
-               1.008253                 1.573802                 0.002421  
+              0.3450914                0.4136577               -0.0004895  
 homeothermY:temperature  
-               0.043071  
+              0.0130595  
 \end{Soutput}
 \end{Schunk}
 It also works with other `simple' functions, such as \code{rlm} (robust linear model) in the \code{MASS} package.
@@ -511,11 +556,11 @@ Converged in 17 iterations
 
 Coefficients:
           (Intercept)             body.size           temperature body.size:temperature 
-         8.327288e-04         -4.382783e-06          2.775763e-05         -1.460928e-07 
+         2.230510e-04         -1.173953e-06          7.435033e-06         -3.913176e-08 
 
 Degrees of freedom: 22 total; 18 residual
   (32 observations deleted due to missingness)
-Scale estimate: 5.92e-15 
+Scale estimate: 1.39e-16 
 \end{Soutput}
 \end{Schunk}
 \noindent Therefore, in many cases, data lists enter the standard \R\ workflow in exactly the same manner as data frames.
@@ -529,60 +574,60 @@ The reason that unmodified data lists can be passed to some functions that are e
 \end{Sinput}
 \begin{Soutput}
                           abundance temperature precipitation body.size metabolic.rate
-midlatitude.2009.capybara         4          NA            NA       140             20
-subtropical.2009.capybara         0          25            99       140             20
-tropical.2009.capybara            8          48           149       140             20
-equatorial.2009.capybara          0          50           199       140             20
-arctic.2009.capybara              0         -37            21       140             20
-subarctic.2009.capybara           0           3            41       140             20
-midlatitude.2008.capybara         0          10            20       140             20
-subtropical.2008.capybara        10          20           100       140             20
-tropical.2008.capybara            0          50           150       140             20
-equatorial.2008.capybara          7          30           200       140             20
-arctic.2008.capybara              0         -30            20       140             20
-subarctic.2008.capybara           0           0            40       140             20
-midlatitude.1537.capybara         0          NA            NA       140             20
-subtropical.1537.capybara         0          NA            NA       140             20
-tropical.1537.capybara            0          NA            NA       140             20
-equatorial.1537.capybara          0          NA            NA       140             20
-arctic.1537.capybara              0          NA            NA       140             20
-subarctic.1537.capybara           0          NA            NA       140             20
-midlatitude.2009.moss             0          NA            NA        NA              5
-subtropical.2009.moss             0          25            99        NA              5
-tropical.2009.moss                9          48           149        NA              5
-equatorial.2009.moss              0          50           199        NA              5
-arctic.2009.moss                  5         -37            21        NA              5
-subarctic.2009.moss               0           3            41        NA              5
-midlatitude.2008.moss             6          10            20        NA              5
-subtropical.2008.moss             0          20           100        NA              5
-tropical.2008.moss                0          50           150        NA              5
-equatorial.2008.moss              3          30           200        NA              5
-arctic.2008.moss                  0         -30            20        NA              5
-subarctic.2008.moss               0           0            40        NA              5
-midlatitude.1537.moss             0          NA            NA        NA              5
-subtropical.1537.moss             0          NA            NA        NA              5
-tropical.1537.moss                0          NA            NA        NA              5
-equatorial.1537.moss              0          NA            NA        NA              5
-arctic.1537.moss                  0          NA            NA        NA              5
-subarctic.1537.moss               0          NA            NA        NA              5
-midlatitude.2009.vampire          0          NA            NA       190              0
-subtropical.2009.vampire          0          25            99       190              0
-tropical.2009.vampire             0          48           149       190              0
-equatorial.2009.vampire           0          50           199       190              0
-arctic.2009.vampire               0         -37            21       190              0
-subarctic.2009.vampire            0           3            41       190              0
-midlatitude.2008.vampire          0          10            20       190              0
-subtropical.2008.vampire          0          20           100       190              0
-tropical.2008.vampire             0          50           150       190              0
-equatorial.2008.vampire           0          30           200       190              0
-arctic.2008.vampire               0         -30            20       190              0
-subarctic.2008.vampire            0           0            40       190              0
-midlatitude.1537.vampire          0          NA            NA       190              0
-subtropical.1537.vampire          1          NA            NA       190              0
-tropical.1537.vampire             0          NA            NA       190              0
-equatorial.1537.vampire           0          NA            NA       190              0
-arctic.1537.vampire               0          NA            NA       190              0
-subarctic.1537.vampire            0          NA            NA       190              0
+midlatitude.2009.capybara 1.6094379          NA            NA       140             20
+subtropical.2009.capybara 0.0000000          25            99       140             20
+tropical.2009.capybara    2.1972246          48           149       140             20
+equatorial.2009.capybara  0.0000000          50           199       140             20
+arctic.2009.capybara      0.0000000         -37            21       140             20
+subarctic.2009.capybara   0.0000000           3            41       140             20
+midlatitude.2008.capybara 0.0000000          10            20       140             20
+subtropical.2008.capybara 2.3978953          20           100       140             20
+tropical.2008.capybara    0.0000000          50           150       140             20
+equatorial.2008.capybara  2.0794415          30           200       140             20
+arctic.2008.capybara      0.0000000         -30            20       140             20
+subarctic.2008.capybara   0.0000000           0            40       140             20
+midlatitude.1537.capybara 0.0000000          NA            NA       140             20
+subtropical.1537.capybara 0.0000000          NA            NA       140             20
+tropical.1537.capybara    0.0000000          NA            NA       140             20
+equatorial.1537.capybara  0.0000000          NA            NA       140             20
+arctic.1537.capybara      0.0000000          NA            NA       140             20
+subarctic.1537.capybara   0.0000000          NA            NA       140             20
+midlatitude.2009.moss     0.0000000          NA            NA        NA              5
+subtropical.2009.moss     0.0000000          25            99        NA              5
+tropical.2009.moss        2.3025851          48           149        NA              5
+equatorial.2009.moss      0.0000000          50           199        NA              5
+arctic.2009.moss          1.7917595         -37            21        NA              5
+subarctic.2009.moss       0.0000000           3            41        NA              5
+midlatitude.2008.moss     1.9459101          10            20        NA              5
+subtropical.2008.moss     0.0000000          20           100        NA              5
+tropical.2008.moss        0.0000000          50           150        NA              5
+equatorial.2008.moss      1.3862944          30           200        NA              5
+arctic.2008.moss          0.0000000         -30            20        NA              5
+subarctic.2008.moss       0.0000000           0            40        NA              5
+midlatitude.1537.moss     0.0000000          NA            NA        NA              5
+subtropical.1537.moss     0.0000000          NA            NA        NA              5
+tropical.1537.moss        0.0000000          NA            NA        NA              5
+equatorial.1537.moss      0.0000000          NA            NA        NA              5
+arctic.1537.moss          0.0000000          NA            NA        NA              5
+subarctic.1537.moss       0.0000000          NA            NA        NA              5
+midlatitude.2009.vampire  0.0000000          NA            NA       190              0
+subtropical.2009.vampire  0.0000000          25            99       190              0
+tropical.2009.vampire     0.0000000          48           149       190              0
+equatorial.2009.vampire   0.0000000          50           199       190              0
+arctic.2009.vampire       0.0000000         -37            21       190              0
+subarctic.2009.vampire    0.0000000           3            41       190              0
+midlatitude.2008.vampire  0.0000000          10            20       190              0
+subtropical.2008.vampire  0.0000000          20           100       190              0
+tropical.2008.vampire     0.0000000          50           150       190              0
+equatorial.2008.vampire   0.0000000          30           200       190              0
+arctic.2008.vampire       0.0000000         -30            20       190              0
+subarctic.2008.vampire    0.0000000           0            40       190              0
+midlatitude.1537.vampire  0.0000000          NA            NA       190              0
+subtropical.1537.vampire  0.6931472          NA            NA       190              0
+tropical.1537.vampire     0.0000000          NA            NA       190              0
+equatorial.1537.vampire   0.0000000          NA            NA       190              0
+arctic.1537.vampire       0.0000000          NA            NA       190              0
+subarctic.1537.vampire    0.0000000          NA            NA       190              0
                           homeotherm
 midlatitude.2009.capybara          Y
 subtropical.2009.capybara          Y
