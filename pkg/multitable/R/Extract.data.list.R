@@ -4,11 +4,22 @@ function(x,...){
 	nmc <- length(mc)
 	nd <- nmc - 2
 	repdim <- dim(x)
-	nv <- nvar(x)
 	if(nd==1){
-		rng <- range(eval(mc[[3]]))
-		if((rng[2] > nv) || (rng[1] < 1))
-			stop("subscript out of range")
+		ss <- eval(mc[[3]],envir=parent.frame())
+		mode.ss <- mode(ss)
+		if(mode.ss=="numeric"){
+			nv <- nvar(x)
+			rng <- range(ss)
+			if((rng[2] > nv) || (rng[1] < 1))
+				stop("subscript out of bounds")
+		}
+		else if(mode.ss=="character"){
+			vn <- varnames(x)
+			if(!all(ss %in% vn))
+				stop("variable name(s) not found")
+		}
+		else if(mode.ss!="logical")
+			stop("invalid subscript type")
 		mc[[1]] <- `[`
 		mc[[2]] <- bquote(xl)
 		xl <- unclass(x)
@@ -25,13 +36,22 @@ function(x,...){
 	for(i in 3:nmc){
 		if(mc[[i]] != substitute()){
 			indi <- eval(mc[[i]],envir=parent.frame())
-			if(is.logical(indi)) indi <- which(indi)
+			if(is.logical(indi)){
+				ndm <- length(dim.names[[i-2]])
+				indi <- suppressWarnings(
+					as.logical(indi + rep(0,ndm))
+				)
+				if(all(!indi))
+					stop("variables with zero length are not allowed in data lists")
+			}
 			if(is.character(indi)){
 				indi <- match(indi,dim.names[[i-2]])
 				if(!all(complete.cases(indi))){
 					stop("supplied names not found in appropriate dimensions")
 				}
 			}
+			if(is.numeric(indi) && any(indi<1))
+				stop("zero subscripting not allowed in data lists")
 			repdim[i-2] <- length(indi)
 			mc[[i]] <- indi
 			dim.names[[i-2]] <- dim.names[[i-2]][indi]
@@ -71,7 +91,3 @@ function(x,...){
 	class(x) <- "data.list"
 	return(x)
 }
-
-#`[[.data.list` <- function(x,i)
-
-
