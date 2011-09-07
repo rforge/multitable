@@ -251,7 +251,7 @@ rlm(abundance ~ (body.size*temperature),data=fake.community)
 
 The reason that unmodified data lists can be passed to some functions that are expecting data frames, is that these functions try to coerce whatever data object they receive into a data frame.  When the \code{multitable} package is loaded, these functions can find a method for making such a conversion.  This method can be accessed by users directly via the \code{as.data.frame} function from the \R\ \code{base} package.  For example, we can pass the \code{fake.community} data to \code{as.data.frame}.
 <<eval=TRUE>>=
-as.data.frame(fake.community)
+head(as.data.frame(fake.community))
 @
 
 %Because the variables differ in the dimensions they are replicated along, replication of such multiple-table data sets cannot simply be represented as rows in a data frame without either repeating data values to fill up the resulting holes (e.g. fourth-corners) or reducing the information content of the data.

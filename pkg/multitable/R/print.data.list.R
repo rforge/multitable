@@ -3,7 +3,7 @@ function(x, ...){
 	for(i in seq_along(x)){
 		subsetdim <- attr(x[[i]],"subsetdim")
 		attr(x[[i]],"subsetdim") <- NULL
-		varname <- varnames(x)[i]
+		varname <- varnames(x)[i]	# could be out of the loop?
 		if(is.null(varname)) varname <- i
 		cat(paste(varname,":\n",sep=""))
 		cat(rep("-",nchar(varname)),"\n",sep="")

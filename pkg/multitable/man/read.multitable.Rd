@@ -33,8 +33,46 @@ multifile.choose(n)
   \item{...}{Additional arguments to pass to \code{\link{read.table}}. Note that headers MUST be present in order to distinguish columns for replication dimensions from columns for variables, and therefore \code{header} is set to \code{TRUE} and cannot be changed.  Exception:  \code{header} may be missing in \code{read.fourthcorner}.}
 }
 \details{
-I'll get to this a little later.
+The \code{read.multitable} function is a multiple-table version of 
 }
 \value{
 A \code{\link{data.list}} object.
+}
+\examples{
+abundance.file <- tempfile()
+environment.file <- tempfile()
+trait.file <- tempfile()
+
+abundance <- data.frame(
+	sites=c(
+		"midlatitude","subtropical","tropical","equatorial",
+		"arctic","midlatitude","tropical","equatorial",
+		"subtropical"
+	),
+	species=c(rep("capybara",4),rep("moss",4),"vampire"),
+	abundance=c(4,10,8,7,5,6,9,3,1)
+)
+
+environment <- data.frame(
+	sites=c(
+		"arctic","subarctic","midlatitude","subtropical",
+		"tropical","equatorial"
+	),
+	temperature=c(-30,0,10,20,50,30),
+	precipitation=c(20,40,20,100,150,200)
+)
+
+trait <- data.frame(
+	species=c("capybara","moss","vampire"),
+	body.size=c(140,5,190),
+	metabolic.rate=c(20,5,0)
+)
+
+write.table(abundance,abundance.file,sep=",")
+write.table(environment,environment.file,sep=",")
+write.table(trait,trait.file,sep=",")
+
+files <- c(abundance.file,environment.file,trait.file)
+dnames <- c("sites","species")
+read.multicsv(files,dnames,fill=c(0,NA,NA))
 }

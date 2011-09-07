@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  31 AUG 2011 12:44
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  6 SEP 2011 17:26
 entering extended mode
 \write18 enabled.
  %&-line parsing enabled.
@@ -341,29 +341,30 @@ LaTeX Font Info:    Try loading font information for T1+aer on input line 100.
 (/usr/local/texlive/2008/texmf-dist/tex/latex/ae/t1aer.fd
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
 ))))
-No file readingmultipletables.aux.
+(./readingmultipletables.aux)
 \openout1 = `readingmultipletables.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 24.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 24.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 31.
+
 (/usr/local/texlive/2008/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    ... okay on input line 31.
 
 (/usr/local/texlive/2008/texmf-dist/tex/context/base/supp-pdf.tex
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -378,7 +379,7 @@ LaTeX Font Info:    ... okay on input line 24.
 \MPnumerator=\count115
 \everyMPtoPDFconversion=\toks25
 )
-Package hyperref Info: Link coloring OFF on input line 24.
+Package hyperref Info: Link coloring OFF on input line 31.
  (/usr/local/texlive/2008/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 
@@ -387,200 +388,166 @@ Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
 \c@section@level=\count116
 )
-LaTeX Info: Redefining \ref on input line 24.
-LaTeX Info: Redefining \pageref on input line 24.
+LaTeX Info: Redefining \ref on input line 31.
+LaTeX Info: Redefining \pageref on input line 31.
+
+(./readingmultipletables.out) (./readingmultipletables.out)
 \@outlinefile=\write4
 \openout4 = `readingmultipletables.out'.
 
 \AtBeginShipoutBox=\box30
-LaTeX Font Info:    Try loading font information for T1+aess on input line 26.
+LaTeX Font Info:    Try loading font information for T1+aess on input line 33.
 
 (/usr/local/texlive/2008/texmf-dist/tex/latex/ae/t1aess.fd
 File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 26.
+LaTeX Font Info:    Try loading font information for U+msa on input line 33.
 
 (/usr/local/texlive/2008/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2002/01/19 v2.2g AMS font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 26.
+LaTeX Font Info:    Try loading font information for U+msb on input line 33.
 
 (/usr/local/texlive/2008/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2002/01/19 v2.2g AMS font definitions
 )
-LaTeX Font Info:    Try loading font information for T1+aett on input line 27.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 34.
 
 (/usr/local/texlive/2008/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 )
-
-LaTeX Warning: Reference `tab:functions' on page 1 undefined on input line 34.
-
-
-Overfull \hbox (1.22627pt too wide) in paragraph at lines 34--35
+Overfull \hbox (1.22627pt too wide) in paragraph at lines 41--42
 []\T1/aer/m/n/10 There are many meth-ods for con-vert-ing multiple-table data i
 nto a \T1/aett/m/n/10 data.list\T1/aer/m/n/10 .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 44--45
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
 []\T1/aer/m/n/10 a num-ber of \T1/aett/m/n/10 vec-tor\T1/aer/m/n/10 s; \T1/aett
 /m/n/10 ma-trix\T1/aer/m/n/10 es; \T1/aett/m/n/10 ar-ray\T1/aer/m/n/10 s;
  []
 
 
-Overfull \hbox (3.72157pt too wide) in paragraph at lines 49--49
+Overfull \hbox (3.72157pt too wide) in paragraph at lines 56--56
 []\T1/aett/m/n/10 read.fourthcorner| 
  []
 
 [1
 
 {/usr/local/texlive/2008/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<./readingmultipletables/community.pdf, id=62, 1407.2575pt x 720.6925pt>
+File: ./readingmultipletables/community.pdf Graphic file (type pdf)
 
-LaTeX Warning: Reference `fig:spreadsheetfc' on page 2 undefined on input line 
-62.
+<use ./readingmultipletables/community.pdf>
+<./readingmultipletables/environment.pdf, id=63, 1407.2575pt x 720.6925pt>
+File: ./readingmultipletables/environment.pdf Graphic file (type pdf)
 
-<community.pdf, id=21, 1407.2575pt x 720.6925pt>
-File: community.pdf Graphic file (type pdf)
- <use community.pdf>
-<environment.pdf, id=22, 1407.2575pt x 720.6925pt>
-File: environment.pdf Graphic file (type pdf)
- <use environment.pdf>
-<traits.pdf, id=23, 1407.2575pt x 720.6925pt>
-File: traits.pdf Graphic file (type pdf)
- <use traits.pdf>
-Underfull \hbox (badness 10000) in paragraph at lines 64--67
+<use ./readingmultipletables/environment.pdf>
+<./readingmultipletables/traits.pdf, id=64, 1407.2575pt x 720.6925pt>
+File: ./readingmultipletables/traits.pdf Graphic file (type pdf)
+
+<use ./readingmultipletables/traits.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 71--74
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 64--67
+Underfull \hbox (badness 10000) in paragraph at lines 71--74
 []
  []
 
 
-Overfull \hbox (5.53595pt too wide) in paragraph at lines 86--88
+Overfull \hbox (5.53595pt too wide) in paragraph at lines 94--96
 \T1/aer/m/n/10 to in-voke an in-ter-ac-tive menu for se-lect-ing the ap-pro-pri
 -ate files. The \T1/aett/m/n/10 header=TRUE
  []
 
-[2] [3 <./community.pdf> <./environment.pdf> <./traits.pdf>] [4]
+[2] [3 <./readingmultipletables/community.pdf> <./readingmultipletables/environ
+ment.pdf> <./readingmultipletables/traits.pdf>] [4]
+<./readingmultipletables/community_long.pdf, id=105, 1156.32pt x 660.4675pt>
+File: ./readingmultipletables/community_long.pdf Graphic file (type pdf)
 
-LaTeX Warning: Reference `fig:longspreadsheetfc' on page 5 undefined on input l
-ine 163.
+<use ./readingmultipletables/community_long.pdf>
+<./readingmultipletables/environment_long.pdf, id=106, 1156.32pt x 660.4675pt>
+File: ./readingmultipletables/environment_long.pdf Graphic file (type pdf)
 
-<community_long.pdf, id=64, 1156.32pt x 660.4675pt>
-File: community_long.pdf Graphic file (type pdf)
- <use community_long.pdf>
-<environment_long.pdf, id=65, 1156.32pt x 660.4675pt>
-File: environment_long.pdf Graphic file (type pdf)
+<use ./readingmultipletables/environment_long.pdf>
+<./readingmultipletables/traits_long.pdf, id=107, 1156.32pt x 660.4675pt>
+File: ./readingmultipletables/traits_long.pdf Graphic file (type pdf)
 
-<use environment_long.pdf> <traits_long.pdf, id=66, 1156.32pt x 660.4675pt>
-File: traits_long.pdf Graphic file (type pdf)
-
-<use traits_long.pdf>
-Underfull \hbox (badness 10000) in paragraph at lines 165--168
+<use ./readingmultipletables/traits_long.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 173--176
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--168
+Underfull \hbox (badness 10000) in paragraph at lines 173--176
 []
  []
 
+[5] [6 <./readingmultipletables/community_long.pdf> <./readingmultipletables/en
+vironment_long.pdf> <./readingmultipletables/traits_long.pdf>]
+<./readingmultipletables/community_complex.pdf, id=146, 1140.26pt x 740.7675pt>
+File: ./readingmultipletables/community_complex.pdf Graphic file (type pdf)
+<use ./readingmultipletables/community_complex.pdf>
+<./readingmultipletables/environment_complex.pdf, id=147, 1140.26pt x 740.7675p
+t>
+File: ./readingmultipletables/environment_complex.pdf Graphic file (type pdf)
+ <use ./readingmultipletables/environment_complex.pdf>
+<./readingmultipletables/traits_complex.pdf, id=148, 1140.26pt x 740.7675pt>
+File: ./readingmultipletables/traits_complex.pdf Graphic file (type pdf)
 
-LaTeX Warning: Reference `fig:longspreadsheetfc' on page 5 undefined on input l
-ine 171.
-
-
-LaTeX Warning: Reference `fig:spreadsheetfc' on page 5 undefined on input line 
-171.
-
-
-LaTeX Warning: Reference `fig:spreadsheetfc' on page 5 undefined on input line 
-171.
-
-
-LaTeX Warning: Reference `fig:longspreadsheetfc' on page 5 undefined on input l
-ine 173.
-
-[5] [6 <./community_long.pdf> <./environment_long.pdf> <./traits_long.pdf>]
-
-LaTeX Warning: Reference `fig:complexspreadsheet' on page 7 undefined on input 
-line 191.
-
-<community_complex.pdf, id=101, 1140.26pt x 740.7675pt>
-File: community_complex.pdf Graphic file (type pdf)
-
-<use community_complex.pdf>
-<environment_complex.pdf, id=102, 1140.26pt x 740.7675pt>
-File: environment_complex.pdf Graphic file (type pdf)
-
-<use environment_complex.pdf>
-<traits_complex.pdf, id=103, 1140.26pt x 740.7675pt>
-File: traits_complex.pdf Graphic file (type pdf)
- <use traits_complex.pdf>
-Underfull \hbox (badness 10000) in paragraph at lines 193--196
+<use ./readingmultipletables/traits_complex.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 201--204
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 193--196
+Underfull \hbox (badness 10000) in paragraph at lines 201--204
 []
  []
 
 
-LaTeX Warning: Float too large for page by 13.84732pt on input line 197.
+LaTeX Warning: Float too large for page by 13.84732pt on input line 205.
 
-[7] [8 <./community_complex.pdf> <./environment_complex.pdf> <./traits_complex.
-pdf>] [9]
-Overfull \hbox (5.25655pt too wide) in paragraph at lines 298--299
+[7] [8 <./readingmultipletables/community_complex.pdf> <./readingmultipletables
+/environment_complex.pdf> <./readingmultipletables/traits_complex.pdf>]
+[9]
+Overfull \hbox (5.25655pt too wide) in paragraph at lines 306--307
 \T1/aett/m/n/10 read.fourthcorner\T1/aer/m/n/10 ) for di-rectly con-vert-ing mu
 ltiple-table data into a \T1/aett/m/n/10 data.list
  []
 
-[10] [11] [12]
-
-LaTeX Warning: Reference `tab:functions' on page 13 undefined on input line 425
-.
-
-[13] [14] [15]
+[10] [11] [12] [13] [14] [15]
 
 LaTeX Font Warning: Font shape `T1/aett/bx/n' undefined
-(Font)              using `T1/aett/m/n' instead on input line 577.
+(Font)              using `T1/aett/m/n' instead on input line 585.
 
 [16] (./readingmultipletables.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 6244 strings out of 493876
- 88808 string characters out of 1150567
- 152582 words of memory out of 3000000
- 9331 multiletter control sequences out of 10000+50000
- 37118 words of font info for 89 fonts, out of 3000000 for 5000
+ 6256 strings out of 493876
+ 89941 string characters out of 1150567
+ 151821 words of memory out of 3000000
+ 9341 multiletter control sequences out of 10000+50000
+ 34332 words of font info for 84 fonts, out of 3000000 for 5000
  714 hyphenation exceptions out of 8191
- 36i,9n,37p,1465b,445s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmbx10.pfb></usr/l
-ocal/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmbx12.pfb></usr/local/texl
-ive/2008/texmf-dist/fonts/type1/bluesky/cm/cmr10.pfb></usr/local/texlive/2008/t
-exmf-dist/fonts/type1/bluesky/cm/cmr12.pfb></usr/local/texlive/2008/texmf-dist/
-fonts/type1/bluesky/cm/cmr17.pfb></usr/local/texlive/2008/texmf-dist/fonts/type
-1/bluesky/cm/cmsltt10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/blues
-ky/cm/cmss10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cms
-s12.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmss17.pfb><
-/usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmtt10.pfb></usr/loca
-l/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmtt12.pfb>
-Output written on readingmultipletables.pdf (16 pages, 1227298 bytes).
+ 36i,9n,37p,1465b,447s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmbx12.pfb></usr/l
+ocal/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmr10.pfb></usr/local/texli
+ve/2008/texmf-dist/fonts/type1/bluesky/cm/cmr12.pfb></usr/local/texlive/2008/te
+xmf-dist/fonts/type1/bluesky/cm/cmr17.pfb></usr/local/texlive/2008/texmf-dist/f
+onts/type1/bluesky/cm/cmsltt10.pfb></usr/local/texlive/2008/texmf-dist/fonts/ty
+pe1/bluesky/cm/cmss10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/blues
+ky/cm/cmss12.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cms
+s17.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmtt10.pfb><
+/usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmtt12.pfb>
+Output written on readingmultipletables.pdf (16 pages, 1229318 bytes).
 PDF statistics:
- 224 PDF objects out of 1000 (max. 8388607)
+ 260 PDF objects out of 1000 (max. 8388607)
  31 named destinations out of 1000 (max. 131072)
- 58 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 138 words of extra memory for PDF output out of 10000 (max. 10000000)
 

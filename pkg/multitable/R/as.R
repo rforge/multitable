@@ -2,7 +2,7 @@ as.data.list <-
 function(x,...) UseMethod("as.data.list")
 
 as.data.list.default <-
-function(x,dnames,match.dnames,check = TRUE,...){
+function(x,dnames,match.dnames,check = TRUE,drop=TRUE,...){
 	if((!is.list(x))||is.data.frame(x)) x <- list(x)
 	if(missing(match.dnames)) match.dnames <- make.match.dnames(x,dnames)
 	if(!is.list(match.dnames)) stop("match.dnames must be a list")
@@ -17,10 +17,11 @@ function(x,dnames,match.dnames,check = TRUE,...){
 	if(check) check.dims(x,bm,repdim)
 	x <- subsetdim(x,bm,repdim)
 	match.dnames <- x$match.dnames
+	names(match.dnames) <- names(x$x)
 	x <- structure(x$x, bm = bm, match.dnames = match.dnames,
 		repdim = repdim, class = "data.list")
 	x <- make.dimnames.consistent(x,bm)
-	if(length(repdim)==1) return(as.data.frame(x))
+	if((length(repdim)==1) && drop) return(as.data.frame(x))
 	return(x)
 }
 
@@ -115,6 +116,8 @@ function(x,match.dnames){
 		else if(is.null(names(x[[i]])))
 			names(x[[i]]) <- paste(names(x)[i],seq_along(x[[i]]),sep=".")
 		for(j in seq_along(x[[i]])){
+			if(length(x[[i]][[j]])==0)
+				stop("variables with zero length are not allowed in data lists")
 			dx <- dim(x[[i]][[j]])
 			if(is.null(dx)) dnx <- names(x[[i]][[j]])
 			else dnx <- dimnames(x[[i]][[j]])
