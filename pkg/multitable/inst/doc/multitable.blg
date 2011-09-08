@@ -1,0 +1,47 @@
+This is BibTeX, Version 0.99c (Web2C 7.5.7)
+The top-level auxiliary file: multitable.aux
+The style file: ecology.bst
+Database file #1: /Users/stevenwalker/Documents/Bibliography/Bibliography.bib
+Warning--I didn't find a database entry for "IvesAndHelmus2011"
+You've used 8 entries,
+            2712 wiz_defined-function locations,
+            658 strings with 5872 characters,
+and the built_in function-call counts, 3642 in all, are:
+= -- 336
+> -- 190
+< -- 5
++ -- 64
+- -- 54
+* -- 321
+:= -- 672
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 57
+chr.to.int$ -- 8
+cite$ -- 8
+duplicate$ -- 149
+empty$ -- 242
+format.name$ -- 68
+if$ -- 710
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 9
+newline$ -- 43
+num.names$ -- 32
+pop$ -- 38
+preamble$ -- 1
+purify$ -- 50
+quote$ -- 0
+skip$ -- 98
+stack$ -- 0
+substring$ -- 219
+swap$ -- 29
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 69
+warning$ -- 0
+while$ -- 30
+width$ -- 0
+write$ -- 106
+(There was 1 warning)

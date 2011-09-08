@@ -1,0 +1,87 @@
+\usepackage[mathscr]{eucal}   % allows script versions of math fonts
+\usepackage{extarrows}   %  allows arrows with stuff over and under them
+\usepackage{bm}		% allows bolding of greek symbols
+\usepackage{rotating}     % allows text and math to be rotated
+\usepackage{graphicx}	% allows externally created pdfs to be included
+\usepackage{booktabs}      % makes better tables
+\usepackage{amsthm}      % allows style of theorem environments to change
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{subfig}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amssymb}
+\usepackage{xypic}
+\usepackage{setspace}
+\usepackage{array}
+\usepackage{mdwlist}
+\usepackage{keystroke}
+\usepackage{lineno}
+\usepackage{upgreek}
+\usepackage{appendix}
+\usepackage{float}
+\usepackage{endfloat}
+%\usepackage[none]{hyphenat}
+%\usepackage{indentfirst}
+
+
+
+\input xy 
+\xyoption{all}
+\xyoption{graph}
+
+%\usepackage{amssymb,amsmath,gensymb}
+\usepackage{url}
+\newcommand{\comment}[1]{}
+
+\newcommand{\thj}{\ensuremath{\hat{\theta}_{(j)}}}       % define formatted theta
+\newcommand{\thij}{\ensuremath{\hat{\theta}_{(i)(j)}}}   % define formatted theta
+\newcommand{\thcv}{\bm{\hat{\theta}}_{ij}^{\mathrm{CV}}}
+\newcommand{\thfv}{\bm{\hat{\theta}}_{j}^{\mathrm{FVO}}}
+\newcommand{\M}{\ensuremath{\bm{\mathrm{M}}}}      % define the M matrix
+\newcommand{\Mp}{\ensuremath{\bm{\mathrm{M'}}}}      % define the M' matrix
+\newcommand{\Mh}{\ensuremath{\bm{\mathrm{\hat{M}}}}}      % define the M hat matrix
+\newcommand{\y}{\ensuremath{\bm{\mathrm{y}}}}      % define the M matrix
+\newcommand{\x}{\ensuremath{\bm{\mathrm{x}}}}      % define the M matrix
+\newcommand{\z}{\ensuremath{\bm{\mathrm{z}}}}      % define the M matrix
+\newcommand{\yh}{\ensuremath{\bm{\mathrm{\hat{y}}}}}      % define the M hat matrix
+\newcommand{\link}{\ensuremath{\mathrm{link}}}
+\newcommand{\mat}[1]{\bm{\mathrm{#1}}}
+
+
+\bibpunct{(}{)}{;}{a}{}{,}  % gives different style for inline citations
+
+%\renewcommand{\citep}[1]{(\citeauthor{#1} \citeyear{#1})}
+\newcommand{\citeeg}[1]{(e.g. \citeauthor{#1} \citeyear{#1})}
+\newcommand{\citenp}[1]{\citeauthor{#1} \citeyear{#1}}
+\newcommand{\cites}[1]{\citeauthor{#1}'s (\citeyear{#1})}
+
+\DeclareMathOperator*{\argmax}{arg\, max}
+\DeclareMathOperator{\aic}{AIC}    % define AIC command
+\DeclareMathOperator{\dev}{DEV}  % define DEV command
+
+\theoremstyle{definition}			% pre-defined choices: plain, definition or remark
+\newtheorem{principle}{Principle}	% define principle sections
+\newtheorem{example}{Illustration}
+\newtheorem{definition}{Definition}
+
+% Here it is: the code that adjusts justification and spacing around caption.
+\makeatletter
+% http://www.texnik.de/floats/caption.phtml
+% This does spacing around caption.
+\setlength{\abovecaptionskip}{6pt}   % 0.5cm as an example
+\setlength{\belowcaptionskip}{6pt}   % 0.5cm as an example
+% This does justification (left) of caption.
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+\makeatother
+
