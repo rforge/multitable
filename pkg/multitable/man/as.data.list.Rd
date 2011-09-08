@@ -13,7 +13,7 @@ as.data.list(x, ...)
 
 data.list.mold(x)
 
-\method{as.data.list}{default}(x, dnames, match.dnames,
+\method{as.data.list}{default}(x, dimids, match.dimids,
 check = TRUE, drop = TRUE,...)
 
 \method{as.data.frame}{data.list}(x, row.names = NULL, 
@@ -26,8 +26,8 @@ optional = FALSE, scheme = "repeat", mold, ...)
 \arguments{
   \item{x}{An object. Either a data.list, data.frame, or list.}
   \item{mold}{A list typically obtained as output from \code{\link{data.list.mold}}.  See details.}
-  \item{dnames}{See \code{\link{data.list}} for an explanation.}
-  \item{match.dnames}{See \code{\link{data.list}} for an explanation.}
+  \item{dimids}{See \code{\link{data.list}} for an explanation.}
+  \item{match.dimids}{See \code{\link{data.list}} for an explanation.}
   \item{check}{See \code{\link{data.list}} for an explanation.}
   \item{drop}{If TRUE, single dimension data lists are coerced to data frames (i.e. their replication dimensions are 'dropped').}
   \item{row.names}{Passed to the default method after some processing.}
@@ -45,7 +45,7 @@ If data lists are to be iteratively coerced to data frames (e.g. repeated random
 
 The \code{as.data.list.default} function is designed to work on arrays, matrices, vectors, data.frames, and lists of such objects.  The \code{\link{data.list}} function is based on \code{as.data.list.default}, and is recommended for data list creation.  The documentation for \code{\link{data.list}} contains more information about \code{as.data.list.default}.
 
-The \code{as.list.data.list} function is equivalent to \code{unclass} if \code{drop.attr = FALSE}, otherwise (i.e. \code{drop.attr = TRUE})  the \code{"match.dnames"}, \code{"bm"}, and \code{"repdim"} attributes are dropped from \code{x} and the \code{"subsetdim"} attributes are dropped from each variable in \code{x}.
+The \code{as.list.data.list} function is equivalent to \code{unclass} if \code{drop.attr = FALSE}, otherwise (i.e. \code{drop.attr = TRUE})  the \code{"match.dimids"}, \code{"bm"}, and \code{"repdim"} attributes are dropped from \code{x} and the \code{"subsetdim"} attributes are dropped from each variable in \code{x}.
 
 The \code{as.matrix} method for data lists returns either a single matrix (if all variables are numeric or all variables are either factors or character); otherwise, two matrices are returned, one with the numeric and one with the factor variables respectively.  The matrices are returned by first coercing to data frames and then to matrices.  This method was created as a result of a suggestion by Philip Dixon.
 }

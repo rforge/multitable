@@ -9,13 +9,13 @@
 These functions are used to read several text files and create a data list from them.
 }
 \usage{
-read.multitable(files, dnames, tnames, fill = rep(NA,length(files)), ...)
+read.multitable(files, dimids, tnames, fill = rep(NA,length(files)), ...)
 
-read.multicsv(files, dnames, tnames, fill = rep(NA,length(files)), ...)
+read.multicsv(files, dimids, tnames, fill = rep(NA,length(files)), ...)
 
-read.multidelim(files, dnames, tnames, fill = rep(NA,length(files)), ...)
+read.multidelim(files, dimids, tnames, fill = rep(NA,length(files)), ...)
 
-read.fourthcorner(community, environment, traits, dnames=c("sites","species"), 
+read.fourthcorner(community, environment, traits, dimids=c("sites","species"), 
 community.name="abundance", ...)
 
 multifile.choose(n)
@@ -25,7 +25,7 @@ multifile.choose(n)
   \item{community}{A character string of the name of the file containing the community data of a fourth-corner problem.}
   \item{environment}{A character string of the name of the file containing the environment data of a fourth-corner problem.}
   \item{traits}{A character string of the name of the file containing the trait data of a fourth-corner problem.}
-  \item{dnames}{A vector with the names of the columns associated with replication dimensions.  For \code{read.fourthcorner} this is simply the names of the replication dimensions.}
+  \item{dimids}{A vector with the names of the columns associated with replication dimensions.  For \code{read.fourthcorner} this is simply the names of the replication dimensions.}
   \item{tnames}{An optional vector with the names of the tables. If missing the filenames are used after being passed through \code{\link{make.names}}.}
   \item{fill}{See \code{\link{dlcast}}.}
   \item{community.name}{Character string of the name of \code{community} matrix.}
@@ -73,6 +73,6 @@ write.table(environment,environment.file,sep=",")
 write.table(trait,trait.file,sep=",")
 
 files <- c(abundance.file,environment.file,trait.file)
-dnames <- c("sites","species")
-read.multicsv(files,dnames,fill=c(0,NA,NA))
+dimids <- c("sites","species")
+read.multicsv(files,dimids,fill=c(0,NA,NA))
 }

@@ -70,7 +70,7 @@ test_that("too many variables extracted",{
 	data(fake.community)
 	em <- try(fake.community[-(1:6)],silent=TRUE)[1]
 	
-	expect_that(em,equals("Error in match.dnames[[which.max(sapply(match.dnames, length))]] : \n  attempt to select less than one element\n"))
+	expect_that(em,equals("Error in match.dimids[[which.max(sapply(match.dimids, length))]] : \n  attempt to select less than one element\n"))
 })
 
 test_that("too much extracted",{
@@ -118,5 +118,5 @@ fake.community[["homeotherm"]] <- dimnames(fake.community)[[3]]
 fake.community[["temperature"]] <- fake.community[["temperature"]] + 1
 
 dm <- dimnames(fake.community)[[3]]
-fake.community[["species",match.dnames="species"]] <- dimnames(fake.community)[[3]]
-fake.community[["species",match.dnames]] <- dm
+fake.community[["species",match.dimids="species"]] <- dimnames(fake.community)[[3]]
+fake.community[["species",match.dimids]] <- dm

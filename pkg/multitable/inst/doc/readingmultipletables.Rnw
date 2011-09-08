@@ -105,12 +105,12 @@ The benefits of the long format are not just to save memory, which currently may
 To read data in long format into a \code{data.list}, we can use one of the functions from the \code{read.multitable} family of functions.  These functions are simply wrappers for the standard \code{read.table} functions in the \R\ \code{utils} package, so that these utilities can be used with multiple-table data.  Here we use \code{read.multicsv} to read in \code{.csv} versions of the data in Figure \ref{fig:longspreadsheetfc},
 <<eval=TRUE>>=
 files <- c("community_long.csv","environment_long.csv","traits_long.csv")
-dnames <- c("sites","species")
-fc <- read.multicsv(files,dnames,fill=c(0,NA,NA))
+dimids <- c("sites","species")
+fc <- read.multicsv(files,dimids,fill=c(0,NA,NA))
 @
 or with interactive menus,
 <<eval=FALSE,echo=TRUE>>=
-fc <- read.multicsv(multifile.choose(3),dnames,fill=c(0,NA,NA))
+fc <- read.multicsv(multifile.choose(3),dimids,fill=c(0,NA,NA))
 @
 These commands store exactly the same \code{fc} object that we obtained before.  Note the \code{fill=c(0,NA,NA)} argument, which causes any missing site-species combinations to be filled with zeros and to fill missing environmental variables or traits with \code{NA}.
 
@@ -128,8 +128,8 @@ This data set is quite a bit more complex, yet it can be read in a very similar 
 
 <<eval=TRUE>>=
 files <- c("community_complex.csv","environment_complex.csv","traits_complex.csv")
-dnames <- c("sites","years","species")
-fc <- read.multicsv(files,dnames,fill=c(0,NA,NA))
+dimids <- c("sites","years","species")
+fc <- read.multicsv(files,dimids,fill=c(0,NA,NA))
 fc
 @
 
@@ -156,10 +156,10 @@ traits
 
 We begin with a potentially frustrating issue that could arise, and then describe its solution.  The \code{multitable} package contains a \code{data.list} function for combining multiple \R\ objects into a data list.  This function is analogous to the \code{data.frame} in the \R\ \code{base} package.  However, if we try to pass these three objects to \code{data.list}, we will get an error,
 <<echo=TRUE, eval=FALSE>>=
-data.list(community,environment,traits,dnames=c("sites","species"))
+data.list(community,environment,traits,dimids=c("sites","species"))
 @
 <<echo=FALSE, eval=TRUE,results=verbatim>>=
-try.out <- try(data.list(community,environment,traits,dnames=c("sites","species")))
+try.out <- try(data.list(community,environment,traits,dimids=c("sites","species")))
 cat(try.out)
 @
 
@@ -172,7 +172,7 @@ So which of our three tables should be matrices and which should be data frames?
 By coercing the community data to a matrix, we can create exactly the same data list object that we obtained above for these data.
 <<eval=TRUE>>=
 abundance <- as.matrix(community)
-dl <- data.list(abundance,environment,traits,dnames=c("sites","species"))
+dl <- data.list(abundance,environment,traits,dimids=c("sites","species"))
 @
 
 \subsection{Fourth-corner data in long format data frames}
@@ -194,7 +194,7 @@ traits
 
 We can use the \code{dlcast} function to combine these tables into a data list.  The following code will again produce an identical data list,
 <<eval=TRUE>>=
-dl <- dlcast(list(community,environment,traits),dnames=c("sites","species"),fill=c(0,NA,NA))
+dl <- dlcast(list(community,environment,traits),dimids=c("sites","species"),fill=c(0,NA,NA))
 @
 The \code{dlcast} function is inspired by the \code{acast} function from the \code{reshape2} package.  The \code{acast} function converts a long-format data frame into an array depending on which variables are identified as defining the dimensions of the resulting array and which variable is used to fill it.  
 
@@ -233,7 +233,7 @@ as.data.list(list(Y,X,Z))
 
 
 
-\subsection{Manual dimension matching with \code{match.dnames}} 
+\subsection{Manual dimension matching with \code{match.dimids}} 
 
 
 
@@ -253,7 +253,7 @@ traits
 @
 
 <<eval=TRUE>>=
-dl <- dlcast(list(community,environment,traits),dnames=c("sites","species"),fill=c(0,NA,NA))
+dl <- dlcast(list(community,environment,traits),dimids=c("sites","species"),fill=c(0,NA,NA))
 dl
 @
 

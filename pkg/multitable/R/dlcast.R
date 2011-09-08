@@ -1,8 +1,8 @@
-dlcast <- function(x,dnames,fill=rep(NA,length(x))){
+dlcast <- function(x,dimids,fill=rep(NA,length(x))){
 	if(!is.list(x) || is.data.frame(x)) x <- list(x)
 	xnames <- lapply(x,names)
-	dims <- lapply(xnames,intersect,dnames)
-	vars <- setdiff(unlist(xnames),dnames)
+	dims <- lapply(xnames,intersect,dimids)
+	vars <- setdiff(unlist(xnames),dimids)
 	vars <- lapply(xnames,intersect,vars)
 	out <- list()
 	for(i in seq_along(x)){
@@ -19,7 +19,7 @@ dlcast <- function(x,dnames,fill=rep(NA,length(x))){
 				mtchs,dfull,dim.namesi,fill[i])
 		names(out[[i]]) <- vars[[i]]
 	}
-	out <- as.data.list(out,match.dnames=dims)
+	out <- as.data.list(out,match.dimids=dims)
 	return(out)
 }
 

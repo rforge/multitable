@@ -386,12 +386,12 @@ The three data frames are related because they share two columns:  sites and spe
 To create a data list out of these data frames we use the \code{dcast} function, which was inspired by the \code{acast} function in the \code{reshape2} package.
 <<eval=TRUE>>=
 dl <- dlcast(list(abundance,environment,trait),
-	dnames=c("sites","species"),
+	dimids=c("sites","species"),
 	fill=c(0,NA,NA)
 )
 dl
 @
-This function takes three arguments:  (1) a list of data frames, (2) a character vector, \code{dnames}, with the names of the dimensions of replication (i.e. the columns shared between the tables), and (3) a vector, \code{fill}, with one element for each data frame giving the value with which to fill in any structural missing values.  This last argument is particularly interesting, because we can fill missing abundances with zeros because those site-species combinations were not observed and \code{NA} values for the other tables.  This data list can now be used in analyses.
+This function takes three arguments:  (1) a list of data frames, (2) a character vector, \code{dimids}, with the names of the dimensions of replication (i.e. the columns shared between the tables), and (3) a vector, \code{fill}, with one element for each data frame giving the value with which to fill in any structural missing values.  This last argument is particularly interesting, because we can fill missing abundances with zeros because those site-species combinations were not observed and \code{NA} values for the other tables.  This data list can now be used in analyses.
 
 It is quite possible that your data are not stored in data frames with columns for both dimensions of replication and variables; this is not a large concern, as the \code{multitable} package offers many ways to get your data into a data list (see vignette ????).  However, we recommend that researchers at least consider what their data might look like in this format, because we believe that this format best illustrates concepts that will help make multiple-table data easier to understand, manage, and analyze.
 

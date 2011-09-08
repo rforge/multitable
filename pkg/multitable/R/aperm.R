@@ -14,11 +14,11 @@ aperm.data.list <-
 function(a, perm, ...){
 	if(missing(perm)) perm <- rev(seq_along(dim(a)))
 	bm.a <- attr(a,"bm")
-	match.dnames <- attr(a,"match.dnames")
-	match.dnames[[bm.a]] <- match.dnames[[bm.a]][perm]
+	match.dimids <- attr(a,"match.dimids")
+	match.dimids[[bm.a]] <- match.dimids[[bm.a]][perm]
 	l <- as.list(a)
 	l[[bm.a]] <- aperm(l[[bm.a]],perm)
-	as.data.list(l,match.dnames=match.dnames)
+	as.data.list(l,match.dimids=match.dimids)
 }
 
 t.data.list <- function(x) aperm(x)

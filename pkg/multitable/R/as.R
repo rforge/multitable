@@ -2,31 +2,31 @@ as.data.list <-
 function(x,...) UseMethod("as.data.list")
 
 as.data.list.default <-
-function(x,dnames,match.dnames,check = TRUE,drop=TRUE,...){
+function(x,dimids,match.dimids,check = TRUE,drop=TRUE,...){
 	if((!is.list(x))||is.data.frame(x)) x <- list(x)
-	if(missing(match.dnames)) match.dnames <- make.match.dnames(x,dnames)
-	if(!is.list(match.dnames)) stop("match.dnames must be a list")
-	if(length(x)!=length(match.dnames)) stop("match.dnames not the right length")
-	if(check.full.rep(match.dnames) && check) stop(
+	if(missing(match.dimids)) match.dimids <- make.match.dimids(x,dimids)
+	if(!is.list(match.dimids)) stop("match.dimids must be a list")
+	if(length(x)!=length(match.dimids)) stop("match.dimids not the right length")
+	if(check.full.rep(match.dimids) && check) stop(
 		"at least one variable must be replicated along all dimensions"
 	)
-	x <- split.dfs(x,match.dnames)
+	x <- split.dfs(x,match.dimids)
 	bm <- which.fully.replicated(x$x)
 	repdim <- dim(x$x[[bm]])
 	if(is.null(names(x$x))) names(x$x) <- paste("V",seq_along(x$x),sep="")
 	if(check) check.dims(x,bm,repdim)
 	x <- subsetdim(x,bm,repdim)
-	match.dnames <- x$match.dnames
-	names(match.dnames) <- names(x$x)
-	x <- structure(x$x, bm = bm, match.dnames = match.dnames,
+	match.dimids <- x$match.dimids
+	names(match.dimids) <- names(x$x)
+	x <- structure(x$x, bm = bm, match.dimids = match.dimids,
 		repdim = repdim, class = "data.list")
 	x <- make.dimnames.consistent(x,bm)
 	if((length(repdim)==1) && drop) return(as.data.frame(x))
 	return(x)
 }
 
-make.match.dnames <- function(x,dnames){
-	match.dnames <- list()
+make.match.dimids <- function(x,dimids){
+	match.dimids <- list()
 	check <- FALSE
 	innames <- lapply(x,get.input.names)
 	ulinnames <- unlist(innames,recursive=FALSE)
@@ -46,18 +46,18 @@ make.match.dnames <- function(x,dnames){
 		wfr <- which.max(sapply(indims,length))
 		indims.wfr <- indims[[wfr]]
 		if(length(unique(indims.wfr)) < length(indims.wfr)){
-			stop("Some dimensions are unnamed and some are of the same length and therefore require specification of match.dnames. Type ?data.list and see the details section of the help file for data.list.")
+			stop("Some dimensions are unnamed and some are of the same length and therefore require specification of match.dimids. Type ?data.list and see the details section of the help file for data.list.")
 		}
 		mat.ndims <- lapply(indims,match,indims.wfr)
 		check <- FALSE
 	}
-	if(missing(dnames)) dnames <- paste("D",seq_along(indims.wfr),sep="")
-	match.dnames <- lapply(mat.ndims,function(ii)dnames[ii])
-	if(check.full.rep(match.dnames) && check){
+	if(missing(dimids)) dimids <- paste("D",seq_along(indims.wfr),sep="")
+	match.dimids <- lapply(mat.ndims,function(ii)dimids[ii])
+	if(check.full.rep(match.dimids) && check){
 		names(x[[1]]) <- dimnames(x[[1]]) <- NULL
-		match.dnames <- make.match.dnames(x,dnames)
+		match.dimids <- make.match.dimids(x,dimids)
 	}
-	return(match.dnames)
+	return(match.dimids)
 }
 
 get.input.dims <- function(xi){
@@ -81,9 +81,9 @@ get.input.names <- function(xi){
 }
 
 check.full.rep <-
-function(match.dnames){
-	mt <- match.dnames[[which.max(sapply(match.dnames,length))]]
-	dims <- lapply(match.dnames,match,table=mt)
+function(match.dimids){
+	mt <- match.dimids[[which.max(sapply(match.dimids,length))]]
+	dims <- lapply(match.dimids,match,table=mt)
 	any(sapply(dims,function(x)any(is.na(x))))
 }
 
@@ -105,9 +105,9 @@ make.varnames <- function(x){
 }
 
 split.dfs <-
-function(x,match.dnames){
+function(x,match.dimids){
 	x.alt <- list()
-	match.dnames.alt <- list()
+	match.dimids.alt <- list()
 	for(i in seq_along(x)){
 		if(!is.list(x[[i]])){
 			x[[i]] <- list(x[[i]])
@@ -131,10 +131,10 @@ function(x,match.dnames){
 			}
 			else dimnames(x[[i]][[j]]) <- dnx
 		}
-		match.dnames.alt <- c(match.dnames.alt,rep(list(match.dnames[[i]]),length(x[[i]])))
+		match.dimids.alt <- c(match.dimids.alt,rep(list(match.dimids[[i]]),length(x[[i]])))
 		x.alt <- c(x.alt,x[[i]])
 	}
-	return(list(x=x.alt,match.dnames=match.dnames.alt))
+	return(list(x=x.alt,match.dimids=match.dimids.alt))
 }
 
 which.fully.replicated <-
@@ -145,10 +145,10 @@ function(x,bm,repdim){
 	if(is.null(names(x$x))){
 		names(x$x) <- paste("variable",seq_along(x$x))
 	}
-	rdn.bm <- x$match.dnames[[bm]]
+	rdn.bm <- x$match.dimids[[bm]]
 	for(i in seq_along(x$x)[-bm]){
-		for(j in seq_along(x$match.dnames[[i]])){
-			repdimij <- repdim[which(rdn.bm==x$match.dnames[[i]][j])]
+		for(j in seq_along(x$match.dimids[[i]])){
+			repdimij <- repdim[which(rdn.bm==x$match.dimids[[i]][j])]
 			dimij <- dim(x$x[[i]])[j]
 			if(repdimij!=dimij) stop(paste("incompatible dimensions in",names(x$x)[i]))
 		}
@@ -157,18 +157,18 @@ function(x,bm,repdim){
 
 subsetdim <-
 function(x,bm,repdim){
-	inds <- lapply(x$match.dnames,match,table=x$match.dnames[[bm]])
+	inds <- lapply(x$match.dimids,match,table=x$match.dimids[[bm]])
 	for(i in seq_along(x$x)){
 		ord.inds <- order(inds[[i]])
 		x$x[[i]] <- aperm(x$x[[i]],ord.inds)
-		x$match.dnames[[i]] <- x$match.dnames[[i]][ord.inds]
+		x$match.dimids[[i]] <- x$match.dimids[[i]][ord.inds]
 	}
-	inds <- lapply(x$match.dnames,match,table=x$match.dnames[[bm]])
+	inds <- lapply(x$match.dimids,match,table=x$match.dimids[[bm]])
 	nd <- length(repdim)
 	for(i in seq_along(x$x)){
 		attr(x$x[[i]],"subsetdim") <- rep(FALSE,nd)
 		attr(x$x[[i]],"subsetdim")[inds[[i]]] <- TRUE
-		names(attr(x$x[[i]],"subsetdim")) <- x$match.dnames[[bm]]
+		names(attr(x$x[[i]],"subsetdim")) <- x$match.dimids[[bm]]
 	}
 	return(x)
 }
@@ -190,7 +190,7 @@ function(x, drop.attr=TRUE, ...){
 	out <- unclass(x)
 	if(drop.attr){
 		for(i in seq_along(x)) attr(out[[i]],"subsetdim") <- NULL
-		attr(out,"match.dnames") <- NULL
+		attr(out,"match.dimids") <- NULL
 		attr(out,"bm") <- NULL
 		attr(out,"repdim") <- NULL
 	}
@@ -214,10 +214,10 @@ function(x, ...){
 	x.attr <- attributes(x)
 	x <- unclass(x)
 	x.num <- structure(x[!fac],class="data.list",
-		match.dnames = x.attr$match.dnames[!fac],
+		match.dimids = x.attr$match.dimids[!fac],
 		repdim = x.attr$repdim)
 	x.fac <- structure(x[fac],class="data.list",
-		match.dnames = x.attr$match.dnames[fac],
+		match.dimids = x.attr$match.dimids[fac],
 		repdim = x.attr$repdim)
 	list(x.num=as.matrix(as.data.frame(x.num)),
 		x.fac=as.matrix(as.data.frame(x.fac)))

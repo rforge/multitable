@@ -22,6 +22,8 @@
 %%%%setwd("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/")
 %%%%Sweave("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/readingmultipletables.Rnw")
 
+
+
 \newcommand{\R}{{\sf R}}
 \newcommand{\code}[1]{\texttt{#1}}
 \title{Multiple-table data in \R}
@@ -35,8 +37,10 @@
 \begin{document}
 \maketitle
 
+
+
 \begin{abstract}
-Hi there.
+Data frames are integral to \R.  They provide a standard format for passing data to model-fitting and plotting functions.  Still, many data sets do not easily fit into a single data frame---examples abound in my field of community ecology.  
 \end{abstract}
 
 \section{Introduction}
@@ -878,118 +882,6 @@ To create a data list out of these data frames we use the \code{dcast} function,
 \begin{Schunk}
 \begin{Sinput}
 > dl <- dlcast(list(abundance,environment,trait),
- 	dnames=c("sites","species"),
+ 	dimids=c("sites","species"),
  	fill=c(0,NA,NA)
  )
-> dl
-\end{Sinput}
-\begin{Soutput}
-abundance:
----------
-            capybara moss vampire
-midlatitude        4    6       0
-subtropical       10    0       1
-tropical           8    9       0
-equatorial         7    3       0
-arctic             0    5       0
-subarctic          0    0       0
-Replicated along:  || sites || species || 
-
-
-temperature:
------------
-midlatitude subtropical    tropical  equatorial      arctic 
-         10          20          50          30          NA 
-  subarctic 
-          0 
-Replicated along:  || sites || 
-
-
-precipitation:
--------------
-midlatitude subtropical    tropical  equatorial      arctic 
-         20         100         150         200          NA 
-  subarctic 
-         40 
-Replicated along:  || sites || 
-
-
-body.size:
----------
-capybara     moss  vampire 
-     140        5      190 
-Replicated along:  || species || 
-
-
-metabolic.rate:
---------------
-capybara     moss  vampire 
-      20        5        0 
-Replicated along:  || species || 
-
-
-REPLICATION DIMENSIONS: 
-  sites species 
-      6       3 
-\end{Soutput}
-\end{Schunk}
-This function takes three arguments:  (1) a list of data frames, (2) a character vector, \code{dnames}, with the names of the dimensions of replication (i.e. the columns shared between the tables), and (3) a vector, \code{fill}, with one element for each data frame giving the value with which to fill in any structural missing values.  This last argument is particularly interesting, because we can fill missing abundances with zeros because those site-species combinations were not observed and \code{NA} values for the other tables.  This data list can now be used in analyses.
-
-It is quite possible that your data are not stored in data frames with columns for both dimensions of replication and variables; this is not a large concern, as the \code{multitable} package offers many ways to get your data into a data list (see vignette ????).  However, we recommend that researchers at least consider what their data might look like in this format, because we believe that this format best illustrates concepts that will help make multiple-table data easier to understand, manage, and analyze.
-
-\section{Multiple-table concepts}
-
-Shared columns (i.e. dimensions of replication) between tables are expanded into the dimensions of the arrays that are used to store each of the other columns (i.e. variables).  For example, because the \code{abundance} table has two dimensions of replication, it is stored as a two-dimensional matrix in the resulting data frame; whereas, the \code{environment} and \code{trait} tables have only two dimensions of replication and so are stored in one-dimensional vectors.
-
-The powerful thing about storing both dimensions of replication and variables as columns, is that we can easily generalize to more complex multiple-table data sets by adding more dimensions of replication, more tables, with more complex patterns of dimension sharing.  For example, the Lac Croche zooplankton community data (Fig. \ref{fig:beatrix}) has a structure given by Fig. \ref{fig:bipartitebeatrix}.  To store these data in a format amenable to \code{dlcast}, we would create one data frame for each of the groups of variables (red boxes) and add a column for each dimension of replication (blue boxes) associated with those variables.
-
-\begin{figure}
-\begin{tikzpicture} [
-	text centered,
-	node distance=0.1cm,
-	ndims/.style={
-		rectangle,minimum width=1.5cm,draw=blue!=0,
-		fill=blue!20
-	},
-	nvars/.style={
-		rectangle,minimum width=2.2cm,draw=red!=0,
-		fill=red!20
-	},
-	nblank/.style={
-		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
-		minimum width=4cm
-	}
-]
-\node [place,nblank]	(abasin)					{};
-\node [place,ndims]	(basin)[below=of abasin]		{basin};
-\node [place,nblank]	(bbasin)[below=of basin]		{};
-\node [place,ndims]	(time)[below=of bbasin]		{time};
-\node [place,nblank]	(btime)[below=of time]		{};
-\node [place,ndims]	(species)[below=of btime]		{species};
-\node [place,nblank]	(bspecies)[below=of species]	{};
-\node [place,nvars]	(environment)[right=of asites]	{environment}
-	edge [-]		(basin)
-	edge [-]		(time);
-\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
-	edge [-]		(basin)
-	edge [-]		(time)
-	edge [-]		(species);
-\node [place,nvars]	(scales)[right=of btime]		{time scales}
-	edge [-]		(time);
-\node [place,nvars]	(traits)[right=of bspecies]		{traits}
-	edge [-]		(species);
-\end{tikzpicture}
-\caption{Bipartite graph of the Lac Croche data in Fig. \ref{fig:beatrix}.} 
-\label{fig:bipartitebeatrix}
-\end{figure}
-
-With our data in this form, we can easily state the two requirements for using \code{data.list} objects:  (1) every table must share at least one dimension of replication with at least one other table and (2) at least one table must be replicated along all of the dimensions present in the data set.  The first criterion ensures that the tables will relate to each other and the second criterion ensures that some variables will be relatable to all other variables---such a fully-replicated variable is a candidate for a response variable.  We also see that we only need more than one table if some variables are not replicated along all of the dimensions.
-
-\section{conclusion}
-
-\bibliographystyle{ecology}
-%% ***   Set the bibliography file.   ***
-%% ("thesis.bib" by default; change if needed)
-\bibliography{/Users/stevenwalker/Documents/Bibliography/Bibliography}
-
-\end{document}

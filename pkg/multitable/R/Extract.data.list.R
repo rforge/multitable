@@ -31,9 +31,9 @@ function(x,...,drop=TRUE,vextract=TRUE){
 		else if(mode.ss!="logical")
 			stop("invalid subscript type")
 		xl <- unclass(x)
-		match.dnames <- attr(xl,"match.dnames")[ss]
+		match.dimids <- attr(xl,"match.dimids")[ss]
 		xl <- xl[ss]
-		xdl <- as.data.list(xl,match.dnames=match.dnames,drop=drop)
+		xdl <- as.data.list(xl,match.dimids=match.dimids,drop=drop)
 		return(xdl)
 	}
 	repdim <- dim(x)
@@ -109,16 +109,16 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	return(xl)
 }
 
-`[[<-.data.list` <- function(x,i,match.dnames,drop=TRUE,value){
+`[[<-.data.list` <- function(x,i,match.dimids,drop=TRUE,value){
 	nx <- names(x)
 	if(is.character(i)){
 		if(!any(nx %in% i)){
-			if(missing(match.dnames))
-				stop("match.dnames required for this assignment")
-			match.dnames <- c(attr(x,"match.dnames"),list(match.dnames))
+			if(missing(match.dimids))
+				stop("match.dimids required for this assignment")
+			match.dimids <- c(attr(x,"match.dimids"),list(match.dimids))
 			x <- unclass(x)
 			x[[i]] <- value
-			x <- as.data.list(x,match.dnames=match.dnames)
+			x <- as.data.list(x,match.dimids=match.dimids)
 			return(x)
 			#stop("can't add variables this way...maybe in the future")
 		}

@@ -564,3 +564,35 @@ File: umsb.fd 2002/01/19 v2.2g AMS font definitions
 !pdfTeX error: /usr/texbin/pdflatex (file ./multitable.pdf): reading image file
  failed
  ==> Fatal error occurred, no output PDF file produced!
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          texmf-dist/tex/generic/xypic/xygraph.tex
+ Xy-pic option: Graph feature v.3.7 not reloaded)
+
+! LaTeX Error: Command \comment already defined.
+               Or name \end... illegal, see p.192 of the manual.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.36 \newcommand{\comment}[1]{}
+                               
+? 
+! Emergency stop.
+ ...                                              
+                                                  
+l.36 \newcommand{\comment}[1]{}
+                               
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+ 
+Here is how much of TeX's memory you used:
+ 12966 strings out of 493876
+ 207381 string characters out of 1150567
+ 295494 words of memory out of 3000000
+ 15956 multiletter control sequences out of 10000+50000
+ 4783 words of font info for 21 fonts, out of 3000000 for 5000
+ 714 hyphenation exceptions out of 8191
+ 47i,4n,49p,340b,106s stack positions out of 5000i,500n,10000p,200000b,50000s
+!  ==> Fatal error occurred, no output PDF file produced!
