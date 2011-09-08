@@ -101,3 +101,22 @@ test_that("as.data.frame molds",{
 		equals(as.data.frame(fake.community,mold=fake.mold)))
 	
 })
+
+library(multitable)
+data(fake.community)
+fake.community$body.size <- letters[1:3]
+fake.community$homeotherm <- letters[1:3]
+fake.community$homeotherm <- dimnames(fake.community)[[3]]
+fake.community[["body.size"]] <- letters[1:3]
+fake.community[["homeotherm"]] <- letters[1:3]
+fake.community[["homeotherm"]] <- dimnames(fake.community)[[3]]
+
+
+
+
+
+fake.community[["temperature"]] <- fake.community[["temperature"]] + 1
+
+dm <- dimnames(fake.community)[[3]]
+fake.community[["species",match.dnames="species"]] <- dimnames(fake.community)[[3]]
+fake.community[["species",match.dnames]] <- dm

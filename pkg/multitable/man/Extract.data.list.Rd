@@ -8,7 +8,7 @@
 \usage{
 \method{[}{data.list}(x,...,drop=TRUE,vextract=TRUE)
 \method{$}{data.list}(x,i) <- value
-\method{[[}{data.list}(x,i,drop=TRUE) <- value
+\method{[[}{data.list}(x,i,match.dnames,drop=TRUE) <- value
 }
 \arguments{
   \item{x}{A \code{\link{data.list}} object.}
@@ -17,6 +17,7 @@
   \item{...}{Vectors to subscript the data list.}
   \item{drop}{If TRUE, single dimension data lists that result from subscripting are coerced to data frames (i.e. their replication dimensions are 'dropped').}
   \item{vextract}{If TRUE, variable extraction is done whenever only a single argument is passed to \code{...}.  If FALSE, variable extraction is not allowed.  Sometimes it is useful to set \code{vextract=FALSE} whenever single-dimension data lists are expecting dimension-wise subscripting.}
+  \item{match.dnames}{A character vector supplying the dnames (ids of the replication dimensions) that \code{value} is replicated along, iff \code{i} is a variable name that does not yet exist in the data list, \code{x}}
 }
 \details{
 See vignette on extraction and replacement of data lists.

@@ -7,14 +7,16 @@
 \usepackage{verbatim}
 \usepackage{tikz}
 \usepackage{rotating}
+\usepackage{natbib}
 
 \usetikzlibrary{positioning,petri}
 
+%\SweaveOpts{width=6,height=4}
+
 %\VignetteIndexEntry{Multiple table data in R}
 %\VignettePackage{multitable}
-%\VignetteDepends{multitable, MASS}
+%\VignetteDepends{multitable, MASS, lattice}
 %\VignetteKeywords{data manipulation, ecology, multivariate, R}
-
 
 %%%%R commands for running Sweave%%%%%%%
 %%%%setwd("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/")
@@ -33,9 +35,15 @@
 \begin{document}
 \maketitle
 
-The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates and variables respectively.  Standard \R\ workflows require that all of the data to be analyzed is organized into a single data frame, and hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects; data frames and formulas are combined by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics).  This framework allows ecologists to concentrate on their primary interests---the relationships between ecological variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.
+\begin{abstract}
+Hi there.
+\end{abstract}
 
-However, research in my field of community ecology has led me to data sets that do not easily fit within a single data frame.  A common example is the fourth-corner problem (Legendre et al. 1997), in which three data tables are to be analyzed: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Fig. \ref{fig:fourth}).  Such data are characterized by a conspicuous (lower-right) `fourth-corner', where there are no data.  These fourth-corners of missing data are not caused by the usual problems (e.g. broken field equipment; budget restrictions; bad weather; dead subjects), but are part of the study design itself.  The fourth-corner problem is a special case of a general `multiple-table problem', which can be much more complex (e.g. could involve three-dimensional `cubes' of data, Fig. \ref{fig:beatrix}).  The challenge of analyzing such multiple-table data sets in \R\ is that it is not obvious how to organize them into a single\code{data.frame}, which is required in standard \R\ workflows.  Our goal with the \code{multitable} package is to provide tools for analyzing multiple-table data sets within this standard \R\ framework.
+\section{Introduction}
+
+The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates and variables respectively.  Standard \R\ workflows require that all of the data to be analyzed is organized into a single data frame, and hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects; data frames and formulas are combined by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics) \citep{ChambersAndHastie1992}.  This framework allows scientists to concentrate on their primary interests---the relationships between variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.
+
+However, research in my field of community ecology has led my colleagues and I to data sets that do not easily fit within a single data frame.  A common example is the fourth-corner problem \citep{LegendreEtAl1997}, in which three data tables are to be analyzed: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Fig. \ref{fig:fourth}).  Such data are characterized by a conspicuous (lower-right) `fourth-corner', where there are no data.  These fourth-corners of missing data are not caused by the usual problems (e.g. broken field equipment; budget restrictions; bad weather; dead subjects), but are part of the study design itself.  The fourth-corner problem is a special case of a general `multiple-table problem', which can be much more complex (e.g. could involve three-dimensional `cubes' of data, Fig. \ref{fig:beatrix}).  The challenge of analyzing such multiple-table data sets in \R\ is that it is not obvious how to organize them into a single \code{data.frame}, which is required in standard \R\ workflows.  Our goal with the \code{multitable} package is to provide tools for analyzing multiple-table data sets within this standard \R\ framework.
 
 \begin{figure}
 \begin{tikzpicture} [
@@ -154,9 +162,9 @@ However, research in my field of community ecology has led me to data sets that 
 \label{fig:beatrix}
 \end{figure}
 
-One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There has been a fair amount of work in this direction, focusing on data with a fourth-corner problem (e.g. Chessel et al. 1996; Legendre et al. 1997; Ives and Godfray 2006; Dray and Legendre 2008; Pillar and Duarte 2010; Leibold et al. 2010; Ives and Helmus 2011).  However, this work does not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}).  One approach to such issues would be to build new data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be learned for each new structure---it does not take advantage of the large number of tools developed within the standard \R\ framework of data frames and formulas.  The \code{multitable} package provides an alternative approach, by introducing a multiple-table generalization of data frames---called data lists---which can be analyzed with virtually any function that can be used to analyze a data frame.  Thus, instead of providing new methods of analysis, \code{multitable} provides new methods of data management.
+One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There has been a fair amount of work in this direction, focusing on data with a fourth-corner problem \citep{DoledecEtAl1996,LegendreEtAl1997,DrayAndLegendre2008,PillarEtAl2010,LeiboldEtAl2010,IvesAndHelmus2011}.  However, this work does not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}; Ref ??).  One approach to such issues would be to build new data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be learned for each new structure---it does not take advantage of the large number of tools developed within the standard \R\ framework of data frames and formulas.  The \code{multitable} package provides an alternative approach, by introducing a multiple-table generalization of data frames---called data lists---which can be analyzed with virtually any function that can be used to analyze a data frame.  Thus, instead of providing new methods of analysis, \code{multitable} provides new methods of data management.
 
-There are several existing \R\ packages that are designed to make data management easier (e.g. \code{reshape2}; etc.??).  In particular, the \code{mefa} and \code{mefa4} packages have been developed to organize data with a slight generalization\footnote{Several community matrices---called segments---with identical dimensions are allowed in \code{mefa}.} of the fourth-corner problem.  The \code{multitable} package has much in common with \code{mefa}, but there are noticeable differences.  For example, \code{mefa} provides more extensive tools for data summarization than \code{multitable} and \code{mefa4} integrates tools for sparse-matrix computations.  On the other hand, \code{multitable} is designed to handle more general data structures than \code{mefa} or \code{mefa4} (e.g. \code{mefa} cannot organize the Lac Croche data structure, Fig. \ref{fig:beatrix}).  However, we hope that \code{mefa} and \code{multitable} will be complementary, not competitive.
+There are several existing \R\ packages that are designed to make data management easier (e.g. \code{reshape2}; \citeauthor{Wickham2007}, \citeyear{Wickham2007}).  The \code{mefa} and \code{mefa4} packages have been developed to organize data with a slight generalization\footnote{Several community matrices---called segments---with identical dimensions are allowed in \code{mefa}.} of the fourth-corner problem \citep{Solymos2009}.  The \code{multitable} package has much in common with \code{mefa}, but there are noticeable differences.  For example, \code{mefa} provides more extensive tools for data summarization than \code{multitable} and \code{mefa4} integrates tools for sparse-matrix computations.  On the other hand, \code{multitable} is designed to handle more general data structures than \code{mefa} or \code{mefa4} (e.g. \code{mefa} cannot organize the Lac Croche data structure, Fig. \ref{fig:beatrix}).  However, we hope that \code{mefa} and \code{multitable} will be complementary, not competitive.
 
 The \code{multitable} model of data organization is illustrated in Figure \ref{fig:model} (\code{mefa} uses a similar model).  In blue are the elements of the standard \R\ workflow: data frames; formulas; functions; and analyses.  The \code{multitable} package seeks to facilitate the use of such workflows with multiple-table data by creating tools (arrows and red boxes) for organizing and manipulating such data.  These tools are based on a new kind of object, called a data list, which is used to organize multiple-table data.  Data lists can be manipulated much like data frames (e.g. variables can be transformed; groups of observations extracted or removed).  Our design principle was to keep the manipulation of data lists as similar as possible to the manipulation of data frames.  Once data lists are ready for analysis \code{multitable} provides tools for coercing them into data frames, thereby entering the standard \R\ workflow.  Importantly, data, formulas, and functions are kept separate, thus preserving the benefits of using \R\ in a standard way.
 
@@ -297,10 +305,14 @@ Importantly however, although the variables are not replicated along all of the 
 > summary(fake.community)
 \end{Sinput}
 \begin{Soutput}
-        abundance temperature precipitation body.size metabolic.rate homeotherm
-sites        TRUE        TRUE          TRUE     FALSE          FALSE      FALSE
-years        TRUE        TRUE          TRUE     FALSE          FALSE      FALSE
-species      TRUE       FALSE         FALSE      TRUE           TRUE       TRUE
+        abundance temperature precipitation body.size
+sites        TRUE        TRUE          TRUE     FALSE
+years        TRUE        TRUE          TRUE     FALSE
+species      TRUE       FALSE         FALSE      TRUE
+        metabolic.rate homeotherm
+sites            FALSE      FALSE
+years            FALSE      FALSE
+species           TRUE       TRUE
 \end{Soutput}
 \end{Schunk}
 \noindent This method returns a logical table with dimensions of replication as rows and variables as columns.  A value of \code{TRUE} appears in cells corresponding to variables that are replicated along a particular dimension, and a value of \code{FALSE} appears otherwise.  We can see that the \code{sites} and \code{years} dimensions relates abundance, temperature, and precipitation; whereas, the \code{species} dimension relates abundance, body size, metabolic rate, and homeotherm.
@@ -312,7 +324,7 @@ Note that some \code{FALSE} entries are bio-physical necessities, whereas some a
 This structure relating variables and dimensions of replication, allows us to manipulate multiple variables simultaneously.  In particular, \code{multitable} makes it possible to extract pieces of a data list will maintaining its structure.  For example, examining the data suggests that 1537 might have been an outlying year relative to 2008 and 2009.  We can exclude data from 1537 just as we would with a single \R\ array.
 \begin{Schunk}
 \begin{Sinput}
-> fake.community[, c("2008", "2009"), ]
+> fake.community[,c("2008","2009"),]
 \end{Sinput}
 \begin{Soutput}
 abundance:
@@ -401,10 +413,10 @@ REPLICATION DIMENSIONS:
       6       2       3 
 \end{Soutput}
 \end{Schunk}
-\noindent This command returns the same data list of variables but without the data from 1537.  In particular, for every variable replicated along the \code{years} dimension is subscripted appropriately.  As another example, perhaps we want all of the data on the first species (i.e. capybara) in 1537 for the first three sites.
+This command returns the same data list of variables but without the data from 1537.  In particular, for every variable replicated along the \code{years} dimension is subscripted appropriately.  As another example, perhaps we want all of the data on the first species (i.e. capybara) in 1537 for the first three sites.
 \begin{Schunk}
 \begin{Sinput}
-> fake.community[1:3, "1537", 1]
+> fake.community[1:3,"1537",1]
 \end{Sinput}
 \begin{Soutput}
 abundance:
@@ -464,7 +476,7 @@ REPLICATION DIMENSIONS:
       3       1       1 
 \end{Soutput}
 \end{Schunk}
-\noindent Notice also that for each different subset of the data, the new replication dimensions are printed after the data.
+Notice also that for each different subset of the data, the new replication dimensions are printed after the data.
 
 \section{Transforming variables in data lists}
 
@@ -510,57 +522,71 @@ attr(,"subsetdim")
    TRUE    TRUE    TRUE 
 \end{Soutput}
 \end{Schunk}
+We note that \code{fake.community} has a lot of missing values, which were useful for illustrating how data lists handle missing values, but will make further illustrations somewhat underwhelming.  We can replace these missing values with values using the standard logic of \R\ replacement.
+\begin{Schunk}
+\begin{Sinput}
+> fake.community$temperature[,"1537"] <- 
+ 	c(5,10,30,20,-80,-10)
+> fake.community$precipitation[,"1537"] <- 
+ 	c(5,50,75,50,2,7)
+> fake.community$body.size["moss"] <- 1
+\end{Sinput}
+\end{Schunk}
 
 \section{Simple analysis functions}
 
 Data lists can be passed `as is' to many standard functions in \R\ that normally take data frames.  In the next section I will define this class of functions in more detail, but for now consider this simple example.  Perhaps we want to explore whether the interaction between body size and temperature has an influence on abundance.  As a first attempt at model building, we fit a linear model using \code{lm}.
 \begin{Schunk}
 \begin{Sinput}
-> lm(abundance ~ (body.size * temperature), data = fake.community)
+> lm(abundance ~ (body.size*temperature),data=fake.community)
 \end{Sinput}
 \begin{Soutput}
 Call:
 lm(formula = abundance ~ (body.size * temperature), data = fake.community)
 
 Coefficients:
-          (Intercept)              body.size            temperature  body.size:temperature  
-            1.5718991             -0.0082732              0.0477659             -0.0002514  
+          (Intercept)              body.size  
+            4.484e-01             -1.718e-03  
+          temperature  body.size:temperature  
+            3.634e-03              5.041e-07  
 \end{Soutput}
 \end{Schunk}
 And this works just as well with mixtures of categorical and numerical data.
 \begin{Schunk}
 \begin{Sinput}
-> lm(abundance ~ -1 + (homeotherm * temperature), data = fake.community)
+> lm(abundance ~ -1+(homeotherm*temperature),data=fake.community)
 \end{Sinput}
 \begin{Soutput}
 Call:
 lm(formula = abundance ~ -1 + (homeotherm * temperature), data = fake.community)
 
 Coefficients:
-            homeothermN              homeothermY              temperature  
-              0.3450914                0.4136577               -0.0004895  
-homeothermY:temperature  
-              0.0130595  
+            homeothermN              homeothermY  
+               0.228770                 0.318948  
+            temperature  homeothermY:temperature  
+               0.001186                 0.007512  
 \end{Soutput}
 \end{Schunk}
 It also works with other `simple' functions, such as \code{rlm} (robust linear model) in the \code{MASS} package.
 \begin{Schunk}
 \begin{Sinput}
 > library(MASS)
-> rlm(abundance ~ (body.size * temperature), data = fake.community)
+> rlm(abundance ~ (body.size*temperature),data=fake.community)
 \end{Sinput}
 \begin{Soutput}
 Call:
 rlm(formula = abundance ~ (body.size * temperature), data = fake.community)
-Converged in 17 iterations
+Converged in 10 iterations
 
 Coefficients:
-          (Intercept)             body.size           temperature body.size:temperature 
-         2.230510e-04         -1.173953e-06          7.435033e-06         -3.913176e-08 
+          (Intercept)             body.size 
+         2.606699e-05         -1.076827e-07 
+          temperature body.size:temperature 
+         3.043212e-07         -8.994997e-10 
 
-Degrees of freedom: 22 total; 18 residual
-  (32 observations deleted due to missingness)
-Scale estimate: 1.39e-16 
+Degrees of freedom: 51 total; 47 residual
+  (3 observations deleted due to missingness)
+Scale estimate: 5.26e-05 
 \end{Soutput}
 \end{Schunk}
 \noindent Therefore, in many cases, data lists enter the standard \R\ workflow in exactly the same manner as data frames.
@@ -570,142 +596,400 @@ Scale estimate: 1.39e-16
 The reason that unmodified data lists can be passed to some functions that are expecting data frames, is that these functions try to coerce whatever data object they receive into a data frame.  When the \code{multitable} package is loaded, these functions can find a method for making such a conversion.  This method can be accessed by users directly via the \code{as.data.frame} function from the \R\ \code{base} package.  For example, we can pass the \code{fake.community} data to \code{as.data.frame}.
 \begin{Schunk}
 \begin{Sinput}
-> as.data.frame(fake.community)
+> fake.community.df <- as.data.frame(fake.community)
+> fake.community.df
 \end{Sinput}
 \begin{Soutput}
-                          abundance temperature precipitation body.size metabolic.rate
-midlatitude.2009.capybara 1.6094379          NA            NA       140             20
-subtropical.2009.capybara 0.0000000          25            99       140             20
-tropical.2009.capybara    2.1972246          48           149       140             20
-equatorial.2009.capybara  0.0000000          50           199       140             20
-arctic.2009.capybara      0.0000000         -37            21       140             20
-subarctic.2009.capybara   0.0000000           3            41       140             20
-midlatitude.2008.capybara 0.0000000          10            20       140             20
-subtropical.2008.capybara 2.3978953          20           100       140             20
-tropical.2008.capybara    0.0000000          50           150       140             20
-equatorial.2008.capybara  2.0794415          30           200       140             20
-arctic.2008.capybara      0.0000000         -30            20       140             20
-subarctic.2008.capybara   0.0000000           0            40       140             20
-midlatitude.1537.capybara 0.0000000          NA            NA       140             20
-subtropical.1537.capybara 0.0000000          NA            NA       140             20
-tropical.1537.capybara    0.0000000          NA            NA       140             20
-equatorial.1537.capybara  0.0000000          NA            NA       140             20
-arctic.1537.capybara      0.0000000          NA            NA       140             20
-subarctic.1537.capybara   0.0000000          NA            NA       140             20
-midlatitude.2009.moss     0.0000000          NA            NA        NA              5
-subtropical.2009.moss     0.0000000          25            99        NA              5
-tropical.2009.moss        2.3025851          48           149        NA              5
-equatorial.2009.moss      0.0000000          50           199        NA              5
-arctic.2009.moss          1.7917595         -37            21        NA              5
-subarctic.2009.moss       0.0000000           3            41        NA              5
-midlatitude.2008.moss     1.9459101          10            20        NA              5
-subtropical.2008.moss     0.0000000          20           100        NA              5
-tropical.2008.moss        0.0000000          50           150        NA              5
-equatorial.2008.moss      1.3862944          30           200        NA              5
-arctic.2008.moss          0.0000000         -30            20        NA              5
-subarctic.2008.moss       0.0000000           0            40        NA              5
-midlatitude.1537.moss     0.0000000          NA            NA        NA              5
-subtropical.1537.moss     0.0000000          NA            NA        NA              5
-tropical.1537.moss        0.0000000          NA            NA        NA              5
-equatorial.1537.moss      0.0000000          NA            NA        NA              5
-arctic.1537.moss          0.0000000          NA            NA        NA              5
-subarctic.1537.moss       0.0000000          NA            NA        NA              5
-midlatitude.2009.vampire  0.0000000          NA            NA       190              0
-subtropical.2009.vampire  0.0000000          25            99       190              0
-tropical.2009.vampire     0.0000000          48           149       190              0
-equatorial.2009.vampire   0.0000000          50           199       190              0
-arctic.2009.vampire       0.0000000         -37            21       190              0
-subarctic.2009.vampire    0.0000000           3            41       190              0
-midlatitude.2008.vampire  0.0000000          10            20       190              0
-subtropical.2008.vampire  0.0000000          20           100       190              0
-tropical.2008.vampire     0.0000000          50           150       190              0
-equatorial.2008.vampire   0.0000000          30           200       190              0
-arctic.2008.vampire       0.0000000         -30            20       190              0
-subarctic.2008.vampire    0.0000000           0            40       190              0
-midlatitude.1537.vampire  0.0000000          NA            NA       190              0
-subtropical.1537.vampire  0.6931472          NA            NA       190              0
-tropical.1537.vampire     0.0000000          NA            NA       190              0
-equatorial.1537.vampire   0.0000000          NA            NA       190              0
-arctic.1537.vampire       0.0000000          NA            NA       190              0
-subarctic.1537.vampire    0.0000000          NA            NA       190              0
-                          homeotherm
-midlatitude.2009.capybara          Y
-subtropical.2009.capybara          Y
-tropical.2009.capybara             Y
-equatorial.2009.capybara           Y
-arctic.2009.capybara               Y
-subarctic.2009.capybara            Y
-midlatitude.2008.capybara          Y
-subtropical.2008.capybara          Y
-tropical.2008.capybara             Y
-equatorial.2008.capybara           Y
-arctic.2008.capybara               Y
-subarctic.2008.capybara            Y
-midlatitude.1537.capybara          Y
-subtropical.1537.capybara          Y
-tropical.1537.capybara             Y
-equatorial.1537.capybara           Y
-arctic.1537.capybara               Y
-subarctic.1537.capybara            Y
-midlatitude.2009.moss              N
-subtropical.2009.moss              N
-tropical.2009.moss                 N
-equatorial.2009.moss               N
-arctic.2009.moss                   N
-subarctic.2009.moss                N
-midlatitude.2008.moss              N
-subtropical.2008.moss              N
-tropical.2008.moss                 N
-equatorial.2008.moss               N
-arctic.2008.moss                   N
-subarctic.2008.moss                N
-midlatitude.1537.moss              N
-subtropical.1537.moss              N
-tropical.1537.moss                 N
-equatorial.1537.moss               N
-arctic.1537.moss                   N
-subarctic.1537.moss                N
-midlatitude.2009.vampire           N
-subtropical.2009.vampire           N
-tropical.2009.vampire              N
-equatorial.2009.vampire            N
-arctic.2009.vampire                N
-subarctic.2009.vampire             N
-midlatitude.2008.vampire           N
-subtropical.2008.vampire           N
-tropical.2008.vampire              N
-equatorial.2008.vampire            N
-arctic.2008.vampire                N
-subarctic.2008.vampire             N
-midlatitude.1537.vampire           N
-subtropical.1537.vampire           N
-tropical.1537.vampire              N
-equatorial.1537.vampire            N
-arctic.1537.vampire                N
-subarctic.1537.vampire             N
+                          abundance temperature
+midlatitude.2009.capybara 1.6094379          NA
+subtropical.2009.capybara 0.0000000          25
+tropical.2009.capybara    2.1972246          48
+equatorial.2009.capybara  0.0000000          50
+arctic.2009.capybara      0.0000000         -37
+subarctic.2009.capybara   0.0000000           3
+midlatitude.2008.capybara 0.0000000          10
+subtropical.2008.capybara 2.3978953          20
+tropical.2008.capybara    0.0000000          50
+equatorial.2008.capybara  2.0794415          30
+arctic.2008.capybara      0.0000000         -30
+subarctic.2008.capybara   0.0000000           0
+midlatitude.1537.capybara 0.0000000           5
+subtropical.1537.capybara 0.0000000          10
+tropical.1537.capybara    0.0000000          30
+equatorial.1537.capybara  0.0000000          20
+arctic.1537.capybara      0.0000000         -80
+subarctic.1537.capybara   0.0000000         -10
+midlatitude.2009.moss     0.0000000          NA
+subtropical.2009.moss     0.0000000          25
+tropical.2009.moss        2.3025851          48
+equatorial.2009.moss      0.0000000          50
+arctic.2009.moss          1.7917595         -37
+subarctic.2009.moss       0.0000000           3
+midlatitude.2008.moss     1.9459101          10
+subtropical.2008.moss     0.0000000          20
+tropical.2008.moss        0.0000000          50
+equatorial.2008.moss      1.3862944          30
+arctic.2008.moss          0.0000000         -30
+subarctic.2008.moss       0.0000000           0
+midlatitude.1537.moss     0.0000000           5
+subtropical.1537.moss     0.0000000          10
+tropical.1537.moss        0.0000000          30
+equatorial.1537.moss      0.0000000          20
+arctic.1537.moss          0.0000000         -80
+subarctic.1537.moss       0.0000000         -10
+midlatitude.2009.vampire  0.0000000          NA
+subtropical.2009.vampire  0.0000000          25
+tropical.2009.vampire     0.0000000          48
+equatorial.2009.vampire   0.0000000          50
+arctic.2009.vampire       0.0000000         -37
+subarctic.2009.vampire    0.0000000           3
+midlatitude.2008.vampire  0.0000000          10
+subtropical.2008.vampire  0.0000000          20
+tropical.2008.vampire     0.0000000          50
+equatorial.2008.vampire   0.0000000          30
+arctic.2008.vampire       0.0000000         -30
+subarctic.2008.vampire    0.0000000           0
+midlatitude.1537.vampire  0.0000000           5
+subtropical.1537.vampire  0.6931472          10
+tropical.1537.vampire     0.0000000          30
+equatorial.1537.vampire   0.0000000          20
+arctic.1537.vampire       0.0000000         -80
+subarctic.1537.vampire    0.0000000         -10
+                          precipitation body.size
+midlatitude.2009.capybara            NA       140
+subtropical.2009.capybara            99       140
+tropical.2009.capybara              149       140
+equatorial.2009.capybara            199       140
+arctic.2009.capybara                 21       140
+subarctic.2009.capybara              41       140
+midlatitude.2008.capybara            20       140
+subtropical.2008.capybara           100       140
+tropical.2008.capybara              150       140
+equatorial.2008.capybara            200       140
+arctic.2008.capybara                 20       140
+subarctic.2008.capybara              40       140
+midlatitude.1537.capybara             5       140
+subtropical.1537.capybara            50       140
+tropical.1537.capybara               75       140
+equatorial.1537.capybara             50       140
+arctic.1537.capybara                  2       140
+subarctic.1537.capybara               7       140
+midlatitude.2009.moss                NA         1
+subtropical.2009.moss                99         1
+tropical.2009.moss                  149         1
+equatorial.2009.moss                199         1
+arctic.2009.moss                     21         1
+subarctic.2009.moss                  41         1
+midlatitude.2008.moss                20         1
+subtropical.2008.moss               100         1
+tropical.2008.moss                  150         1
+equatorial.2008.moss                200         1
+arctic.2008.moss                     20         1
+subarctic.2008.moss                  40         1
+midlatitude.1537.moss                 5         1
+subtropical.1537.moss                50         1
+tropical.1537.moss                   75         1
+equatorial.1537.moss                 50         1
+arctic.1537.moss                      2         1
+subarctic.1537.moss                   7         1
+midlatitude.2009.vampire             NA       190
+subtropical.2009.vampire             99       190
+tropical.2009.vampire               149       190
+equatorial.2009.vampire             199       190
+arctic.2009.vampire                  21       190
+subarctic.2009.vampire               41       190
+midlatitude.2008.vampire             20       190
+subtropical.2008.vampire            100       190
+tropical.2008.vampire               150       190
+equatorial.2008.vampire             200       190
+arctic.2008.vampire                  20       190
+subarctic.2008.vampire               40       190
+midlatitude.1537.vampire              5       190
+subtropical.1537.vampire             50       190
+tropical.1537.vampire                75       190
+equatorial.1537.vampire              50       190
+arctic.1537.vampire                   2       190
+subarctic.1537.vampire                7       190
+                          metabolic.rate homeotherm
+midlatitude.2009.capybara             20          Y
+subtropical.2009.capybara             20          Y
+tropical.2009.capybara                20          Y
+equatorial.2009.capybara              20          Y
+arctic.2009.capybara                  20          Y
+subarctic.2009.capybara               20          Y
+midlatitude.2008.capybara             20          Y
+subtropical.2008.capybara             20          Y
+tropical.2008.capybara                20          Y
+equatorial.2008.capybara              20          Y
+arctic.2008.capybara                  20          Y
+subarctic.2008.capybara               20          Y
+midlatitude.1537.capybara             20          Y
+subtropical.1537.capybara             20          Y
+tropical.1537.capybara                20          Y
+equatorial.1537.capybara              20          Y
+arctic.1537.capybara                  20          Y
+subarctic.1537.capybara               20          Y
+midlatitude.2009.moss                  5          N
+subtropical.2009.moss                  5          N
+tropical.2009.moss                     5          N
+equatorial.2009.moss                   5          N
+arctic.2009.moss                       5          N
+subarctic.2009.moss                    5          N
+midlatitude.2008.moss                  5          N
+subtropical.2008.moss                  5          N
+tropical.2008.moss                     5          N
+equatorial.2008.moss                   5          N
+arctic.2008.moss                       5          N
+subarctic.2008.moss                    5          N
+midlatitude.1537.moss                  5          N
+subtropical.1537.moss                  5          N
+tropical.1537.moss                     5          N
+equatorial.1537.moss                   5          N
+arctic.1537.moss                       5          N
+subarctic.1537.moss                    5          N
+midlatitude.2009.vampire               0          N
+subtropical.2009.vampire               0          N
+tropical.2009.vampire                  0          N
+equatorial.2009.vampire                0          N
+arctic.2009.vampire                    0          N
+subarctic.2009.vampire                 0          N
+midlatitude.2008.vampire               0          N
+subtropical.2008.vampire               0          N
+tropical.2008.vampire                  0          N
+equatorial.2008.vampire                0          N
+arctic.2008.vampire                    0          N
+subarctic.2008.vampire                 0          N
+midlatitude.1537.vampire               0          N
+subtropical.1537.vampire               0          N
+tropical.1537.vampire                  0          N
+equatorial.1537.vampire                0          N
+arctic.1537.vampire                    0          N
+subarctic.1537.vampire                 0          N
 \end{Soutput}
 \end{Schunk}
+%head(fake.community.df, n=10)
+%tail(fake.community.df, n=10)
+%The \code{head} and \code{tail} functions print only the first and last (in this case \code{n=10}) lines of the data frame.  
+
+The resulting data frame contains one column for each variable and one row for each combination of replicates across the three dimensions of replication.  Notice that the row names are automatically generated to be informative about the dimensions of replication that have been collapsed into a single dimension.  Unlike the corresponding data list object, the data frame has redundancy.  For example, because the traits are only replicated along species there are only three unique trait values, one for each of the three species.  These three values are repeated so that all of the variables can be stored side-by-side in a single data frame.
+
+By storing these data in a single data frame, we can now pass them to any function that accepts data frames.  For example, we can graphically examine the interaction between an environmental variable and a trait using the \code{xyplot} function from the \code{lattice} package (Fig. \ref{fig:xyplot}).  Because these are completely fake data I won't make too much out of the results, but there doesn't seem to be much of an interaction between body size and temperature.  The exciting thing about this graph is that it suggests a general graphical method for exploring the interactions between traits and environmental variables on community composition.
+
+\begin{figure}
+\begin{Schunk}
+\begin{Sinput}
+> library(lattice)
+> xyplot(abundance ~ temperature | body.size,data=fake.community.df)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{multitable-014}
+\caption{\code{xyplot}}
+\label{fig:xyplot}
+\end{figure}
+
+
 
 %Because the variables differ in the dimensions they are replicated along, replication of such multiple-table data sets cannot simply be represented as rows in a data frame without either repeating data values to fill up the resulting holes (e.g. fourth-corners) or reducing the information content of the data.
 
-\section{Theory}
+\section{How data lists are made}
 
-Data lists are based on a distinction between 
+Up until now we have used an existing data list to illustrate the use of the \code{multitable} package.  Although there are several ways to create data lists, there is one way that best demonstrates the general idea of data lists, which I now explain.
 
-The \code{multitable} package  coerce multiple-table data into a single data frame?  
+Consider a data frame of species abundances counted at various sites.
+\begin{Schunk}
+\begin{Sinput}
+> abundance
+\end{Sinput}
+\begin{Soutput}
+        sites  species abundance
+1 midlatitude capybara         4
+2 subtropical capybara        10
+3    tropical capybara         8
+4  equatorial capybara         7
+5      arctic     moss         5
+6 midlatitude     moss         6
+7    tropical     moss         9
+8  equatorial     moss         3
+9 subtropical  vampire         1
+\end{Soutput}
+\end{Schunk}
+We have six sites and three species, but each species is not present at each site and so there are missing site-species combinations.  Related to this data frame we have a data frame of environmental variables at each site and a data frame of traits for each species.
+\begin{Schunk}
+\begin{Sinput}
+> environment
+\end{Sinput}
+\begin{Soutput}
+        sites temperature precipitation
+1   subarctic           0            40
+2 midlatitude          10            20
+3 subtropical          20           100
+4    tropical          50           150
+5  equatorial          30           200
+\end{Soutput}
+\begin{Sinput}
+> trait
+\end{Sinput}
+\begin{Soutput}
+   species body.size metabolic.rate
+1 capybara       140             20
+2     moss         5              5
+3  vampire       190              0
+\end{Soutput}
+\end{Schunk}
+To make things interesting to scientists with real data, we assume that our environmental data are missing from the arctic site (perhaps because it is too harsh and remote).
 
-This model of data organization is made possible by new objects, called data lists.  These data list objects organize and relate data from multiple tables, which were stored in multiple text-based data files.  Once in data list form, handling multiple-table data is much like handling single-table data in data frames; in fact data lists are much like the data frames that you have come to love!
+The three data frames are related because they share two columns:  sites and species.  The specific pattern of sharing for these data is shown by this bipartite graph (i.e. matching diagram; Fig. \ref{fig:bipartite}).  Columns that are shared between data frames are called \emph{dimensions of replication} and those that are not are called \emph{variables}.  The reason for this terminology is that in standard single-table statistical settings, we are able to relate variables because they are replicated along some common dimension.  For example, we could relate pH and temperature if they were both replicated along the same set of lakes.  Similarly, we can relate the variables in several tables together if they share columns (i.e. dimensions of replication).
 
-Like data lists 
+\begin{figure}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.1cm,
+	ndims/.style={
+		rectangle,minimum width=1.5cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=2.2cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,nblank]	(asites)					{};
+\node [place,ndims]	(sites)[below=of asites]		{sites};
+\node [place,nblank]	(bsites)[below=of sites]		{};
+\node [place,ndims]	(species)[below=of bsites]		{species};
+\node [place,nblank]	(bspecies)[below=of species]	{};
+\node [place,nvars]	(environment)[right=of asites]	{environment}
+	edge [-]		(sites);
+\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
+	edge [-]		(sites)
+	edge [-]		(species);
+\node [place,nvars]	(traits)[right=of bspecies]		{traits}
+	edge [-]		(species);
+\end{tikzpicture}
+\caption{Bipartite graph of the multiple-table structure of data with a standard fourth-corner problem (Fig. \ref{fig:fourth}).  Dimensions of replication are in blue and tables are in red.}
+\label{fig:bipartite}
+\end{figure}
+
+To create a data list out of these data frames we use the \code{dcast} function, which was inspired by the \code{acast} function in the \code{reshape2} package.
+\begin{Schunk}
+\begin{Sinput}
+> dl <- dlcast(list(abundance,environment,trait),
+ 	dnames=c("sites","species"),
+ 	fill=c(0,NA,NA)
+ )
+> dl
+\end{Sinput}
+\begin{Soutput}
+abundance:
+---------
+            capybara moss vampire
+midlatitude        4    6       0
+subtropical       10    0       1
+tropical           8    9       0
+equatorial         7    3       0
+arctic             0    5       0
+subarctic          0    0       0
+Replicated along:  || sites || species || 
 
 
+temperature:
+-----------
+midlatitude subtropical    tropical  equatorial      arctic 
+         10          20          50          30          NA 
+  subarctic 
+          0 
+Replicated along:  || sites || 
 
 
+precipitation:
+-------------
+midlatitude subtropical    tropical  equatorial      arctic 
+         20         100         150         200          NA 
+  subarctic 
+         40 
+Replicated along:  || sites || 
 
-\section{Reading multiple data files into a data list}
-\section{Manipulating data lists}
-\section{Simple analyses with data lists}
-\section{Coercing data lists to data frames}
 
+body.size:
+---------
+capybara     moss  vampire 
+     140        5      190 
+Replicated along:  || species || 
+
+
+metabolic.rate:
+--------------
+capybara     moss  vampire 
+      20        5        0 
+Replicated along:  || species || 
+
+
+REPLICATION DIMENSIONS: 
+  sites species 
+      6       3 
+\end{Soutput}
+\end{Schunk}
+This function takes three arguments:  (1) a list of data frames, (2) a character vector, \code{dnames}, with the names of the dimensions of replication (i.e. the columns shared between the tables), and (3) a vector, \code{fill}, with one element for each data frame giving the value with which to fill in any structural missing values.  This last argument is particularly interesting, because we can fill missing abundances with zeros because those site-species combinations were not observed and \code{NA} values for the other tables.  This data list can now be used in analyses.
+
+It is quite possible that your data are not stored in data frames with columns for both dimensions of replication and variables; this is not a large concern, as the \code{multitable} package offers many ways to get your data into a data list (see vignette ????).  However, we recommend that researchers at least consider what their data might look like in this format, because we believe that this format best illustrates concepts that will help make multiple-table data easier to understand, manage, and analyze.
+
+\section{Multiple-table concepts}
+
+Shared columns (i.e. dimensions of replication) between tables are expanded into the dimensions of the arrays that are used to store each of the other columns (i.e. variables).  For example, because the \code{abundance} table has two dimensions of replication, it is stored as a two-dimensional matrix in the resulting data frame; whereas, the \code{environment} and \code{trait} tables have only two dimensions of replication and so are stored in one-dimensional vectors.
+
+The powerful thing about storing both dimensions of replication and variables as columns, is that we can easily generalize to more complex multiple-table data sets by adding more dimensions of replication, more tables, with more complex patterns of dimension sharing.  For example, the Lac Croche zooplankton community data (Fig. \ref{fig:beatrix}) has a structure given by Fig. \ref{fig:bipartitebeatrix}.  To store these data in a format amenable to \code{dlcast}, we would create one data frame for each of the groups of variables (red boxes) and add a column for each dimension of replication (blue boxes) associated with those variables.
+
+\begin{figure}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.1cm,
+	ndims/.style={
+		rectangle,minimum width=1.5cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=2.2cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,nblank]	(abasin)					{};
+\node [place,ndims]	(basin)[below=of abasin]		{basin};
+\node [place,nblank]	(bbasin)[below=of basin]		{};
+\node [place,ndims]	(time)[below=of bbasin]		{time};
+\node [place,nblank]	(btime)[below=of time]		{};
+\node [place,ndims]	(species)[below=of btime]		{species};
+\node [place,nblank]	(bspecies)[below=of species]	{};
+\node [place,nvars]	(environment)[right=of asites]	{environment}
+	edge [-]		(basin)
+	edge [-]		(time);
+\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
+	edge [-]		(basin)
+	edge [-]		(time)
+	edge [-]		(species);
+\node [place,nvars]	(scales)[right=of btime]		{time scales}
+	edge [-]		(time);
+\node [place,nvars]	(traits)[right=of bspecies]		{traits}
+	edge [-]		(species);
+\end{tikzpicture}
+\caption{Bipartite graph of the Lac Croche data in Fig. \ref{fig:beatrix}.} 
+\label{fig:bipartitebeatrix}
+\end{figure}
+
+With our data in this form, we can easily state the two requirements for using \code{data.list} objects:  (1) every table must share at least one dimension of replication with at least one other table and (2) at least one table must be replicated along all of the dimensions present in the data set.  The first criterion ensures that the tables will relate to each other and the second criterion ensures that some variables will be relatable to all other variables---such a fully-replicated variable is a candidate for a response variable.  We also see that we only need more than one table if some variables are not replicated along all of the dimensions.
+
+\section{conclusion}
+
+\bibliographystyle{ecology}
+%% ***   Set the bibliography file.   ***
+%% ("thesis.bib" by default; change if needed)
+\bibliography{/Users/stevenwalker/Documents/Bibliography/Bibliography}
 
 \end{document}

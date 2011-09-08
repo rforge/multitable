@@ -97,18 +97,31 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	if(length(xl[[i]])!=length(value))
 		stop("length of replacement value does not
 			match length of the variable to be replaced")
-	attr.xl <- attributes(xl[[i]])
+	if(is.character(value)){
+		dimvalue <- dim(value)
+		value <- as.factor(value)
+		dim(value) <- dimvalue
+	}
+	attr.xl <- datalistVARattributes(xl[[i]])
 	xl[[i]] <- value
-	attributes(xl[[i]]) <- attr.xl
+	datalistVARattributes(xl[[i]]) <- attr.xl
 	class(xl) <- "data.list"
 	return(xl)
 }
 
-`[[<-.data.list` <- function(x,i,drop=TRUE,value){
+`[[<-.data.list` <- function(x,i,match.dnames,drop=TRUE,value){
 	nx <- names(x)
 	if(is.character(i)){
-		if(!any(nx %in% i))
-			stop("can't add variables this way...maybe in the future")
+		if(!any(nx %in% i)){
+			if(missing(match.dnames))
+				stop("match.dnames required for this assignment")
+			match.dnames <- c(attr(x,"match.dnames"),list(match.dnames))
+			x <- unclass(x)
+			x[[i]] <- value
+			x <- as.data.list(x,match.dnames=match.dnames)
+			return(x)
+			#stop("can't add variables this way...maybe in the future")
+		}
 	}
 	else if(is.numeric(i)){
 		if((i > length(x)) || (i < 1))
@@ -123,11 +136,34 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	xl <- unclass(x)
 	if(length(xl[[i]])!=length(value))
 		stop("length of replacement value does not match length of the variable to be replaced")
-	attr.xl <- attributes(xl[[i]])
+	if(is.character(value)){
+		dimvalue <- dim(value)
+		value <- as.factor(value)
+		dim(value) <- dimvalue
+	}
+	attr.xl <- datalistVARattributes(xl[[i]])
 	xl[[i]] <- value
-	attributes(xl[[i]]) <- attr.xl
+	datalistVARattributes(xl[[i]]) <- attr.xl
 	class(xl) <- "data.list"
 	return(xl)
 }
 
+# the purpose of this function (by Hadley Wickham) is to test if 'try' found and error
 is.error <- function(x) inherits(x, "try-error")
+
+datalistVARattributes <- function(dlvar){
+	# returns only those attributes required by variables in a data list
+	list(
+		dim=attr(dlvar,"dim"),
+		dimnames=attr(dlvar,"dimnames"),
+		subsetdim=attr(dlvar,"subsetdim")
+	)
+}
+
+`datalistVARattributes<-` <- function(dlvar,value){
+	# maybe in the future put a warning or error if these attributes don't match somehow
+	attr(dlvar,"dim") <- value$dim
+	attr(dlvar,"dimnames") <- value$dimnames 
+	attr(dlvar,"subsetdim") <- value$subsetdim
+	return(dlvar)
+}

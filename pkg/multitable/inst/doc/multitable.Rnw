@@ -7,18 +7,22 @@
 \usepackage{verbatim}
 \usepackage{tikz}
 \usepackage{rotating}
+\usepackage{natbib}
 
 \usetikzlibrary{positioning,petri}
 
+%\SweaveOpts{width=6,height=4}
+
 %\VignetteIndexEntry{Multiple table data in R}
 %\VignettePackage{multitable}
-%\VignetteDepends{multitable, MASS}
+%\VignetteDepends{multitable, MASS, lattice}
 %\VignetteKeywords{data manipulation, ecology, multivariate, R}
-
 
 %%%%R commands for running Sweave%%%%%%%
 %%%%setwd("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/")
 %%%%Sweave("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/readingmultipletables.Rnw")
+
+\SweaveOpts{keep.source=TRUE}
 
 \newcommand{\R}{{\sf R}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -32,9 +36,23 @@
 \begin{document}
 \maketitle
 
-The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates and variables respectively.  Standard \R\ workflows require that all of the data to be analyzed is organized into a single data frame, and hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects; data frames and formulas are combined by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics).  This framework allows ecologists to concentrate on their primary interests---the relationships between ecological variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.
+<<echo=false>>=
+options(width=60)
+@
 
-However, research in my field of community ecology has led me to data sets that do not easily fit within a single data frame.  A common example is the fourth-corner problem (Legendre et al. 1997), in which three data tables are to be analyzed: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Fig. \ref{fig:fourth}).  Such data are characterized by a conspicuous (lower-right) `fourth-corner', where there are no data.  These fourth-corners of missing data are not caused by the usual problems (e.g. broken field equipment; budget restrictions; bad weather; dead subjects), but are part of the study design itself.  The fourth-corner problem is a special case of a general `multiple-table problem', which can be much more complex (e.g. could involve three-dimensional `cubes' of data, Fig. \ref{fig:beatrix}).  The challenge of analyzing such multiple-table data sets in \R\ is that it is not obvious how to organize them into a single\code{data.frame}, which is required in standard \R\ workflows.  Our goal with the \code{multitable} package is to provide tools for analyzing multiple-table data sets within this standard \R\ framework.
+<<echo=false>>=
+options(continue=" ")
+@
+
+\begin{abstract}
+Data frames are integral to \R.  They provide a standard format for passing data to model-fitting and plotting functions.  Still, many data sets do not easily fit into a single data frame---examples abound in my field of community ecology.  
+\end{abstract}
+
+\section{Introduction}
+
+The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates and variables respectively.  Standard \R\ workflows require that all of the data to be analyzed is organized into a single data frame, and hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects; data frames and formulas are combined by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics) \citep{ChambersAndHastie1992}.  This framework allows scientists to concentrate on their primary interests---the relationships between variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.
+
+However, research in my field of community ecology has led my colleagues and I to data sets that do not easily fit within a single data frame.  A common example is the fourth-corner problem \citep{LegendreEtAl1997}, in which three data tables are to be analyzed: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Fig. \ref{fig:fourth}).  Such data are characterized by a conspicuous (lower-right) `fourth-corner', where there are no data.  These fourth-corners of missing data are not caused by the usual problems (e.g. broken field equipment; budget restrictions; bad weather; dead subjects), but are part of the study design itself.  The fourth-corner problem is a special case of a general `multiple-table problem', which can be much more complex (e.g. could involve three-dimensional `cubes' of data, Fig. \ref{fig:beatrix}).  The challenge of analyzing such multiple-table data sets in \R\ is that it is not obvious how to organize them into a single \code{data.frame}, which is required in standard \R\ workflows.  Our goal with the \code{multitable} package is to provide tools for analyzing multiple-table data sets within this standard \R\ framework.
 
 \begin{figure}
 \begin{tikzpicture} [
@@ -153,9 +171,9 @@ However, research in my field of community ecology has led me to data sets that 
 \label{fig:beatrix}
 \end{figure}
 
-One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There has been a fair amount of work in this direction, focusing on data with a fourth-corner problem (e.g. Chessel et al. 1996; Legendre et al. 1997; Ives and Godfray 2006; Dray and Legendre 2008; Pillar and Duarte 2010; Leibold et al. 2010; Ives and Helmus 2011).  However, this work does not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}).  One approach to such issues would be to build new data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be learned for each new structure---it does not take advantage of the large number of tools developed within the standard \R\ framework of data frames and formulas.  The \code{multitable} package provides an alternative approach, by introducing a multiple-table generalization of data frames---called data lists---which can be analyzed with virtually any function that can be used to analyze a data frame.  Thus, instead of providing new methods of analysis, \code{multitable} provides new methods of data management.
+One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There has been a fair amount of work in this direction, focusing on data with a fourth-corner problem \citep{DoledecEtAl1996,LegendreEtAl1997,DrayAndLegendre2008,PillarEtAl2010,LeiboldEtAl2010,IvesAndHelmus2011}.  However, this work does not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}; Ref ??).  One approach to such issues would be to build new data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be learned for each new structure---it does not take advantage of the large number of tools developed within the standard \R\ framework of data frames and formulas.  The \code{multitable} package provides an alternative approach, by introducing a multiple-table generalization of data frames---called data lists---which can be analyzed with virtually any function that can be used to analyze a data frame.  Thus, instead of providing new methods of analysis, \code{multitable} provides new methods of data management.
 
-There are several existing \R\ packages that are designed to make data management easier (e.g. \code{reshape2}; etc.??).  In particular, the \code{mefa} and \code{mefa4} packages have been developed to organize data with a slight generalization\footnote{Several community matrices---called segments---with identical dimensions are allowed in \code{mefa}.} of the fourth-corner problem.  The \code{multitable} package has much in common with \code{mefa}, but there are noticeable differences.  For example, \code{mefa} provides more extensive tools for data summarization than \code{multitable} and \code{mefa4} integrates tools for sparse-matrix computations.  On the other hand, \code{multitable} is designed to handle more general data structures than \code{mefa} or \code{mefa4} (e.g. \code{mefa} cannot organize the Lac Croche data structure, Fig. \ref{fig:beatrix}).  However, we hope that \code{mefa} and \code{multitable} will be complementary, not competitive.
+There are several existing \R\ packages that are designed to make data management easier (e.g. \code{reshape2}; \citeauthor{Wickham2007}, \citeyear{Wickham2007}).  The \code{mefa} and \code{mefa4} packages have been developed to organize data with a slight generalization\footnote{Several community matrices---called segments---with identical dimensions are allowed in \code{mefa}.} of the fourth-corner problem \citep{Solymos2009}.  The \code{multitable} package has much in common with \code{mefa}, but there are noticeable differences.  For example, \code{mefa} provides more extensive tools for data summarization than \code{multitable} and \code{mefa4} integrates tools for sparse-matrix computations.  On the other hand, \code{multitable} is designed to handle more general data structures than \code{mefa} or \code{mefa4} (e.g. \code{mefa} cannot organize the Lac Croche data structure, Fig. \ref{fig:beatrix}).  However, we hope that \code{mefa} and \code{multitable} will be complementary, not competitive.
 
 The \code{multitable} model of data organization is illustrated in Figure \ref{fig:model} (\code{mefa} uses a similar model).  In blue are the elements of the standard \R\ workflow: data frames; formulas; functions; and analyses.  The \code{multitable} package seeks to facilitate the use of such workflows with multiple-table data by creating tools (arrows and red boxes) for organizing and manipulating such data.  These tools are based on a new kind of object, called a data list, which is used to organize multiple-table data.  Data lists can be manipulated much like data frames (e.g. variables can be transformed; groups of observations extracted or removed).  Our design principle was to keep the manipulation of data lists as similar as possible to the manipulation of data frames.  Once data lists are ready for analysis \code{multitable} provides tools for coercing them into data frames, thereby entering the standard \R\ workflow.  Importantly, data, formulas, and functions are kept separate, thus preserving the benefits of using \R\ in a standard way.
 
@@ -216,11 +234,11 @@ This structure relating variables and dimensions of replication, allows us to ma
 <<eval=TRUE>>=
 fake.community[,c("2008","2009"),]
 @
-\noindent This command returns the same data list of variables but without the data from 1537.  In particular, for every variable replicated along the \code{years} dimension is subscripted appropriately.  As another example, perhaps we want all of the data on the first species (i.e. capybara) in 1537 for the first three sites.
+This command returns the same data list of variables but without the data from 1537.  In particular, for every variable replicated along the \code{years} dimension is subscripted appropriately.  As another example, perhaps we want all of the data on the first species (i.e. capybara) in 1537 for the first three sites.
 <<eval=TRUE>>=
 fake.community[1:3,"1537",1]
 @
-\noindent Notice also that for each different subset of the data, the new replication dimensions are printed after the data.
+Notice also that for each different subset of the data, the new replication dimensions are printed after the data.
 
 \section{Transforming variables in data lists}
 
@@ -228,6 +246,16 @@ Often we need to transform variables before passing data frames to functions.  T
 <<eval=TRUE>>=
 fake.community$abundance <- log(fake.community$abundance + 1)
 fake.community$abundance
+@
+We note that \code{fake.community} has a lot of missing values, which were useful for illustrating how data lists handle missing values, but will make further illustrations somewhat underwhelming.  We can replace these missing values with values using the standard logic of \R\ replacement.
+<<eval=TRUE>>=
+fake.community$temperature[,"1537"] <- 
+	c(5,10,30,20,-80,-10)
+	
+fake.community$precipitation[,"1537"] <- 
+	c(5,50,75,50,2,7)
+	
+fake.community$body.size["moss"] <- 1
 @
 
 \section{Simple analysis functions}
@@ -251,29 +279,175 @@ rlm(abundance ~ (body.size*temperature),data=fake.community)
 
 The reason that unmodified data lists can be passed to some functions that are expecting data frames, is that these functions try to coerce whatever data object they receive into a data frame.  When the \code{multitable} package is loaded, these functions can find a method for making such a conversion.  This method can be accessed by users directly via the \code{as.data.frame} function from the \R\ \code{base} package.  For example, we can pass the \code{fake.community} data to \code{as.data.frame}.
 <<eval=TRUE>>=
-head(as.data.frame(fake.community))
+fake.community.df <- as.data.frame(fake.community)
+fake.community.df
 @
+%head(fake.community.df, n=10)
+%tail(fake.community.df, n=10)
+%The \code{head} and \code{tail} functions print only the first and last (in this case \code{n=10}) lines of the data frame.  
+
+The resulting data frame contains one column for each variable and one row for each combination of replicates across the three dimensions of replication.  Notice that the row names are automatically generated to be informative about the dimensions of replication that have been collapsed into a single dimension.  Unlike the corresponding data list object, the data frame has redundancy.  For example, because the traits are only replicated along species there are only three unique trait values, one for each of the three species.  These three values are repeated so that all of the variables can be stored side-by-side in a single data frame.
+
+By storing these data in a single data frame, we can now pass them to any function that accepts data frames.  For example, we can graphically examine the interaction between an environmental variable and a trait using the \code{xyplot} function from the \code{lattice} package (Fig. \ref{fig:xyplot}).  Because these are completely fake data I won't make too much out of the results, but there doesn't seem to be much of an interaction between body size and temperature.  The exciting thing about this graph is that it suggests a general graphical method for exploring the interactions between traits and environmental variables on community composition.
+
+\begin{figure}
+<<eval=TRUE>>=
+library(lattice)
+xyplot(abundance ~ temperature | body.size,data=fake.community.df)
+@
+<<fig=TRUE,echo=FALSE,eps=FALSE,pdf=TRUE,width=4,height=4>>=
+print(xyplot(abundance ~ temperature | body.size,data=fake.community.df))
+@
+\caption{\code{xyplot}}
+\label{fig:xyplot}
+\end{figure}
+
+
 
 %Because the variables differ in the dimensions they are replicated along, replication of such multiple-table data sets cannot simply be represented as rows in a data frame without either repeating data values to fill up the resulting holes (e.g. fourth-corners) or reducing the information content of the data.
 
-\section{Theory}
+\section{How data lists are made}
 
-Data lists are based on a distinction between 
+Up until now we have used an existing data list to illustrate the use of the \code{multitable} package.  Although there are several ways to create data lists, there is one way that best demonstrates the general idea of data lists, which I now explain.
 
-The \code{multitable} package  coerce multiple-table data into a single data frame?  
+Consider a data frame of species abundances counted at various sites.
+<<eval=TRUE,echo=FALSE>>=
+abundance <- data.frame(
+	sites=c(
+		"midlatitude","subtropical","tropical","equatorial",
+		"arctic","midlatitude","tropical","equatorial",
+		"subtropical"
+	),
+	species=c(rep("capybara",4),rep("moss",4),"vampire"),
+	abundance=c(4,10,8,7,5,6,9,3,1)
+)
+@
+<<eval=TRUE>>=
+abundance
+@
+We have six sites and three species, but each species is not present at each site and so there are missing site-species combinations.  Related to this data frame we have a data frame of environmental variables at each site and a data frame of traits for each species.
+<<eval=TRUE,echo=FALSE>>=
+environment <- data.frame(
+	sites=c(
+		"subarctic","midlatitude","subtropical",
+		"tropical","equatorial"
+	),
+	temperature=c(0,10,20,50,30),
+	precipitation=c(40,20,100,150,200)
+)
+trait <- data.frame(
+	species=c("capybara","moss","vampire"),
+	body.size=c(140,5,190),
+	metabolic.rate=c(20,5,0)
+)
+@
+<<eval=TRUE>>=
+environment
+trait
+@
+To make things interesting to scientists with real data, we assume that our environmental data are missing from the arctic site (perhaps because it is too harsh and remote).
 
-This model of data organization is made possible by new objects, called data lists.  These data list objects organize and relate data from multiple tables, which were stored in multiple text-based data files.  Once in data list form, handling multiple-table data is much like handling single-table data in data frames; in fact data lists are much like the data frames that you have come to love!
+The three data frames are related because they share two columns:  sites and species.  The specific pattern of sharing for these data is shown by this bipartite graph (i.e. matching diagram; Fig. \ref{fig:bipartite}).  Columns that are shared between data frames are called \emph{dimensions of replication} and those that are not are called \emph{variables}.  The reason for this terminology is that in standard single-table statistical settings, we are able to relate variables because they are replicated along some common dimension.  For example, we could relate pH and temperature if they were both replicated along the same set of lakes.  Similarly, we can relate the variables in several tables together if they share columns (i.e. dimensions of replication).
 
-Like data lists 
+\begin{figure}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.1cm,
+	ndims/.style={
+		rectangle,minimum width=1.5cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=2.2cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,nblank]	(asites)					{};
+\node [place,ndims]	(sites)[below=of asites]		{sites};
+\node [place,nblank]	(bsites)[below=of sites]		{};
+\node [place,ndims]	(species)[below=of bsites]		{species};
+\node [place,nblank]	(bspecies)[below=of species]	{};
+\node [place,nvars]	(environment)[right=of asites]	{environment}
+	edge [-]		(sites);
+\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
+	edge [-]		(sites)
+	edge [-]		(species);
+\node [place,nvars]	(traits)[right=of bspecies]		{traits}
+	edge [-]		(species);
+\end{tikzpicture}
+\caption{Bipartite graph of the multiple-table structure of data with a standard fourth-corner problem (Fig. \ref{fig:fourth}).  Dimensions of replication are in blue and tables are in red.}
+\label{fig:bipartite}
+\end{figure}
 
+To create a data list out of these data frames we use the \code{dcast} function, which was inspired by the \code{acast} function in the \code{reshape2} package.
+<<eval=TRUE>>=
+dl <- dlcast(list(abundance,environment,trait),
+	dnames=c("sites","species"),
+	fill=c(0,NA,NA)
+)
+dl
+@
+This function takes three arguments:  (1) a list of data frames, (2) a character vector, \code{dnames}, with the names of the dimensions of replication (i.e. the columns shared between the tables), and (3) a vector, \code{fill}, with one element for each data frame giving the value with which to fill in any structural missing values.  This last argument is particularly interesting, because we can fill missing abundances with zeros because those site-species combinations were not observed and \code{NA} values for the other tables.  This data list can now be used in analyses.
 
+It is quite possible that your data are not stored in data frames with columns for both dimensions of replication and variables; this is not a large concern, as the \code{multitable} package offers many ways to get your data into a data list (see vignette ????).  However, we recommend that researchers at least consider what their data might look like in this format, because we believe that this format best illustrates concepts that will help make multiple-table data easier to understand, manage, and analyze.
 
+\section{Multiple-table concepts}
 
+Shared columns (i.e. dimensions of replication) between tables are expanded into the dimensions of the arrays that are used to store each of the other columns (i.e. variables).  For example, because the \code{abundance} table has two dimensions of replication, it is stored as a two-dimensional matrix in the resulting data frame; whereas, the \code{environment} and \code{trait} tables have only two dimensions of replication and so are stored in one-dimensional vectors.
 
-\section{Reading multiple data files into a data list}
-\section{Manipulating data lists}
-\section{Simple analyses with data lists}
-\section{Coercing data lists to data frames}
+The powerful thing about storing both dimensions of replication and variables as columns, is that we can easily generalize to more complex multiple-table data sets by adding more dimensions of replication, more tables, with more complex patterns of dimension sharing.  For example, the Lac Croche zooplankton community data (Fig. \ref{fig:beatrix}) has a structure given by Fig. \ref{fig:bipartitebeatrix}.  To store these data in a format amenable to \code{dlcast}, we would create one data frame for each of the groups of variables (red boxes) and add a column for each dimension of replication (blue boxes) associated with those variables.
 
+\begin{figure}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.1cm,
+	ndims/.style={
+		rectangle,minimum width=1.5cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=2.2cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,nblank]	(abasin)					{};
+\node [place,ndims]	(basin)[below=of abasin]		{basin};
+\node [place,nblank]	(bbasin)[below=of basin]		{};
+\node [place,ndims]	(time)[below=of bbasin]		{time};
+\node [place,nblank]	(btime)[below=of time]		{};
+\node [place,ndims]	(species)[below=of btime]		{species};
+\node [place,nblank]	(bspecies)[below=of species]	{};
+\node [place,nvars]	(environment)[right=of asites]	{environment}
+	edge [-]		(basin)
+	edge [-]		(time);
+\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
+	edge [-]		(basin)
+	edge [-]		(time)
+	edge [-]		(species);
+\node [place,nvars]	(scales)[right=of btime]		{time scales}
+	edge [-]		(time);
+\node [place,nvars]	(traits)[right=of bspecies]		{traits}
+	edge [-]		(species);
+\end{tikzpicture}
+\caption{Bipartite graph of the Lac Croche data in Fig. \ref{fig:beatrix}.} 
+\label{fig:bipartitebeatrix}
+\end{figure}
+
+With our data in this form, we can easily state the two requirements for using \code{data.list} objects:  (1) every table must share at least one dimension of replication with at least one other table and (2) at least one table must be replicated along all of the dimensions present in the data set.  The first criterion ensures that the tables will relate to each other and the second criterion ensures that some variables will be relatable to all other variables---such a fully-replicated variable is a candidate for a response variable.  We also see that we only need more than one table if some variables are not replicated along all of the dimensions.
+
+\section{conclusion}
+
+\bibliographystyle{ecology}
+%% ***   Set the bibliography file.   ***
+%% ("thesis.bib" by default; change if needed)
+\bibliography{/Users/stevenwalker/Documents/Bibliography/Bibliography}
 
 \end{document}
