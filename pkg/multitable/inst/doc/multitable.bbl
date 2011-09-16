@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{9}
 
 \bibitem[Chambers and Hastie(1992)]{ChambersAndHastie1992}
 Chambers, J.~M. and T.~J. Hastie, 1992.
@@ -17,6 +17,12 @@ Dray, S. and P.~Legendre, 2008.
 \newblock Testing the species traits-environment relationships: the
   fourth-corner problem revisited.
 \newblock \emph{Ecology} \textbf{89}:3400--3412.
+
+\bibitem[Ives and Helmus(2011)]{IvesAndHelmus2011}
+Ives, A.~R. and M.~R. Helmus, 2011.
+\newblock Generalized linear mixed models for phylogenetic analyses of
+  community structure.
+\newblock \emph{Ecological Monographs} \textbf{81}:511--523.
 
 \bibitem[Legendre et~al.(1997)Legendre, Galzin, and
   Harmelin-Vivien]{LegendreEtAl1997}

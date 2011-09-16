@@ -1,6 +1,10 @@
 setwd("/users/stevenwalker/documents/multitable/multitable/pkg/multitable/inst/doc/")
 Sweave("/users/stevenwalker/documents/multitable/multitable/pkg/multitable/inst/doc/multitable.Rnw")
 
+setwd("/users/stevenwalker/documents/multitable/multitable/pkg/multitable/inst/doc/")
+Sweave("/users/stevenwalker/documents/multitable/multitable/pkg/multitable/inst/doc/readingmultipletables.Rnw")
+
+
 
 setwd("/users/stevenwalker/documents/multitable/multitable/pkg/")
 Sweave("/users/stevenwalker/documents/multitable/multitable/pkg/multitable.Rnw")

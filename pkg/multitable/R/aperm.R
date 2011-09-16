@@ -3,10 +3,11 @@ function(a, perm, ...){
 	# a stupid workaround for the behaviour of aperm to convert to numeric
 	a.dim <- dim(a)
 	a.names <- dimnames(a)
+	a.levels <- attr(a,"levels")
 	a <- structure(as.character(a),dim=a.dim)
 	a <- aperm(a,perm,...)
 	a <- structure(as.factor(a),
-		dim=a.dim[perm],dimnames=a.names[perm])
+		dim=a.dim[perm],dimnames=a.names[perm],levels=a.levels)
 	return(a)
 }
 

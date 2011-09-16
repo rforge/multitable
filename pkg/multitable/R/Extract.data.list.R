@@ -88,7 +88,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 `$<-.data.list` <- function(x,i,value){
 	nx <- names(x)
 	if(!any(nx %in% i))
-		stop("can't add variables this way...maybe in the future")
+		stop("can't add variables this way...try using [[ instead of $...and don't forget to specify match.dimids")
 	if(is.null(value)){
 		ni <- which(nx==i)
 		return(x[-ni])
@@ -97,6 +97,11 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	if(length(xl[[i]])!=length(value))
 		stop("length of replacement value does not
 			match length of the variable to be replaced")
+	if(is.factor(xl[[i]])){
+		levels.in <- levels(xl[[i]])
+		levels.add <- as.character(unique(value))
+		levels(xl[[i]]) <- union(levels.in,levels.add)
+	}
 	if(is.character(value)){
 		dimvalue <- dim(value)
 		value <- as.factor(value)
@@ -117,10 +122,11 @@ function(x,...,drop=TRUE,vextract=TRUE){
 				stop("match.dimids required for this assignment")
 			match.dimids <- c(attr(x,"match.dimids"),list(match.dimids))
 			x <- unclass(x)
+			#if(is.factor(value)) 
+			#else x[[i]] <- value
 			x[[i]] <- value
 			x <- as.data.list(x,match.dimids=match.dimids)
 			return(x)
-			#stop("can't add variables this way...maybe in the future")
 		}
 	}
 	else if(is.numeric(i)){
@@ -136,6 +142,11 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	xl <- unclass(x)
 	if(length(xl[[i]])!=length(value))
 		stop("length of replacement value does not match length of the variable to be replaced")
+	if(is.factor(xl[[i]])){
+		levels.in <- levels(xl[[i]])
+		levels.add <- as.character(unique(value))
+		levels(xl[[i]]) <- union(levels.in,levels.add)
+	}
 	if(is.character(value)){
 		dimvalue <- dim(value)
 		value <- as.factor(value)

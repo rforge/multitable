@@ -1,5 +1,6 @@
 \name{as.data.list}
 \alias{as.data.list}
+\alias{is.data.list}
 \alias{as.data.list.default}
 \alias{as.data.frame.data.list}
 \alias{as.matrix.data.list}
@@ -10,6 +11,8 @@
 These functions coerce lists and data frame objects to data lists and vice versa.}
 \usage{
 as.data.list(x, ...)
+
+is.data.list(x)
 
 data.list.mold(x)
 
@@ -48,6 +51,8 @@ The \code{as.data.list.default} function is designed to work on arrays, matrices
 The \code{as.list.data.list} function is equivalent to \code{unclass} if \code{drop.attr = FALSE}, otherwise (i.e. \code{drop.attr = TRUE})  the \code{"match.dimids"}, \code{"bm"}, and \code{"repdim"} attributes are dropped from \code{x} and the \code{"subsetdim"} attributes are dropped from each variable in \code{x}.
 
 The \code{as.matrix} method for data lists returns either a single matrix (if all variables are numeric or all variables are either factors or character); otherwise, two matrices are returned, one with the numeric and one with the factor variables respectively.  The matrices are returned by first coercing to data frames and then to matrices.  This method was created as a result of a suggestion by Philip Dixon.
+
+The \code{is.data.list} function tests if an object inherits from class \code{data.list}.
 }
 \value{The coerced object.}
 \seealso{

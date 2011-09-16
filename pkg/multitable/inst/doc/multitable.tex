@@ -40,12 +40,14 @@
 
 
 \begin{abstract}
-Data frames are integral to \R.  They provide a standard format for passing data to model-fitting and plotting functions.  Still, many data sets do not easily fit into a single data frame---examples abound in my field of community ecology.  
+Data frames are integral to \R.  They provide a standard format for passing data to model-fitting and plotting functions.  This standard makes it easier for experienced use\R s to learn new functions, because most developments in \R\ continue to accept a single data frame as input.  Still, many data sets do not easily fit into a single data frame, and my field of community ecology provides many examples of such inherently multiple-table data (e.g. fourth-corner problem and other trait-based data sets).  Storing such data in a single data frame results in either large numbers of meaningless missing values or storage of redundant information.  These storage problems have led ecologists to model summaries of their data (e.g. community-weighted trait matrices), rather then their data itself.  Perhaps more importantly, my experience with manipulating such data using data frames has resulted in difficult-to-read workflows with many lines.  The \code{multitable} package introduces new data storage objects called \code{data.list}s, which are extensions of \code{data.frame}s.  As \code{data.list}s can be coerced to \code{data.frame}s, they can be used with all \R\ functions that accept an object that is coercible to a \code{data.frame} (e.g. \code{lm}; \code{plot}; \code{lme}; and many more).  The \code{multitable} package also provides several mechanisms for simplifying the manipulation of \code{data.list} objects.
 \end{abstract}
+
+%\tableofcontents
 
 \section{Introduction}
 
-The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates and variables respectively.  Standard \R\ workflows require that all of the data to be analyzed is organized into a single data frame, and hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects; data frames and formulas are combined by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics) \citep{ChambersAndHastie1992}.  This framework allows scientists to concentrate on their primary interests---the relationships between variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.
+The standard data management paradigm in \R\ is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates and variables respectively.  Standard \R\ workflows require that all of the data to be analyzed are organized into a single data frame, and hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects; data frames and formulas are combined by passing them to functions that produce analyses (e.g. plots; fitted models; summary statistics) \citep{ChambersAndHastie1992}.  This framework allows scientists to concentrate on their primary interests---the relationships between variables---without explicit reference to complex mathematical and algorithmic details.  It also provides access to those details, which are required (1) for more effective analyses and (2) to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.  Thus, by separating low-level methods development from high-level data analysis, \R\ fosters the formation of a community of researchers where both methodologists and analysts can have mutually beneficial interactions.
 
 However, research in my field of community ecology has led my colleagues and I to data sets that do not easily fit within a single data frame.  A common example is the fourth-corner problem \citep{LegendreEtAl1997}, in which three data tables are to be analyzed: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Fig. \ref{fig:fourth}).  Such data are characterized by a conspicuous (lower-right) `fourth-corner', where there are no data.  These fourth-corners of missing data are not caused by the usual problems (e.g. broken field equipment; budget restrictions; bad weather; dead subjects), but are part of the study design itself.  The fourth-corner problem is a special case of a general `multiple-table problem', which can be much more complex (e.g. could involve three-dimensional `cubes' of data, Fig. \ref{fig:beatrix}).  The challenge of analyzing such multiple-table data sets in \R\ is that it is not obvious how to organize them into a single \code{data.frame}, which is required in standard \R\ workflows.  Our goal with the \code{multitable} package is to provide tools for analyzing multiple-table data sets within this standard \R\ framework.
 
@@ -168,9 +170,9 @@ However, research in my field of community ecology has led my colleagues and I t
 
 One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There has been a fair amount of work in this direction, focusing on data with a fourth-corner problem \citep{DoledecEtAl1996,LegendreEtAl1997,DrayAndLegendre2008,PillarEtAl2010,LeiboldEtAl2010,IvesAndHelmus2011}.  However, this work does not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}; Ref ??).  One approach to such issues would be to build new data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be learned for each new structure---it does not take advantage of the large number of tools developed within the standard \R\ framework of data frames and formulas.  The \code{multitable} package provides an alternative approach, by introducing a multiple-table generalization of data frames---called data lists---which can be analyzed with virtually any function that can be used to analyze a data frame.  Thus, instead of providing new methods of analysis, \code{multitable} provides new methods of data management.
 
-There are several existing \R\ packages that are designed to make data management easier (e.g. \code{reshape2}; \citeauthor{Wickham2007}, \citeyear{Wickham2007}).  The \code{mefa} and \code{mefa4} packages have been developed to organize data with a slight generalization\footnote{Several community matrices---called segments---with identical dimensions are allowed in \code{mefa}.} of the fourth-corner problem \citep{Solymos2009}.  The \code{multitable} package has much in common with \code{mefa}, but there are noticeable differences.  For example, \code{mefa} provides more extensive tools for data summarization than \code{multitable} and \code{mefa4} integrates tools for sparse-matrix computations.  On the other hand, \code{multitable} is designed to handle more general data structures than \code{mefa} or \code{mefa4} (e.g. \code{mefa} cannot organize the Lac Croche data structure, Fig. \ref{fig:beatrix}).  However, we hope that \code{mefa} and \code{multitable} will be complementary, not competitive.
+There are several existing \R\ packages that are designed to make data management easier (e.g. \code{reshape2}; \citeauthor{Wickham2007}, \citeyear{Wickham2007}).  In fact, the \code{mefa} and \code{mefa4} packages have been developed to organize data with a slight generalization\footnote{Several community matrices---called segments---with identical dimensions are allowed in \code{mefa}.} of the fourth-corner problem \citep{Solymos2009}.  The \code{multitable} package has much in common with \code{mefa}, but there are noticeable differences.  For example, \code{mefa} provides more extensive tools for data summarization than \code{multitable} and \code{mefa4} integrates tools for sparse-matrix computations.  On the other hand, \code{multitable} is designed to handle more general data structures than \code{mefa} or \code{mefa4} (e.g. \code{mefa} cannot organize the Lac Croche data structure, Fig. \ref{fig:beatrix}).  However, we hope that \code{mefa} and \code{multitable} will be complementary, not competitive.
 
-The \code{multitable} model of data organization is illustrated in Figure \ref{fig:model} (\code{mefa} uses a similar model).  In blue are the elements of the standard \R\ workflow: data frames; formulas; functions; and analyses.  The \code{multitable} package seeks to facilitate the use of such workflows with multiple-table data by creating tools (arrows and red boxes) for organizing and manipulating such data.  These tools are based on a new kind of object, called a data list, which is used to organize multiple-table data.  Data lists can be manipulated much like data frames (e.g. variables can be transformed; groups of observations extracted or removed).  Our design principle was to keep the manipulation of data lists as similar as possible to the manipulation of data frames.  Once data lists are ready for analysis \code{multitable} provides tools for coercing them into data frames, thereby entering the standard \R\ workflow.  Importantly, data, formulas, and functions are kept separate, thus preserving the benefits of using \R\ in a standard way.
+The \code{multitable} model of data organization is illustrated in Figure \ref{fig:model} (\code{mefa} uses a similar model).  The elements of the standard \R\ workflow are in blue: data frames; formulas; functions; and analyses.  The \code{multitable} package seeks to facilitate the use of such workflows with multiple-table data by creating tools (arrows and red boxes) for organizing and manipulating such data.  These tools are based on a new kind of object, called a data list, which is used to organize multiple-table data.  Data lists can be manipulated much like data frames (e.g. variables can be transformed; groups of observations extracted or removed).  Our design principle was to keep the manipulation of data lists as similar as possible to the manipulation of data frames.  Once data lists are ready for analysis \code{multitable} provides tools for coercing them into data frames, thereby entering the standard \R\ workflow.  Importantly, data, formulas, and functions are kept separate, thus preserving the benefits of using \R\ in this standard way.
 
 \begin{figure}
 \begin{tikzpicture} [
@@ -202,6 +204,9 @@ The \code{multitable} model of data organization is illustrated in Figure \ref{f
 \label{fig:model}
 \end{figure}
 
+The purpose of this vignette is to justify and introduce the use of the \code{multitable} package.  I begin by describing the structure of an example \code{data.list} object.  Then I illustrate one of the most powerful features of \code{data.list}s:  methods that allow related variables, which cannot fit into a single data frame, to be subscripted simultaneously.  Next I show that variables in data lists can be transformed and modeled, in the same manner that is standard for variables in data frames.  Finally, I describe a simple method for creating a data list of your own data, and use this method to introduce some useful concepts associated with multiple-table data.
+
+\newpage
 \section{The structure of data lists}
 
 The \code{multitable} package comes with a fictitious \code{data.list}, to illustrate how these objects work.
@@ -301,7 +306,7 @@ REPLICATION DIMENSIONS:
 
 At first sight, this \code{data.list} object looks very different from standard \code{data.frame} objects, but on second look we can see that they are really quite similar.  Just like data frames, data lists are composed of a number of variables---in this case, we have six variables (abundance; temperature; precipitation; body size; metabolic rate; and homeotherm) each identified in the printed object above by underlined names.  The variables in data lists must be printed in this sequential manner, rather than as columns neatly lined up in a data frame, precisely because the variables in multiple-table data sets do not line up neatly; this is the problem \code{multitable} seeks to address.
 
-Also as in data frames, the replication of variables in data lists are represented as vectors of values.  The main difference between the two objects in this regard is that the vectors that represent variables in data lists have a \code{dim} (i.e. dimension) attribute, which gives it further structure.  In \R, vectors with \code{dim} attributes are best thought of as matrices and arrays of numbers.  For example, the abundance variable is replicated along three dimensions (sites; years; and species), and therefore is a three dimensional array of data.  This information is indicated above after the variable itself is printed.  Some variables are only replicated along two dimensions (e.g. temperature and precipitation) and others only a single dimension (e.g. body size; metabolic rate; and homeotherm).  
+Also as in data frames, the replication of variables in data lists are represented as vectors of values.  The main difference between the two objects in this regard is that the vectors that represent variables in data lists have a \code{dim} (i.e. dimension) attribute, which gives it further structure.  In \R, vectors with \code{dim} attributes are best thought of as matrices and arrays of numbers.  For example, the \code{abundance} variable is replicated along three dimensions (sites; years; and species), and therefore is a three dimensional array of data.  This information is indicated above after the variable itself is printed.  Some variables are only replicated along two dimensions (e.g. temperature and precipitation) and others only a single dimension (e.g. body size; metabolic rate; and homeotherm).  
 
 Importantly however, although the variables are not replicated along all of the same dimensions, they do share dimensions; and it is this dimension sharing that allows us to relate variables to each other.  To appreciate the dimension sharing of this example, we can use the \code{summary} method for \code{data.list} objects.
 \begin{Schunk}
@@ -319,13 +324,13 @@ years            FALSE      FALSE
 species           TRUE       TRUE
 \end{Soutput}
 \end{Schunk}
-\noindent This method returns a logical table with dimensions of replication as rows and variables as columns.  A value of \code{TRUE} appears in cells corresponding to variables that are replicated along a particular dimension, and a value of \code{FALSE} appears otherwise.  We can see that the \code{sites} and \code{years} dimensions relates abundance, temperature, and precipitation; whereas, the \code{species} dimension relates abundance, body size, metabolic rate, and homeotherm.
+\noindent This method returns a logical table with dimensions of replication as rows and variables as columns.  A value of \code{TRUE} appears in cells corresponding to variables that are replicated along a particular dimension, and a value of \code{FALSE} appears otherwise.  We can see that the \code{sites} and \code{years} dimensions relate \code{abundance}, \code{temperature}, and \code{precipitation}; whereas, the \code{species} dimension relates \code{abundance}, \code{body size}, \code{metabolic rate}, and \code{homeotherm}.
 
 Note that some \code{FALSE} entries are bio-physical necessities, whereas some are properties of the study design.  For example, suppose that later in the study, the researchers decided that it was necessary to get some idea of the spatial variation in metabolic rates.  It would then be possible to measure metabolic rates of the species at different sites, thereby changing the \code{FALSE} associated with the metabolic rate-sites cell to a \code{TRUE}.  To the contrary, it is physically and logically impossible to measure the precipitation of a species, and so this \code{FALSE} is necessarily \code{FALSE}.
 
 \section{Subscripting data lists}
 
-This structure relating variables and dimensions of replication, allows us to manipulate multiple variables simultaneously.  In particular, \code{multitable} makes it possible to extract pieces of a data list will maintaining its structure.  For example, examining the data suggests that 1537 might have been an outlying year relative to 2008 and 2009.  We can exclude data from 1537 just as we would with a single \R\ array.
+This structure relating variables and dimensions of replication, allows us to manipulate multiple variables simultaneously.  In particular, \code{multitable} makes it possible to extract pieces of a data list while maintaining its structure.  For example, examining the data suggests that 1537 might have been an outlying year relative to 2008 and 2009.  We can exclude data from 1537 just as we would with a single \R\ array.
 \begin{Schunk}
 \begin{Sinput}
 > fake.community[,c("2008","2009"),]
@@ -417,7 +422,7 @@ REPLICATION DIMENSIONS:
       6       2       3 
 \end{Soutput}
 \end{Schunk}
-This command returns the same data list of variables but without the data from 1537.  In particular, for every variable replicated along the \code{years} dimension is subscripted appropriately.  As another example, perhaps we want all of the data on the first species (i.e. capybara) in 1537 for the first three sites.
+This command returns the same data list of variables but without the data from 1537.  Note that every variable replicated along the \code{years} dimension is subscripted appropriately, while variables that are not replicated along this dimension are unchanged.  As another example, perhaps we want all of the data on the first species (i.e. capybara) in 1537 for the first three sites.
 \begin{Schunk}
 \begin{Sinput}
 > fake.community[1:3,"1537",1]
@@ -597,6 +602,7 @@ Scale estimate: 5.26e-05
 
 \section{Coercing data lists to data frames}
 
+
 The reason that unmodified data lists can be passed to some functions that are expecting data frames, is that these functions try to coerce whatever data object they receive into a data frame.  When the \code{multitable} package is loaded, these functions can find a method for making such a conversion.  This method can be accessed by users directly via the \code{as.data.frame} function from the \R\ \code{base} package.  For example, we can pass the \code{fake.community} data to \code{as.data.frame}.
 \begin{Schunk}
 \begin{Sinput}
@@ -604,116 +610,61 @@ The reason that unmodified data lists can be passed to some functions that are e
 > fake.community.df
 \end{Sinput}
 \begin{Soutput}
-                          abundance temperature
-midlatitude.2009.capybara 1.6094379          NA
-subtropical.2009.capybara 0.0000000          25
-tropical.2009.capybara    2.1972246          48
-equatorial.2009.capybara  0.0000000          50
-arctic.2009.capybara      0.0000000         -37
-subarctic.2009.capybara   0.0000000           3
-midlatitude.2008.capybara 0.0000000          10
-subtropical.2008.capybara 2.3978953          20
-tropical.2008.capybara    0.0000000          50
-equatorial.2008.capybara  2.0794415          30
-arctic.2008.capybara      0.0000000         -30
-subarctic.2008.capybara   0.0000000           0
-midlatitude.1537.capybara 0.0000000           5
-subtropical.1537.capybara 0.0000000          10
-tropical.1537.capybara    0.0000000          30
-equatorial.1537.capybara  0.0000000          20
-arctic.1537.capybara      0.0000000         -80
-subarctic.1537.capybara   0.0000000         -10
-midlatitude.2009.moss     0.0000000          NA
-subtropical.2009.moss     0.0000000          25
-tropical.2009.moss        2.3025851          48
-equatorial.2009.moss      0.0000000          50
-arctic.2009.moss          1.7917595         -37
-subarctic.2009.moss       0.0000000           3
-midlatitude.2008.moss     1.9459101          10
-subtropical.2008.moss     0.0000000          20
-tropical.2008.moss        0.0000000          50
-equatorial.2008.moss      1.3862944          30
-arctic.2008.moss          0.0000000         -30
-subarctic.2008.moss       0.0000000           0
-midlatitude.1537.moss     0.0000000           5
-subtropical.1537.moss     0.0000000          10
-tropical.1537.moss        0.0000000          30
-equatorial.1537.moss      0.0000000          20
-arctic.1537.moss          0.0000000         -80
-subarctic.1537.moss       0.0000000         -10
-midlatitude.2009.vampire  0.0000000          NA
-subtropical.2009.vampire  0.0000000          25
-tropical.2009.vampire     0.0000000          48
-equatorial.2009.vampire   0.0000000          50
-arctic.2009.vampire       0.0000000         -37
-subarctic.2009.vampire    0.0000000           3
-midlatitude.2008.vampire  0.0000000          10
-subtropical.2008.vampire  0.0000000          20
-tropical.2008.vampire     0.0000000          50
-equatorial.2008.vampire   0.0000000          30
-arctic.2008.vampire       0.0000000         -30
-subarctic.2008.vampire    0.0000000           0
-midlatitude.1537.vampire  0.0000000           5
-subtropical.1537.vampire  0.6931472          10
-tropical.1537.vampire     0.0000000          30
-equatorial.1537.vampire   0.0000000          20
-arctic.1537.vampire       0.0000000         -80
-subarctic.1537.vampire    0.0000000         -10
-                          precipitation body.size
-midlatitude.2009.capybara            NA       140
-subtropical.2009.capybara            99       140
-tropical.2009.capybara              149       140
-equatorial.2009.capybara            199       140
-arctic.2009.capybara                 21       140
-subarctic.2009.capybara              41       140
-midlatitude.2008.capybara            20       140
-subtropical.2008.capybara           100       140
-tropical.2008.capybara              150       140
-equatorial.2008.capybara            200       140
-arctic.2008.capybara                 20       140
-subarctic.2008.capybara              40       140
-midlatitude.1537.capybara             5       140
-subtropical.1537.capybara            50       140
-tropical.1537.capybara               75       140
-equatorial.1537.capybara             50       140
-arctic.1537.capybara                  2       140
-subarctic.1537.capybara               7       140
-midlatitude.2009.moss                NA         1
-subtropical.2009.moss                99         1
-tropical.2009.moss                  149         1
-equatorial.2009.moss                199         1
-arctic.2009.moss                     21         1
-subarctic.2009.moss                  41         1
-midlatitude.2008.moss                20         1
-subtropical.2008.moss               100         1
-tropical.2008.moss                  150         1
-equatorial.2008.moss                200         1
-arctic.2008.moss                     20         1
-subarctic.2008.moss                  40         1
-midlatitude.1537.moss                 5         1
-subtropical.1537.moss                50         1
-tropical.1537.moss                   75         1
-equatorial.1537.moss                 50         1
-arctic.1537.moss                      2         1
-subarctic.1537.moss                   7         1
-midlatitude.2009.vampire             NA       190
-subtropical.2009.vampire             99       190
-tropical.2009.vampire               149       190
-equatorial.2009.vampire             199       190
-arctic.2009.vampire                  21       190
-subarctic.2009.vampire               41       190
-midlatitude.2008.vampire             20       190
-subtropical.2008.vampire            100       190
-tropical.2008.vampire               150       190
-equatorial.2008.vampire             200       190
-arctic.2008.vampire                  20       190
-subarctic.2008.vampire               40       190
-midlatitude.1537.vampire              5       190
-subtropical.1537.vampire             50       190
-tropical.1537.vampire                75       190
-equatorial.1537.vampire              50       190
-arctic.1537.vampire                   2       190
-subarctic.1537.vampire                7       190
+                          abundance temperature precipitation body.size
+midlatitude.2009.capybara 1.6094379          NA            NA       140
+subtropical.2009.capybara 0.0000000          25            99       140
+tropical.2009.capybara    2.1972246          48           149       140
+equatorial.2009.capybara  0.0000000          50           199       140
+arctic.2009.capybara      0.0000000         -37            21       140
+subarctic.2009.capybara   0.0000000           3            41       140
+midlatitude.2008.capybara 0.0000000          10            20       140
+subtropical.2008.capybara 2.3978953          20           100       140
+tropical.2008.capybara    0.0000000          50           150       140
+equatorial.2008.capybara  2.0794415          30           200       140
+arctic.2008.capybara      0.0000000         -30            20       140
+subarctic.2008.capybara   0.0000000           0            40       140
+midlatitude.1537.capybara 0.0000000           5             5       140
+subtropical.1537.capybara 0.0000000          10            50       140
+tropical.1537.capybara    0.0000000          30            75       140
+equatorial.1537.capybara  0.0000000          20            50       140
+arctic.1537.capybara      0.0000000         -80             2       140
+subarctic.1537.capybara   0.0000000         -10             7       140
+midlatitude.2009.moss     0.0000000          NA            NA         1
+subtropical.2009.moss     0.0000000          25            99         1
+tropical.2009.moss        2.3025851          48           149         1
+equatorial.2009.moss      0.0000000          50           199         1
+arctic.2009.moss          1.7917595         -37            21         1
+subarctic.2009.moss       0.0000000           3            41         1
+midlatitude.2008.moss     1.9459101          10            20         1
+subtropical.2008.moss     0.0000000          20           100         1
+tropical.2008.moss        0.0000000          50           150         1
+equatorial.2008.moss      1.3862944          30           200         1
+arctic.2008.moss          0.0000000         -30            20         1
+subarctic.2008.moss       0.0000000           0            40         1
+midlatitude.1537.moss     0.0000000           5             5         1
+subtropical.1537.moss     0.0000000          10            50         1
+tropical.1537.moss        0.0000000          30            75         1
+equatorial.1537.moss      0.0000000          20            50         1
+arctic.1537.moss          0.0000000         -80             2         1
+subarctic.1537.moss       0.0000000         -10             7         1
+midlatitude.2009.vampire  0.0000000          NA            NA       190
+subtropical.2009.vampire  0.0000000          25            99       190
+tropical.2009.vampire     0.0000000          48           149       190
+equatorial.2009.vampire   0.0000000          50           199       190
+arctic.2009.vampire       0.0000000         -37            21       190
+subarctic.2009.vampire    0.0000000           3            41       190
+midlatitude.2008.vampire  0.0000000          10            20       190
+subtropical.2008.vampire  0.0000000          20           100       190
+tropical.2008.vampire     0.0000000          50           150       190
+equatorial.2008.vampire   0.0000000          30           200       190
+arctic.2008.vampire       0.0000000         -30            20       190
+subarctic.2008.vampire    0.0000000           0            40       190
+midlatitude.1537.vampire  0.0000000           5             5       190
+subtropical.1537.vampire  0.6931472          10            50       190
+tropical.1537.vampire     0.0000000          30            75       190
+equatorial.1537.vampire   0.0000000          20            50       190
+arctic.1537.vampire       0.0000000         -80             2       190
+subarctic.1537.vampire    0.0000000         -10             7       190
                           metabolic.rate homeotherm
 midlatitude.2009.capybara             20          Y
 subtropical.2009.capybara             20          Y
@@ -771,9 +722,7 @@ arctic.1537.vampire                    0          N
 subarctic.1537.vampire                 0          N
 \end{Soutput}
 \end{Schunk}
-%head(fake.community.df, n=10)
-%tail(fake.community.df, n=10)
-%The \code{head} and \code{tail} functions print only the first and last (in this case \code{n=10}) lines of the data frame.  
+
 
 The resulting data frame contains one column for each variable and one row for each combination of replicates across the three dimensions of replication.  Notice that the row names are automatically generated to be informative about the dimensions of replication that have been collapsed into a single dimension.  Unlike the corresponding data list object, the data frame has redundancy.  For example, because the traits are only replicated along species there are only three unique trait values, one for each of the three species.  These three values are repeated so that all of the variables can be stored side-by-side in a single data frame.
 
@@ -786,18 +735,14 @@ By storing these data in a single data frame, we can now pass them to any functi
 > xyplot(abundance ~ temperature | body.size,data=fake.community.df)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{multitable-014}
+\includegraphics{multitable-016}
 \caption{\code{xyplot}}
 \label{fig:xyplot}
 \end{figure}
 
-
-
-%Because the variables differ in the dimensions they are replicated along, replication of such multiple-table data sets cannot simply be represented as rows in a data frame without either repeating data values to fill up the resulting holes (e.g. fourth-corners) or reducing the information content of the data.
-
 \section{How data lists are made}
 
-Up until now we have used an existing data list to illustrate the use of the \code{multitable} package.  Although there are several ways to create data lists, there is one way that best demonstrates the general idea of data lists, which I now explain.
+Up until now we have used an existing data list to illustrate the use of the \code{multitable} package.  Although there are several ways to create data lists, there is one way that provides the simplest framework for understanding the difference between variables and dimensions of replication, which is an important distinction to understand in order to use \code{multitable} most effectively. 
 
 Consider a data frame of species abundances counted at various sites.
 \begin{Schunk}
@@ -842,7 +787,7 @@ We have six sites and three species, but each species is not present at each sit
 \end{Schunk}
 To make things interesting to scientists with real data, we assume that our environmental data are missing from the arctic site (perhaps because it is too harsh and remote).
 
-The three data frames are related because they share two columns:  sites and species.  The specific pattern of sharing for these data is shown by this bipartite graph (i.e. matching diagram; Fig. \ref{fig:bipartite}).  Columns that are shared between data frames are called \emph{dimensions of replication} and those that are not are called \emph{variables}.  The reason for this terminology is that in standard single-table statistical settings, we are able to relate variables because they are replicated along some common dimension.  For example, we could relate pH and temperature if they were both replicated along the same set of lakes.  Similarly, we can relate the variables in several tables together if they share columns (i.e. dimensions of replication).
+The three data frames are related because they share two columns:  sites and species.  The specific pattern of sharing for these data can be illustrated with a bipartite graph (i.e. matching diagram; Fig. \ref{fig:bipartite}).  Columns that are shared between data frames are called \emph{dimensions of replication} and those that are not are called \emph{variables}.  The reason for this terminology is that in standard single-table statistical settings, we are able to relate variables because they are replicated along some common dimension.  For example, we could relate pH and temperature if they were both replicated along the same set of lakes.  Similarly, we can relate the variables in several tables together if they share columns (i.e. dimensions of replication).
 
 \begin{figure}
 \begin{tikzpicture} [
@@ -878,10 +823,127 @@ The three data frames are related because they share two columns:  sites and spe
 \label{fig:bipartite}
 \end{figure}
 
-To create a data list out of these data frames we use the \code{dcast} function, which was inspired by the \code{acast} function in the \code{reshape2} package.
+To create a data list out of these data frames we use the \code{dcast} function, which was inspired by the \code{acast} function in the \code{reshape2} package \citep{Wickham2007}.
 \begin{Schunk}
 \begin{Sinput}
 > dl <- dlcast(list(abundance,environment,trait),
  	dimids=c("sites","species"),
  	fill=c(0,NA,NA)
  )
+> dl
+\end{Sinput}
+\begin{Soutput}
+abundance:
+---------
+            capybara moss vampire
+midlatitude        4    6       0
+subtropical       10    0       1
+tropical           8    9       0
+equatorial         7    3       0
+arctic             0    5       0
+subarctic          0    0       0
+Replicated along:  || sites || species || 
+
+
+temperature:
+-----------
+midlatitude subtropical    tropical  equatorial      arctic 
+         10          20          50          30          NA 
+  subarctic 
+          0 
+Replicated along:  || sites || 
+
+
+precipitation:
+-------------
+midlatitude subtropical    tropical  equatorial      arctic 
+         20         100         150         200          NA 
+  subarctic 
+         40 
+Replicated along:  || sites || 
+
+
+body.size:
+---------
+capybara     moss  vampire 
+     140        5      190 
+Replicated along:  || species || 
+
+
+metabolic.rate:
+--------------
+capybara     moss  vampire 
+      20        5        0 
+Replicated along:  || species || 
+
+
+REPLICATION DIMENSIONS: 
+  sites species 
+      6       3 
+\end{Soutput}
+\end{Schunk}
+This function takes three arguments:  (1) a list of data frames, (2) a character vector, \code{dimids}, with the names identifying the dimensions of replication (i.e. the names of the columns shared between the tables), and (3) a vector, \code{fill}, with one element for each data frame giving the value with which to fill in any structural missing values.  This last argument is particularly interesting, because we can fill missing abundances with zeros because those site-species combinations were not observed and \code{NA} values for the other tables.  This data list can now be used in analyses.
+
+It is quite possible that your data are not stored in data frames with columns for both dimensions of replication and variables; this is not a large concern, as the \code{multitable} package offers many ways to get your data into a data list (see vignette ????).  However, we recommend that researchers at least consider what their data might look like in this format, because we believe that this format best illustrates concepts that will help make multiple-table data easier to understand, manage, and analyze.  I now finish with some further elaboration of these concepts.
+
+\section{Multiple-table concepts}
+
+Shared columns (i.e. dimensions of replication) between tables are expanded by \code{dlcast} into the dimensions of the arrays that are used to store each of the other columns (i.e. variables).  For example, because the \code{abundance} table has two dimensions of replication, it is stored as a two-dimensional matrix in the resulting data frame; whereas, the \code{environment} and \code{trait} tables have only two dimensions of replication and so are stored in one-dimensional vectors.
+
+The benefits of the distinction between dimensions of replication and variables, is that it provides a common framework for understanding both simple and more complex multiple-table data structures.  In particular, the framework allows us to visualize the structure of complex data; for example the Lac Croche zooplankton community data (Fig. \ref{fig:beatrix}) has a structure given by Fig. \ref{fig:bipartitebeatrix}.  To store these data in a format amenable to \code{dlcast}, we would create one data frame for each of the groups of variables (red boxes) and add a column for each dimension of replication (blue boxes) associated with those variables.
+
+\begin{figure}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.1cm,
+	ndims/.style={
+		rectangle,minimum width=1.5cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=2.2cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,nblank]	(abasin)					{};
+\node [place,ndims]	(basin)[below=of abasin]		{basin};
+\node [place,nblank]	(bbasin)[below=of basin]		{};
+\node [place,ndims]	(time)[below=of bbasin]		{time};
+\node [place,nblank]	(btime)[below=of time]		{};
+\node [place,ndims]	(species)[below=of btime]		{species};
+\node [place,nblank]	(bspecies)[below=of species]	{};
+\node [place,nvars]	(environment)[right=of asites]	{environment}
+	edge [-]		(basin)
+	edge [-]		(time);
+\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
+	edge [-]		(basin)
+	edge [-]		(time)
+	edge [-]		(species);
+\node [place,nvars]	(scales)[right=of btime]		{time scales}
+	edge [-]		(time);
+\node [place,nvars]	(traits)[right=of bspecies]		{traits}
+	edge [-]		(species);
+\end{tikzpicture}
+\caption{Bipartite graph of the Lac Croche data in Fig. \ref{fig:beatrix}.} 
+\label{fig:bipartitebeatrix}
+\end{figure}
+
+With our data in this form, we can easily state the two requirements for using \code{data.list} objects:  (1) every table must share at least one dimension of replication with at least one other table and (2) at least one table must be replicated along all of the dimensions present in the data set.  The first criterion ensures that the tables will relate to each other; the second criterion ensures that some variables will be relatable to all other variables, a property that we feel is necessary for a response variable.  We also see that we only need more than one table if some variables are not replicated along all of the dimensions.
+
+\section{Conclusion}
+
+The structure of \code{data.list} objects is sufficiently rich to give rise to a much wider variety of uses than I could cover here.  However, this vignette was only intended to illustrate the basic features and concepts of the \code{multitable} package, and to justify its utility.  My long-term goal with the \code{multitable} project in general is to make standard analyses in \R\ (and beyond?) simpler to conduct on complex multiple-table data.
+
+\section*{Acknowledgements}
+I thank Guillaume Gu\'{e}nard, Levi Waldron, Ben Bolker, and Philip Dixon for discussions and suggestions about software design.
+
+\bibliographystyle{ecology}
+%% ***   Set the bibliography file.   ***
+%% ("thesis.bib" by default; change if needed)
+\bibliography{/Users/stevenwalker/Documents/Bibliography/Bibliography}
+
+\end{document}

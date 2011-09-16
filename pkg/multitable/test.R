@@ -102,21 +102,3 @@ test_that("as.data.frame molds",{
 	
 })
 
-library(multitable)
-data(fake.community)
-fake.community$body.size <- letters[1:3]
-fake.community$homeotherm <- letters[1:3]
-fake.community$homeotherm <- dimnames(fake.community)[[3]]
-fake.community[["body.size"]] <- letters[1:3]
-fake.community[["homeotherm"]] <- letters[1:3]
-fake.community[["homeotherm"]] <- dimnames(fake.community)[[3]]
-
-
-
-
-
-fake.community[["temperature"]] <- fake.community[["temperature"]] + 1
-
-dm <- dimnames(fake.community)[[3]]
-fake.community[["species",match.dimids="species"]] <- dimnames(fake.community)[[3]]
-fake.community[["species",match.dimids]] <- dm
