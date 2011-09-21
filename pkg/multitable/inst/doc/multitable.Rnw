@@ -283,7 +283,7 @@ rlm(abundance ~ (body.size*temperature),data=fake.community)
 \section{Coercing data lists to data frames}
 
 <<echo=false>>=
-options(width=80)
+options(width=100)
 @
 
 The reason that unmodified data lists can be passed to some functions that are expecting data frames, is that these functions try to coerce whatever data object they receive into a data frame.  When the \code{multitable} package is loaded, these functions can find a method for making such a conversion.  This method can be accessed by users directly via the \code{as.data.frame} function from the \R\ \code{base} package.  For example, we can pass the \code{fake.community} data to \code{as.data.frame}.

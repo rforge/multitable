@@ -247,8 +247,11 @@ function(x,bm){
 }
 
 as.list.data.list <-
-function(x, drop.attr=TRUE, ...){
-	out <- unclass(x)
+function(x, drop.attr=TRUE, factorsTOstrings=FALSE,...){
+	if(factorsTOstrings)
+		out <- lapply(x,function(xx)
+			if(is.factor(xx)) as.character(xx) else xx)
+	else out <- unclass(x)
 	if(drop.attr){
 		for(i in seq_along(x)) attr(out[[i]],"subsetdim") <- NULL
 		attr(out,"match.dimids") <- NULL
@@ -273,15 +276,19 @@ function(x, ...){
 	if(all(!fac)||all(fac))
 		return(as.matrix(as.data.frame(x)))
 	x.attr <- attributes(x)
-	x <- unclass(x)
-	x.num <- structure(x[!fac],class="data.list",
-		match.dimids = x.attr$match.dimids[!fac],
-		repdim = x.attr$repdim)
-	x.fac <- structure(x[fac],class="data.list",
-		match.dimids = x.attr$match.dimids[fac],
-		repdim = x.attr$repdim)
-	list(x.num=as.matrix(as.data.frame(x.num)),
-		x.fac=as.matrix(as.data.frame(x.fac)))
+	x.df <- as.data.frame(x)
+	x.num <- x.df[!fac]
+	x.fac <- x.df[fac]
+	#x <- unclass(x)
+	#x.num <- as.data.list(x[!fac],match.dimids = x.attr$match.dimids[!fac])
+	#x.fac <- as.data.list(x[fac],match.dimids = x.attr$match.dimids[fac])
+	#x.num <- structure(x[!fac],class="data.list",
+		#match.dimids = x.attr$match.dimids[!fac],
+		#repdim = x.attr$repdim)
+	#x.fac <- structure(x[fac],class="data.list",
+		#match.dimids = x.attr$match.dimids[fac],
+		#repdim = x.attr$repdim)
+	list(x.num=as.matrix(x.num),x.fac=as.matrix(x.fac))
 }
 
 data.list.mold <-

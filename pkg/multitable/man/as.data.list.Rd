@@ -24,7 +24,8 @@ optional = FALSE, scheme = "repeat", mold, ...)
 
 \method{as.matrix}{data.list}(x, ...)
 
-\method{as.list}{data.list}(x, drop.attr = TRUE, ...)
+\method{as.list}{data.list}(x, drop.attr = TRUE, 
+factorsTOstrings = FALSE, ...)
 }
 \arguments{
   \item{x}{An object. Either a data.list, data.frame, or list.}
@@ -37,6 +38,7 @@ optional = FALSE, scheme = "repeat", mold, ...)
   \item{optional}{Passed to the default method after some processing.}
   \item{scheme}{Type of coercion.  Currently, only "repeat" is allowed but others may follow.}
   \item{drop.attr}{Should the attributes of the data list be dropped?}
+  \item{factorsTOstrings}{Should factors be converted to character strings?}
   \item{...}{Additional arguments (passed to the default method in \code{as.data.frame.data.list}).}
 }
 \details{
