@@ -77,9 +77,9 @@ Function & Input objects \\
 \subsection{Reading fourth corner data}
 
 Figure \ref{fig:spreadsheetfc} \begin{figure}
-\includegraphics{./readingmultipletables/community.pdf}
-\includegraphics{./readingmultipletables/environment.pdf}
-\includegraphics{./readingmultipletables/traits.pdf}
+\includegraphics{./readingmultipletables/community.png}
+\includegraphics{./readingmultipletables/environment.png}
+\includegraphics{./readingmultipletables/traits.png}
 \caption{Fictitious fourth-corner data set.}
 \label{fig:spreadsheetfc}
 \end{figure}shows three spreadsheets containing the data for a simple fourth-corner problem \citep{LegendreEtAl1997}.  The first sheet gives species abundance data for three species (capybara; moss; vampire) at six sites (arctic; subarctic; midlatitude; subtropical; tropical; equatorial).  The second and third sheets give two environmental variables (temperature; precipitation) at each site and two traits (body size; metabolic rate) for each species.  We are going to convert these spreadsheets into an \R\ object that contains all of these variables, relating them along their shared dimensions.
@@ -194,9 +194,9 @@ Residual Deviance: 36.15 	AIC: 85.5
 \subsection{Reading fourth corner data in long format}
 
 Looking at these community data, we see that some species were not present at many sites (e.g. the rare and metabolically inert vampire species).  Such sparsity is a common feature of community data, because most species are absent or rare at most places, which is one of the successful general predictions made by the standard neutral model \citep{Hubbell2001}.  Because sparsity is common, we can save space by storing these data in `long' format (Fig. \ref{fig:longspreadsheetfc}). \begin{figure}
-\includegraphics{./readingmultipletables/community_long.pdf}
-\includegraphics{./readingmultipletables/environment_long.pdf}
-\includegraphics{./readingmultipletables/traits_long.pdf}
+\includegraphics{./readingmultipletables/community_long.png}
+\includegraphics{./readingmultipletables/environment_long.png}
+\includegraphics{./readingmultipletables/traits_long.png}
 \caption{Fictitious fourth-corner data set in `long' format.}
 \label{fig:longspreadsheetfc}
 \end{figure}In this format, the community data becomes a single column (i.e. abundance).  The site and species that correspond to each abundance is identified by two additional columns (i.e. sites; species).  Notice that none of the zeros are stored, because it is implied that a species was not detected at a site if that site-species combination is not present in the long-format data.
@@ -222,9 +222,9 @@ These commands store exactly the same \code{fc} object that we obtained before. 
 \subsection{Reading more complex multiple-table data}
 
 Notwithstanding its small size, the above example is extremely simple; it contains only numeric data, has no missing values, and has only two dimensions of replication.  Here I provide an example (Fig. \ref{fig:complexspreadsheet}) \begin{figure}
-\includegraphics{./readingmultipletables/community_complex.pdf}
-\includegraphics{./readingmultipletables/environment_complex.pdf}
-\includegraphics{./readingmultipletables/traits_complex.pdf}
+\includegraphics{./readingmultipletables/community_complex.png}
+\includegraphics{./readingmultipletables/environment_complex.png}
+\includegraphics{./readingmultipletables/traits_complex.png}
 \caption{Complex fictitious data set in `long' format.}
 \label{fig:complexspreadsheet}
 \end{figure}that relaxes those simplifications.  For the sake of space I resisted the temptation to add another file, although such an addition would pose no further difficulties.
