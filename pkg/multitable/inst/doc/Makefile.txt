@@ -1,8 +1,6 @@
 all:  multitable.pdf readingmultipletables.pdf
 multitable.pdf : multitable.tex
 	texi2dvi --pdf --clean multitable.tex
-	-rm -f multitable.bbl multitable-*.pdf multitable.out
+	-rm -f multitable-*.pdf
 readingmultipletables.pdf : readingmultipletables.tex Bibliography.bib
 	texi2dvi --pdf --clean readingmultipletables.tex
-	-rm -f readingmultipletables.bbl readingmultipletables.blg
-
