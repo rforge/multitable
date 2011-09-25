@@ -1,9 +1,0 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}
-\BOOKMARK [1][-]{section.2}{Reading from text files directly into a data.list}{}
-\BOOKMARK [2][-]{subsection.2.1}{Reading fourth corner data}{section.2}
-\BOOKMARK [2][-]{subsection.2.2}{Reading fourth corner data in long format}{section.2}
-\BOOKMARK [2][-]{subsection.2.3}{Reading more complex multiple-table data}{section.2}
-\BOOKMARK [1][-]{section.3}{Creating data.list objects by combining existing R objects}{}
-\BOOKMARK [2][-]{subsection.3.1}{Combining fourth-corner data}{section.3}
-\BOOKMARK [2][-]{subsection.3.2}{Combining fourth-corner data in `long' data frames}{section.3}
-\BOOKMARK [2][-]{subsection.3.3}{Explicit specification of dimension sharing}{section.3}
