@@ -2,5 +2,5 @@ all:  multitable.pdf readingmultipletables.pdf
 multitable.pdf : multitable.tex
 	texi2dvi --pdf --clean multitable.tex
 	-rm -f multitable-*.pdf
-readingmultipletables.pdf : readingmultipletables.tex Bibliography.bib
+readingmultipletables.pdf : readingmultipletables.tex
 	texi2dvi --pdf --clean readingmultipletables.tex

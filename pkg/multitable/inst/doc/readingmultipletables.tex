@@ -13,11 +13,6 @@
 %\VignetteKeywords{data manipulation, ecology, multivariate, R}
 
 
-%%%%R commands for running Sweave%%%%%%%
-%%%%setwd("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/")
-%%%%Sweave("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/readingmultipletables.Rnw")
-
-
 
 \newcommand{\R}{{\sf R}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -57,7 +52,6 @@ There are many methods for converting multiple-table data into a \code{data.list
 \hline
 Function & Input objects \\
 \hline
-%\code{as.data.list} & either a \code{vector}; \code{matrix}; \code{array}; \code{data.frame}; \code{list}; or a \code{list} of such objects \\
 \code{data.list} & a number of \code{vector}s; \code{matrix}es; \code{array}s; \code{data.frame}s; and \code{list}s \\
 \code{dlcast} & a \code{list} of long-format \code{data.frame}s \\
 \code{read.multitable} & character \code{vector} giving filenames of long-format text files \\
@@ -69,8 +63,6 @@ Function & Input objects \\
 \end{center}
 \label{tab:functions}
 \end{table}
-
-%Here we organize this vignette by considering ?? approaches for doing so.  If your data are in standard `fourth-corner' format and would like to get going as quickly as possible, see Section ??.  If you would like a good general-purpose step-by-step method that follows many of the `best-practices' often recommended in data management, then I recommend Section ??.  This section covers recommendations on how to format your data in Excel / text files, right up to the commands required to read these files into \R.  If you would like to understand some of the details behind these `best-practices' see Section ??.  And if you do not appreciate being told how to get your data into standard \R\ objects (e.g. \code{data.frame}s; \code{matrix}es), and would like to simply combine such objects into a \code{data.list} then see Section ??.
 
 \section{Reading from text files directly into a \code{data.list}}
 
@@ -383,9 +375,9 @@ Error in check.dims(x, bm, repdim) : incompatible dimensions in body.size
 \end{Soutput}
 \end{Schunk}
 
-Why didn't this work?  Well, the quick answer is that data lists must contain at least one variable that is replicated along all the dimensions of replication used by all other variables (see vignette on ????).  But why did our code result in a data list without a variable that is replicated along all dimensions (i.e. along both sites and species)?  The answer is important for understanding multiple-table data in \R, and has to do with the differences between data frames and matrices.  In standard \R\ workflows we usually don't need to worry about these differences, because many functions have the ability to work equally well with either a matrix or a data frame.  But this approach will not work with multiple-table data, because \code{data.list} will treat matrices and data frames very differently even though they look very similar.
+Why didn't this work?  Well, the quick answer is that data lists must contain at least one variable that is replicated along all the dimensions of replication used by all other variables (see vignette("multitable").  But why did our code result in a data list without a variable that is replicated along all dimensions (i.e. along both sites and species)?  The answer is important for understanding multiple-table data in \R, and has to do with the differences between data frames and matrices.  In standard \R\ workflows we usually don't need to worry about these differences, because many functions have the ability to work equally well with either a matrix or a data frame.  But this approach will not work with multiple-table data, because \code{data.list} will treat matrices and data frames very differently even though they look very similar.
 
-So what's the difference between matrices and data frames?  In technical terms, a matrix is an atomic vector with a dimension attribute whereas a data frame is a list of atomic vectors without a dimension attribute.  In less technical terms, a matrix is one single variable that has been replicated along two dimensions (represented by the rows and the columns); on the other hand, a data frame is a group of several variables (represented by the columns) that has been replicated along a single dimension (represented by the rows).  The reason why this technicality is important in practice is that the structure provided by data lists is based on a distinction between dimensions of replication and groups of variables.  When a matrix is passed to \code{data.list} it `thinks' its getting one single variable that has been replicated along two dimensions, but when it gets a data frame it `thinks' its getting several variables that have only been replicated along a single dimension.
+So what's the difference between matrices and data frames?  In technical terms, a matrix is an atomic vector with a dimension attribute whereas a data frame is a list of atomic vectors without dimension attributes.  In less technical terms, a matrix is one single variable that has been replicated along two dimensions (represented by the rows and the columns); on the other hand, a data frame is a group of several variables (represented by the columns) that has been replicated along a single dimension (represented by the rows).  The reason why this technicality is important in practice is that the structure provided by data lists is based on a distinction between dimensions of replication and groups of variables.  When a matrix is passed to \code{data.list} it `thinks' its getting one single variable that has been replicated along two dimensions, but when it gets a data frame it `thinks' its getting several variables that have only been replicated along a single dimension.
 
 So which of our three tables should be matrices and which should be data frames?  The \code{environment} and \code{traits} tables should remain as data frames because temperature, precipitation, body size, and metabolic rate are each different variables replicated along either sites or species.  The \code{community} table should be a matrix because it is a single variable (i.e. abundance), which is replicated along both sites and species.  The error message of the previous code now makes sense.  Because we entered each of our tables as data frames, we implied that all variables were only replicated along a single dimension:  species abundances and environmental variables were replicated along sites whereas traits were replicated along species.  Therefore, none of our variables were replicated along both dimensions (i.e. sites and species), making it impossible to relate the tables.
 
@@ -465,21 +457,21 @@ For example, consider the following three objects.
 \end{Sinput}
 \begin{Soutput}
      [,1] [,2] [,3]
-[1,] "b"  "b"  "b" 
-[2,] "b"  "c"  "c" 
-[3,] "c"  "b"  "b" 
+[1,] "c"  "c"  "b" 
+[2,] "c"  "c"  "b" 
+[3,] "c"  "c"  "c" 
 \end{Soutput}
 \begin{Sinput}
 > B
 \end{Sinput}
 \begin{Soutput}
-[1] 0.1699835 0.5148565 0.2964128
+[1] 0.9013964 0.7329064 0.5542093
 \end{Soutput}
 \begin{Sinput}
 > C
 \end{Sinput}
 \begin{Soutput}
-[1] 0.59257387 0.05096413 0.09850842
+[1] 0.1140291 0.8989933 0.7442376
 \end{Soutput}
 \end{Schunk}
 If we try to combine them into a data list using \code{data.list} without a \code{match.dimids} argument, we will get an error.
@@ -510,9 +502,9 @@ The error message tells us that two things have gone wrong.  First, the dimensio
 a:
 -
   1 2
-1 a c
-2 b b
-3 a c
+1 a a
+2 c a
+3 b a
 Levels: a b c
 Replicated along:  || D1 || D2 || 
 
@@ -520,14 +512,14 @@ Replicated along:  || D1 || D2 ||
 b:
 -
         1         2         3 
-0.4510398 0.1706515 0.3199520 
+0.5360663 0.4315376 0.2078194 
 Replicated along:  || D1 || 
 
 
 c:
 -
         1         2 
-0.5817590 0.3162734 
+0.4269517 0.6085922 
 Replicated along:  || D2 || 
 
 
@@ -545,9 +537,9 @@ In this example, \code{b} must be related to the first dimension of \code{a} bec
 A:
 -
   1 2 3
-1 b b b
-2 b c c
-3 c b b
+1 c c b
+2 c c b
+3 c c c
 Levels: b c
 Replicated along:  || D1 || D2 || 
 
@@ -555,14 +547,14 @@ Replicated along:  || D1 || D2 ||
 B:
 -
         1         2         3 
-0.1699835 0.5148565 0.2964128 
+0.9013964 0.7329064 0.5542093 
 Replicated along:  || D1 || 
 
 
 C:
 -
-         1          2          3 
-0.59257387 0.05096413 0.09850842 
+        1         2         3 
+0.1140291 0.8989933 0.7442376 
 Replicated along:  || D2 || 
 
 
@@ -572,9 +564,7 @@ D1 D2
 \end{Soutput}
 \end{Schunk}
 
-\bibliographystyle{ecology}
-%% ***   Set the bibliography file.   ***
-%% ("thesis.bib" by default; change if needed)
-\bibliography{Bibliography}
+\bibliographystyle{plain}
+\bibliography{/Users/stevenwalker/Documents/Bibliography/Bibliography}
 
 \end{document}

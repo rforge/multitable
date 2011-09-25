@@ -1,4 +1,3 @@
-%\documentclass[article,shortnames,nojss]{jss}
 \documentclass{article}
 \usepackage{graphicx}
 \usepackage{url}
@@ -17,10 +16,6 @@
 %\VignettePackage{multitable}
 %\VignetteDepends{multitable, MASS, lattice}
 %\VignetteKeywords{data manipulation, ecology, multivariate, R}
-
-%%%%R commands for running Sweave%%%%%%%
-%%%%setwd("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/")
-%%%%Sweave("/users/stevenwalker/documents/multitable/multitable/vignettes/readingmultipletables/readingmultipletables.Rnw")
 
 
 
@@ -42,8 +37,6 @@
 \begin{abstract}
 Data frames are integral to \R.  They provide a standard format for passing data to model-fitting and plotting functions.  This standard makes it easier for experienced use\R s to learn new functions, because most developments in \R\ continue to accept a single data frame as input.  Still, many data sets do not easily fit into a single data frame, and my field of community ecology provides many examples of such inherently multiple-table data (e.g. fourth-corner problem and other trait-based data sets).  Storing such data in a single data frame results in either large numbers of meaningless missing values or storage of redundant information.  These storage problems have led ecologists to model summaries of their data (e.g. community-weighted trait matrices), rather then their data itself.  Perhaps more importantly, my experience with manipulating such data using data frames has resulted in difficult-to-read workflows with many lines.  The \code{multitable} package introduces new data storage objects called \code{data.list}s, which are extensions of \code{data.frame}s.  As \code{data.list}s can be coerced to \code{data.frame}s, they can be used with all \R\ functions that accept an object that is coercible to a \code{data.frame} (e.g. \code{lm}; \code{plot}; \code{lme}; and many more).  The \code{multitable} package also provides several mechanisms for simplifying the manipulation of \code{data.list} objects.
 \end{abstract}
-
-%\tableofcontents
 
 \section{Introduction}
 
@@ -941,9 +934,7 @@ The structure of \code{data.list} objects is sufficiently rich to give rise to a
 \section*{Acknowledgements}
 I thank Guillaume Gu\'{e}nard, Levi Waldron, Ben Bolker, and Philip Dixon for discussions and suggestions about software design.
 
-\bibliographystyle{ecology}
-%% ***   Set the bibliography file.   ***
-%% ("thesis.bib" by default; change if needed)
+\bibliographystyle{plain}
 \bibliography{/Users/stevenwalker/Documents/Bibliography/Bibliography}
 
 \end{document}
