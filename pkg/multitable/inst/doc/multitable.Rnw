@@ -450,6 +450,6 @@ The structure of \code{data.list} objects is sufficiently rich to give rise to a
 I thank Guillaume Gu\'{e}nard, Levi Waldron, Ben Bolker, and Philip Dixon for discussions and suggestions about software design.
 
 \bibliographystyle{plain}
-\bibliography{/Users/stevenwalker/Documents/Bibliography/Bibliography}
+\bibliography{Bibliography}
 
 \end{document}
