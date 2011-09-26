@@ -42,7 +42,6 @@ factorsTOstrings = FALSE, ...)
   \item{...}{Additional arguments (passed to the default method in \code{as.data.frame.data.list}).}
 }
 \details{
-See vignette on coercing data lists into data frames.
 
 By default, \code{as.data.frame.data.list} works in two steps.  First, a \code{mold} of the coercion process is created with \code{data.list.mold}.  The \code{mold} is a list of vectors, each with \code{\link{length}} equal to the number of rows in the coerced data frame.  Each vector is associated with a particular variable in \code{x} and contains indices that point to the elements of that variable.  Second, the \code{mold} is 'filled with' (i.e. used to subscript) \code{x} thereby producing the coerced data frame.
 
@@ -64,16 +63,23 @@ The \code{is.data.list} function tests if an object inherits from class \code{da
 data(fake.community)
 fake.community
 
+## coercing to a data frame with explicit mold creation
 fake.mold <- data.list.mold(fake.community)
 fake.mold
 as.data.frame(fake.community)
 as.data.frame(fake.community,mold=fake.mold)
 
+## unless drop=FALSE, simple data lists are immediately
+## coerced into data frames -- simple data don't require
+## data lists
 x <- runif(10)
 as.data.list(x)
 as.data.list(x,drop=FALSE)
 
+## different ways to coerce a data list to a list.
+## each way can produce slightly different results.
 as.list(fake.community)
 as.list(fake.community,drop.attr=FALSE)
 unclass(fake.community)
+lapply(fake.community,I)
 }
