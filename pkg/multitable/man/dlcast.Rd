@@ -2,19 +2,19 @@
 \alias{dlcast}
 \title{Cast data lists}
 \description{
-Cast a list of molten data frames into a data list.
+Cast a list of molten (i.e. long-format) data frames into a data list.
 }
 \usage{
 dlcast(x,dimids,fill)
 }
 \arguments{
-  \item{x}{A list of molten data frames}
+  \item{x}{A list of long-format data frames}
   \item{dimids}{See \code{\link{data.list}}}
   \item{fill}{A vector the same \code{\link{length}} as \code{x}, giving the value to use for structural missing values for each of the data frames in \code{x}.}
 }
 \details{
-For the purposes of \code{dlcast}, a molten data frame is a data frame with one named column for each variable, one named column for each dimension of replication (called \code{idvar}s in the \code{reshape2} package), and one row for each (possibly multivariate) sample.  Several data frames will allow variables to differ in their dimensions of replication.  However,  in order to combine them into a valid data list: \itemize{
-\item{each data frames must share at least one dimension of replication with at least one other data frame and}
+This is one of several ways to create \code{data.list} objects.  It is useful when the data are stored as several long-format \code{data.frame} objects. For the purposes of \code{dlcast}, a long-format data frame is a data frame with one named column for each variable, one named column for each dimension of replication (called \code{idvar}s in the \code{reshape2} package), and one row for each (possibly multivariate) sample.  Several data frames will allow variables to differ in their dimensions of replication.  In order to combine several data frames into a valid data list: \itemize{
+\item{each data frame must share at least one dimension of replication with at least one of the other data frames and}
 \item{at least one data frame must contain all of the dimensions of replication in all of the data frames.}
 }
 }
@@ -22,6 +22,9 @@ For the purposes of \code{dlcast}, a molten data frame is a data frame with one 
 This function is inspired by the \code{acast} function in the \code{reshape2} package by Hadley Wickham.  Levi Waldron was a great help during the writing of \code{dlcast}.}
 \value{
 A data list.
+}
+\seealso{
+For other ways to create \code{data.list} objects:  \code{\link{data.list}}; \code{\link{as.data.list}}; \code{\link{read.multitable}}.
 }
 \examples{
 ## a fictitious data set with a fourth-corner problem
