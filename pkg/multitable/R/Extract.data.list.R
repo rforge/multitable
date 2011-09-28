@@ -44,7 +44,8 @@ function(x,...,drop=TRUE,vextract=TRUE){
 			stop("NULL subscripting is not allowed in data lists")
 		else if(mc[[i]] != substitute()){
 			indi <- eval(mc[[i]],envir=parent.frame())
-			if(is.logical(indi)){
+			indi.logical <- is.logical(indi)
+			if(indi.logical){
 				ndm <- length(dim.names[[i-2]])
 				indi <- suppressWarnings(
 					as.logical(indi + rep(0,ndm))
@@ -62,6 +63,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 				stop("zero subscripting not allowed in data lists")
 			if(any(sign(indi) == -1))
 				repdim[i-2] <- dim(x)[i-2] - length(indi)
+			else if(indi.logical) repdim[i-2] <- sum(indi)
 			else repdim[i-2] <- length(indi)
 			if(repdim[i-2]==0) stop("some replication dimensions have been reduced to zero length and this is not allowed")
 			mc[[i]] <- indi

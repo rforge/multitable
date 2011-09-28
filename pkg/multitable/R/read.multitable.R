@@ -1,15 +1,14 @@
-read.multitable <- function(files, dimids, tnames, fill = rep(NA,length(files)), ...){
+read.multitable <- function(files, dimids, fill = rep(NA,length(files)), ...){
 	x <- lapply(files, read.table, header = TRUE, ...)
-	names(x) <- if(missing(tnames)) make.names(files) else tnames
 	dl <- dlcast(x,dimids,fill)
 	return(dl)
 }
 
-read.multicsv <- function(files, dimids, tnames, fill = rep(NA,length(files)),...)
-	read.multitable(files, dimids, tnames, fill, sep=",", ...)
+read.multicsv <- function(files, dimids, fill = rep(NA,length(files)),...)
+	read.multitable(files, dimids, fill, sep=",", ...)
 	
-read.multidelim <- function(files, dimids, tnames, fill = rep(NA,length(files)),...)
-	read.multitable(files, dimids, tnames, fill, sep="\t", ...)
+read.multidelim <- function(files, dimids, fill = rep(NA,length(files)),...)
+	read.multitable(files, dimids, fill, sep="\t", ...)
 
 read.fourthcorner <- function(community, environment, traits, dimids=c("sites","species"), community.name="abundance",...){
 	community <- as.matrix(read.table(community, ...))

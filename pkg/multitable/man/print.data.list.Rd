@@ -9,10 +9,10 @@ A print method for data lists.
 }
 \arguments{
   \item{x}{A \code{\link{data.list}} object.}
-  \item{\dots}{Additional arguments to pass to \code{\link{print}}.}
+  \item{\dots}{Not used.}
 }
 \details{
-Prints each variable in \code{x} followed by the names of the dimensions that that variable is replicated along.  A special notation is used whereby dimension names are separated by two vertical bars, \code{||}.  After all the variables are printed, the \code{repdim} attribute of \code{x} is also printed.
+Prints each variable in \code{x} proceeded by the underlined name of that variable and followed by the names of the dimensions that that variable is replicated along.  A special notation is used whereby dimension names are separated by two vertical bars, \code{||}.  After all the variables are printed, the \code{repdim} attribute of \code{x} is also printed.
 }
 \seealso{
 \code{\link{print}}

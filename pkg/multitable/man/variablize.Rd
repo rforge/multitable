@@ -4,7 +4,7 @@
 \alias{variablize.factor}
 \alias{variablize.data.list}
 \title{Variablization}
-\description{Convert all but the first dimension of replication of an array or data list into variables}
+\description{Convert all but the first dimension of replication of an array or data list into variables.  Currently an experimental function.}
 \usage{
 variablize(x, ...)
 
@@ -26,4 +26,9 @@ To use a dimension other than the first as the rows of the data frame, transpose
 }
 \seealso{
 \code{\link{aperm.data.list}},\code{\link{data.list}}
+}
+\examples{
+data(fake.community)
+variablize(fake.community)
+variablize(t(fake.community))
 }

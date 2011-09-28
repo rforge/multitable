@@ -130,7 +130,7 @@ Research in community ecology (i.e. the ecology of more than one species) someti
 \label{fig:fourth}
 \end{figure}
 
-One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There have been several such methods developed in ecology, focusing on data with a fourth-corner problem \citep{DoledecEtAl1996,LegendreEtAl1997,DrayAndLegendre2008,PillarEtAl2010,LeiboldEtAl2010,IvesAndHelmus2011}.  However, these methods do not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}; Ref ??).  One approach to such issues would be to develop suites of data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be developed for each new structure---it does not take advantage of the large number of tools developed for standard \R\ workflows \citep{ChambersAndHastie1992}.  The \pkg{multitable} package provides an alternative approach, by introducing a multiple-table generalisation of data frames---called data lists---which can be analysed with virtually any function that can be used to analyse a data frame.  Thus, instead of providing new methods of analysis, \pkg{multitable} provides new methods of data management and organisation.
+One possible solution is to develop new \R\ analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There have been several such methods developed in ecology, focusing on data with a fourth-corner problem \citep{DoledecEtAl1996,LegendreEtAl1997,DrayAndLegendre2008,PillarEtAl2010,LeiboldEtAl2010,IvesAndHelmus2011}.  However, these methods do not apply to data sets that have other more complex multiple-table data structures (e.g. zooplankton communities in Lac Croche, Fig. \ref{fig:beatrix}) \citep{CantinEtAl2011}.  One approach to such issues would be to develop suites of data analysis functions for each new data structure.  But such an approach is less than ideal, as it would require that new methods be developed for each new structure---it does not take advantage of the large number of tools developed for standard \R\ workflows \citep{ChambersAndHastie1992}.  The \pkg{multitable} package provides an alternative approach, by introducing a multiple-table generalisation of data frames---called data lists---which can be analysed with virtually any function that can be used to analyse a data frame.  Thus, instead of providing new methods of analysis, \pkg{multitable} provides new methods of data management and organisation.
 
 \begin{figure}
 \begin{tikzpicture} [
@@ -469,7 +469,7 @@ Researchers will often have text files or spreadsheets of data that are not stor
 
 \section{Multiple-table concepts}
 
-The \pkg{multitable} package is based on a distinction between dimensions of replication and variables.  One benefit of this distinction is that it provides a common framework for understanding both simple and more complex multiple-table data structures.  In particular, the framework allows us to visualise the structure of complex data; for example the Lac Croche zooplankton community data (Ref ??, Fig. \ref{fig:beatrix}) has a structure given by Fig. \ref{fig:bipartitebeatrix}.  To store these data in a format amenable to \code{dlcast} (i.e. `long format'), we would create one data frame for each of the groups of variables (red boxes on the right) and add a column for each dimension of replication (blue boxes on the left) associated with those variables.
+The \pkg{multitable} package is based on a distinction between dimensions of replication and variables.  One benefit of this distinction is that it provides a common framework for understanding both simple and more complex multiple-table data structures.  In particular, the framework allows us to visualise the structure of complex data; for example the Lac Croche zooplankton community data (Fig. \ref{fig:beatrix}) \citep{CantinEtAl2011} has a structure given by Fig. \ref{fig:bipartitebeatrix}.  To store these data in a format amenable to \code{dlcast} (i.e. `long format'), we would create one data frame for each of the groups of variables (red boxes on the right) and add a column for each dimension of replication (blue boxes on the left) associated with those variables.
 
 \begin{figure}
 \vspace{0.1cm}
@@ -521,7 +521,7 @@ The two requirements for using \code{data.list} objects are that (1) every table
 The structure of \code{data.list} objects is sufficiently rich to give rise to a much wider variety of uses than can be described in detail here.  Our intention was to illustrate the basic features and concepts of the \pkg{multitable} package, and to demonstrate its utility.  Our long-term goal with the \pkg{multitable} project in general is to make standard analyses in \R\ simpler to conduct on complex multiple-table data.
 
 \section*{Acknowledgements}
-We thank Levi Waldron, Ben Bolker, and Philip Dixon for discussions and suggestions about software design.
+We thank Levi Waldron, Ben Bolker, and Philip Dixon for discussions and suggestions about software design and Beatrix Beisner for discussions about biology.
 
 \bibliographystyle{abbrvnat}
 \bibliography{Bibliography}

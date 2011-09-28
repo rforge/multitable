@@ -3,8 +3,8 @@
 \alias{[.data.list}
 \alias{$<-.data.list}
 \alias{[[<-.data.list}
-\title{Extract or replace parts of a data list object}
-\description{Operators acting on data lists to extract or replace parts.}
+\title{Extract or replace parts of a data list}
+\description{Operators acting on data list objects to extract or replace parts.}
 \usage{
 \method{[}{data.list}(x,...,drop=TRUE,vextract=TRUE)
 \method{$}{data.list}(x,i) <- value
@@ -20,8 +20,6 @@
   \item{match.dimids}{A character vector supplying the dimids (ids of the replication dimensions) that \code{value} is replicated along, iff \code{i} is a variable name that does not yet exist in the data list, \code{x}}
 }
 \details{
-See vignette on extraction and replacement of data lists.
-
 The \code{[.data.list} method of extraction can be used in two main ways:  (1) to extract parts of the replication dimensions of all of the variables in the data list (modeled after the method for arrays and matrices, \code{\link{Extract}}), and (2) to extract some of the variables while keeping their replication dimensions unaltered (modeled after the method for lists, \code{\link{Extract}}).
 
 In array-like extraction, each replication dimension of the data list is subscripted as an element in a comma-separated list passed to \code{...}.  In intuitive terms, all variables in the data list will be subsequently subscripted along the appropriate replication dimensions; in technical terms, there is a two-step process for each variable where (1) the subscripts for the dimensions that this variable is not replicated along are deleted and then (2) the remaining subscripts are used to index that variable.  This kind of subscripting is one of the major advantages of the data list concept; because the vectors, matrices, and arrays in a data list are related via dimension sharing, they can all be subscripted in a single line.  To emphasize an important point, the main difference between subscripting arrays and array-like subscripting of data lists is that the latter does not allow any dimensions to be either reduced to length zero or be dropped.  In general, the differences between these two types of subscripting are (compare with sections 3.4.1 and 3.4.2 in the R language definition),
@@ -57,10 +55,9 @@ fake.community["body.size"]
 fake.community["body.size",drop=FALSE]
 fake.community[c("abundance","body.size")]
 fake.community[1:3]
-fake.community[1:3]
 
 ## assignment
-fake.community$abundance  <- log(fake.community$abundance + 1)
+fake.community$abundance  <- log1p(fake.community$abundance)
 fake.community[[6]] <- NULL
 fake.community$body.size <- fake.community$precipitation <- NULL
 fake.community
