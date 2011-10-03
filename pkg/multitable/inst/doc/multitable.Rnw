@@ -1,5 +1,5 @@
 \documentclass[a4paper]{report}
-\usepackage{Rjournal}
+\usepackage{RJournal}
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{amssymb}
@@ -18,10 +18,6 @@
 %\VignetteDepends{multitable, MASS, lattice}
 %\VignetteKeywords{data manipulation, ecology, multivariate, R}
 
-\newcounter{exercise}
-\numberwithin{exercise}{section}
-\newcommand{\exnumber}{\addtocounter{exercise}{1} \theexercise \thinspace}
-
 %\usepackage{Sweave}
 \begin{document}
 \begin{article}
@@ -39,6 +35,7 @@ options(width=60)
 options(continue=" ")
 @
 
+%% redefine some print methods to make better output on sweave
 <<echo=false>>=
 print.lm <- function (x, digits = max(3, getOption("digits") - 3), ...) 
 {
@@ -256,7 +253,7 @@ The purpose of this article is to justify and introduce the use of the \pkg{mult
 
 \section{The structure of data lists}
 
-The \pkg{multitable} package comes with a fictitious \code{data.list}, to illustrate how these objects work. %  change fake.community to something else without the work fake.
+The \pkg{multitable} package comes with a fictitious \code{data.list}, to illustrate how these objects work.
 <<eval=TRUE>>=
 library(multitable)
 data(fake.community)
@@ -271,7 +268,7 @@ Also as with data frames, the replication of variables in data lists are represe
 options(width=50)
 @
 
-Importantly however, although the variables are not replicated along all of the same dimensions, they do share dimensions; and it is this dimension sharing that allows us to relate variables to each other.  To appreciate the dimension sharing of this example, we can use the \code{summary} method for \code{data.list} objects: % maybe one another instead of each other.
+Importantly however, although the variables are not replicated along all of the same dimensions, they do share dimensions; and it is this dimension sharing that allows us to relate variables to each other.  To appreciate the dimension sharing of this example, we can use the \code{summary} method for \code{data.list} objects:
 <<eval=TRUE>>=
 summary(fake.community)
 @

@@ -22,4 +22,4 @@ function(a, perm, ...){
 	as.data.list(l,match.dimids=match.dimids)
 }
 
-t.data.list <- function(x) aperm(x)
+t.data.list <- function(x) aperm.data.list(x)

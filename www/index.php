@@ -42,6 +42,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <p> Major features: (1) subscripting of multiple tables simultanenously, (2) coercion of multiple tables into a single data frame for use in standard R model fitting and plotting functions.</p>
 
+<p> <strong>NOW ON CRAN</strong> <a href="http://cran.r-project.org/web/packages/multitable/"><strong>here</strong></a>. </p>
 
 <p> The <strong>project summary page</strong> can be found <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 

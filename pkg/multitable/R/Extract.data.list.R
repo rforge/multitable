@@ -1,6 +1,11 @@
 `[.data.list` <-
 function(x,...,drop=TRUE,vextract=TRUE){
+	
 	mc <- match.call()
+
+	# obtain the correct number, nd, of dimension indices passed to ...
+	# this involves not counting drop and vextract arguments if they
+	# were specified.
 	nmc <- length(mc)
 	which.dv <- c("drop","vextract") %in% names(mc)
 	if(any(which.dv)){
@@ -9,14 +14,24 @@ function(x,...,drop=TRUE,vextract=TRUE){
 		nmc <- nmc - ndv
 	}
 	nd <- nmc - 2
+	
+	# return unmodified x if no subscripts are passed and check for
+	# the passing of a single matrix (not allowed).
 	if(nd==1){
 		if(mc[[3]] == substitute()) return(x)
 		if(is.matrix(eval(mc[[3]],envir=parent.frame())))
 			stop("subscripting data lists with matrices is currently not allowed, but this may change in the future")
 	}
+	
+	###################################
+	## list-like (variable) extraction
+	###################################
 	if((nd==1) && vextract){
+		
+		# obtain subscript at determine its mode
 		ss <- eval(mc[[3]],envir=parent.frame())
 		mode.ss <- mode(ss)
+		
 		if(mode.ss=="numeric"){
 			nv <- nvar(x)
 			rng <- range(ss)
@@ -30,22 +45,43 @@ function(x,...,drop=TRUE,vextract=TRUE){
 		}
 		else if(mode.ss!="logical")
 			stop("invalid subscript type")
+		
+		# unclass so that variables can be extracted
+		# using the method for lists
 		xl <- unclass(x)
 		match.dimids <- attr(xl,"match.dimids")[ss]
 		xl <- xl[ss]
+		
 		xdl <- as.data.list(xl,match.dimids=match.dimids,drop=drop)
 		return(xdl)
 	}
+	
+	###################################
+	## array-like extraction
+	###################################
 	repdim <- dim(x)
 	if(nd!=length(repdim)) stop("incorrect number of dimensions")
 	dim.names <- dimnames(bm(x))
+	
+	# loop over each dimension
 	for(i in 3:nmc){
+		
+		# NULL subscripting not allowed
 		if(is.null(mc[[i]]))
 			stop("NULL subscripting is not allowed in data lists")
+		
+		# if subscripts are specified...
 		else if(mc[[i]] != substitute()){
+			
+			# get the subscript indices
 			indi <- eval(mc[[i]],envir=parent.frame())
+			
 			indi.logical <- is.logical(indi)
 			if(indi.logical){
+				# logical vectors of indices that don't match
+				# the length of the dimension, get their elements
+				# recycled (in accordance with standard array-
+				# like subscripting rules)
 				ndm <- length(dim.names[[i-2]])
 				indi <- suppressWarnings(
 					as.logical(indi + rep(0,ndm))
@@ -54,6 +90,10 @@ function(x,...,drop=TRUE,vextract=TRUE){
 					stop("variables with zero length are not allowed in data lists")
 			}
 			if(is.character(indi)){
+				# character index vectors are converted to
+				# numeric, because it works even if the only
+				# variable with dimnames is the benchmark
+				# (i.e. its safer this way)
 				indi <- match(indi,dim.names[[i-2]])
 				if(!all(complete.cases(indi))){
 					stop("supplied names not found in appropriate dimensions")
@@ -61,19 +101,32 @@ function(x,...,drop=TRUE,vextract=TRUE){
 			}
 			if(is.numeric(indi) && any(abs(indi)<1))
 				stop("zero subscripting not allowed in data lists")
+			
+			# update the replication dimensions
 			if(any(sign(indi) == -1))
 				repdim[i-2] <- dim(x)[i-2] - length(indi)
 			else if(indi.logical) repdim[i-2] <- sum(indi)
 			else repdim[i-2] <- length(indi)
+			
 			if(repdim[i-2]==0) stop("some replication dimensions have been reduced to zero length and this is not allowed")
+			
+			# save new subscript indices
 			mc[[i]] <- indi
 			dim.names[[i-2]] <- dim.names[[i-2]][indi]
 		}
+		
+		# if no subscripts specified, just return the full unchanged dimension
 		else mc[[i]] <- 1:repdim[i-2]
-	}	
+	}
+	
+	# create building blocks for the function calls that will
+	# be used to extract from each variable
 	mc1 <- list(`[`,bquote(xi))
 	mc2 <- as.list(mc)[3:nmc]
+
 	x <- unclass(x)
+	
+	# subscript each variable one-at-a-time
 	for(i in seq_along(x)){
 		xi <- x[[i]]
 		dsi <- attr(xi,"subsetdim")
@@ -82,6 +135,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 		x[[i]] <- eval(mci)
 		attr(x[[i]],"subsetdim") <- dsi
 	}
+	
 	attr(x,"repdim") <- repdim
 	class(x) <- "data.list"
 	return(x)
@@ -124,8 +178,6 @@ function(x,...,drop=TRUE,vextract=TRUE){
 				stop("match.dimids required for this assignment")
 			match.dimids <- c(attr(x,"match.dimids"),list(match.dimids))
 			x <- unclass(x)
-			#if(is.factor(value)) 
-			#else x[[i]] <- value
 			x[[i]] <- value
 			x <- as.data.list(x,match.dimids=match.dimids)
 			return(x)
@@ -161,11 +213,11 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	return(xl)
 }
 
-# the purpose of this function (by Hadley Wickham) is to test if 'try' found and error
+# the purpose of this function (by Hadley Wickham) is to test if 'try' found an error
 is.error <- function(x) inherits(x, "try-error")
 
+# returns only those attributes required by variables in a data list
 datalistVARattributes <- function(dlvar){
-	# returns only those attributes required by variables in a data list
 	list(
 		dim=attr(dlvar,"dim"),
 		dimnames=attr(dlvar,"dimnames"),

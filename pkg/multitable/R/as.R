@@ -279,15 +279,6 @@ function(x, ...){
 	x.df <- as.data.frame(x)
 	x.num <- x.df[!fac]
 	x.fac <- x.df[fac]
-	#x <- unclass(x)
-	#x.num <- as.data.list(x[!fac],match.dimids = x.attr$match.dimids[!fac])
-	#x.fac <- as.data.list(x[fac],match.dimids = x.attr$match.dimids[fac])
-	#x.num <- structure(x[!fac],class="data.list",
-		#match.dimids = x.attr$match.dimids[!fac],
-		#repdim = x.attr$repdim)
-	#x.fac <- structure(x[fac],class="data.list",
-		#match.dimids = x.attr$match.dimids[fac],
-		#repdim = x.attr$repdim)
 	list(x.num=as.matrix(x.num),x.fac=as.matrix(x.fac))
 }
 

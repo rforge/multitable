@@ -1,3 +1,5 @@
+# not currently used
+
 fc.data.list <-
 function(Y,X,Z,dnames=c("sites","species"),respname="community"){
 	dl <- list(as.matrix(Y),as.data.frame(X),as.data.frame(Z))
