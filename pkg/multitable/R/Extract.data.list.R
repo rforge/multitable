@@ -71,7 +71,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 			stop("NULL subscripting is not allowed in data lists")
 		
 		# if subscripts are specified...
-		else if(mc[[i]] != substitute()){
+		else if(mc[[i]] != bquote()){
 			
 			# get the subscript indices
 			indi <- eval(mc[[i]],envir=parent.frame())
