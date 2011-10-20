@@ -102,3 +102,17 @@ test_that("as.data.frame molds",{
 	
 })
 
+test_that("character valued benchmark variable",{
+	library(multitable)
+	A <- runif(3)
+	B <- matrix(letters[1:15],5,3)
+	C <- runif(5)
+	dl <- data.list(A,B,C)
+	dl2 <- dl[1:3,1:2]
+	dl2$B <- dl2$B[,drop = TRUE]
+	A <- A[1:2]
+	B <- B[1:3,1:2]
+	C <- C[1:3]
+	dl3 <- data.list(A,B,C)
+	expect_that(dl2,equals(dl3))
+})
