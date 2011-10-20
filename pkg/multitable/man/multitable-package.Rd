@@ -11,7 +11,7 @@ Package: \tab multitable\cr
 Type: \tab Package\cr
 Version: \tab 1.1\cr
 Date: \tab 2011-10-20\cr
-Suggests: \tab MASS, lattice\cr
+Suggests: \tab MASS, lattice, testthat\cr
 License: \tab GPL-2\cr
 URL: \tab http://multitable.r-forge.r-project.org/\cr
 LazyLoad: \tab yes\cr
