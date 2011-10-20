@@ -18,7 +18,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	# return unmodified x if no subscripts are passed and check for
 	# the passing of a single matrix (not allowed).
 	if(nd==1){
-		if(mc[[3]] == substitute()) return(x)
+		if(mc[[3]] == bquote()) return(x)
 		if(is.matrix(eval(mc[[3]],envir=parent.frame())))
 			stop("subscripting data lists with matrices is currently not allowed, but this may change in the future")
 	}
@@ -170,14 +170,18 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	return(xl)
 }
 
-`[[<-.data.list` <- function(x,i,match.dimids,drop=TRUE,value){
+`[[<-.data.list` <- function(x,i,match.dimids,shape,drop=TRUE,value){
 	nx <- names(x)
 	if(is.character(i)){
 		if(!any(nx %in% i)){
-			if(missing(match.dimids))
-				stop("match.dimids required for this assignment")
-			match.dimids <- c(attr(x,"match.dimids"),list(match.dimids))
 			x <- unclass(x)
+			if(missing(match.dimids)){
+				if(missing(shape))
+					stop("match.dimids or shape required for this assignment")
+				else
+					match.dimids <- attr(x,"match.dimids")[[shape]]
+			}
+			match.dimids <- c(attr(x,"match.dimids"),list(match.dimids))
 			x[[i]] <- value
 			x <- as.data.list(x,match.dimids=match.dimids)
 			return(x)

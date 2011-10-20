@@ -8,7 +8,7 @@
 \usage{
 \method{[}{data.list}(x,...,drop=TRUE,vextract=TRUE)
 \method{$}{data.list}(x,i) <- value
-\method{[[}{data.list}(x,i,match.dimids,drop=TRUE) <- value
+\method{[[}{data.list}(x,i,match.dimids,shape,drop=TRUE) <- value
 }
 \arguments{
   \item{x}{A \code{\link{data.list}} object.}
@@ -17,7 +17,8 @@
   \item{...}{Vectors to subscript the data list.}
   \item{drop}{If TRUE, single dimension data lists that result from subscripting are coerced to data frames (i.e. their replication dimensions are 'dropped').}
   \item{vextract}{If TRUE, variable extraction is done whenever only a single argument is passed to \code{...}.  If FALSE, variable extraction is not allowed.  Sometimes it is useful to set \code{vextract=FALSE} whenever single-dimension data lists are expecting dimension-wise subscripting.}
-  \item{match.dimids}{A character vector supplying the dimids (ids of the replication dimensions) that \code{value} is replicated along, iff \code{i} is a variable name that does not yet exist in the data list, \code{x}}
+  \item{match.dimids}{A character vector supplying the dimids (ids of the replication dimensions) that \code{value} is replicated along, iff \code{i} is a variable name that does not yet exist in the data list, \code{x}.  Ignored if \code{shape} is provided.}
+  \item{shape}{A single character string giving the name of an already existing variable in \code{x}, whose dimensions will be used for the new variable, \code{i}.}
 }
 \details{
 The \code{[.data.list} method of extraction can be used in two main ways:  (1) to extract parts of the replication dimensions of all of the variables in the data list (modeled after the method for arrays and matrices, \code{\link{Extract}}), and (2) to extract some of the variables while keeping their replication dimensions unaltered (modeled after the method for lists, \code{\link{Extract}}).
@@ -60,5 +61,12 @@ fake.community[1:3]
 fake.community$abundance  <- log1p(fake.community$abundance)
 fake.community[[6]] <- NULL
 fake.community$body.size <- fake.community$precipitation <- NULL
+fake.community
+
+## adding a new variable to an existing data list
+fake.community[["newvar",match.dimids="years"]] <- letters[1:3]
+fake.community[["reallynewvar",shape="metabolic.rate"]] <- runif(3)
+fake.community[["sites",match.dimids="sites"]] <- 
+	dimnames(fake.community)[[1]]
 fake.community
 }

@@ -4,11 +4,13 @@ function(x) inherits(x, "data.list")
 as.data.list <-
 function(x,...) UseMethod("as.data.list")
 
+as.data.list.data.list <- 
+function(x,...) return(x)
+
 as.data.list.default <-
 function(x,dimids,match.dimids,check = TRUE,drop=TRUE,...){
 
 	# x really needs to be a list!
-	if(is.data.list(x)) return(x)
 	if((!is.list(x))||is.data.frame(x)) x <- list(x)
 
 	# the make.match.dimids function is an algorithm
@@ -98,10 +100,19 @@ replicated along all dimensions")
 
 make.match.dimids <- function(x,dimids){
 	match.dimids <- list()
+	
+	# set a flag that ????
 	check <- FALSE
+	
+	# create a list of the dimnames in x
 	innames <- lapply(x,get.input.names)
 	ulinnames <- unlist(innames,recursive=FALSE)
+	
+	# get a logical vector indicating which elements
+	# in x have null dimnames.  this is used for???
 	notnullnames <- !sapply(innames,is.null)
+	
+	
 	if(all(notnullnames) && !is.null(ulinnames)){
 		unique.dimnames <- unique(ulinnames)
 		allunique <- length(unique.dimnames)==length(ulinnames)
@@ -152,7 +163,6 @@ atomic elements")
 }
 
 get.input.names <- function(xi){
-	#if(!all(dim(xi))) stop("some variables ")
 	if(is.null(dim(xi)) & is.atomic(xi)) return(list(names(xi)))
 	else if(is.recursive(xi) & is.atomic(xi[[1]])){
 		if(is.null(dim(xi[[1]]))) return(list(names(xi[[1]])))
