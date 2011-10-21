@@ -99,9 +99,11 @@ replicated along all dimensions")
 }
 
 make.match.dimids <- function(x,dimids){
+	# the purpose of this function is to figure out
+	# how the elements in x are related
+	
 	match.dimids <- list()
 	
-	# set a flag that ????
 	check <- FALSE
 	
 	# create a list of the dimnames in x
@@ -109,11 +111,18 @@ make.match.dimids <- function(x,dimids){
 	ulinnames <- unlist(innames,recursive=FALSE)
 	
 	# get a logical vector indicating which elements
-	# in x have null dimnames.  this is used for???
+	# in x have non-null dimnames.  this is used for???
 	notnullnames <- !sapply(innames,is.null)
 	
-	
 	if(all(notnullnames) && !is.null(ulinnames)){
+		# this condition is evaluated when the dimensions
+		# of the elements in x are 'fully named'
+		# therefore, this is where the algorithm tries
+		# to match dimnames
+		
+		# the first thing to be done is to check that there
+		# is a comparison to make (i.e. the dimnames are not
+		# all unique and there is more than one variable)
 		unique.dimnames <- unique(ulinnames)
 		allunique <- length(unique.dimnames)==length(ulinnames)
 		morethanonevar <- length(x) > 1
@@ -122,14 +131,49 @@ make.match.dimids <- function(x,dimids){
 "Resulting data list invalid:
 some variables do not share any
 dimensions with other variables")
+
+		# create a list with one element for each in x,
+		# with vector elements giving indices for each of
+		# the dimensions associated with that element.
+		# for example, for two elements such that the first
+		# has two dimensions and the second shares the first
+		# of those two, we would have something like:
+		# 	$A
+		# 	[1] 1 2
+		# 	$B
+		# 	[1] 1
 		mat.ndims <- lapply(innames,match,unique.dimnames)
+
+		# now create a vector of the sizes of the indexed
+		# dimensions in mat.ndims (wfr stands for 'which
+		# fully replicated' because the dimensions overall
+		# are equal to the dimensions of a fully replicated
+		# variable -- e.g. benchmark variable)
 		indims.wfr <- sapply(unique.dimnames,length)
+
+		# check that the dimensions of each element in x 
+		# are fully replicated, when its time to do so
 		check <- TRUE
 	}
 	else{
+		# if this condition is evaluated then dimension
+		# matching is attempted using the lengths of the
+		# dimensions of the elements in x
+		 
+		# get the dimensions of the elements in x
 		indims <- lapply(x,get.input.dims)
+		
+		# find out which one is fully replicated (wfr)
 		wfr <- which.max(sapply(indims,length))
+		
+		# get a vector of the sizes of the data list 
+		# dimensions (compare w indims.wfr in the previous
+		# condition)
 		indims.wfr <- indims[[wfr]]
+		
+		# if some dimensions appear to have an identical
+		# length, then it is impossible to decide how to
+		# match them.
 		if(length(unique(indims.wfr)) < length(indims.wfr)){
 			stop(
 "Some dimensions are unnamed and some are 
@@ -138,6 +182,8 @@ specification of match.dimids. Type
 ?data.list and see the details section
 of the help file for data.list.")
 		}
+		
+		# see the explanation above for mat.ndims
 		mat.ndims <- lapply(indims,match,indims.wfr)
 		check <- FALSE
 	}
@@ -163,7 +209,8 @@ atomic elements")
 }
 
 get.input.names <- function(xi){
-	if(is.null(dim(xi)) & is.atomic(xi)) return(list(names(xi)))
+	if(is.data.frame(xi)) return(list(rownames(xi)))
+	else if(is.null(dim(xi)) & is.atomic(xi)) return(list(names(xi)))
 	else if(is.recursive(xi) & is.atomic(xi[[1]])){
 		if(is.null(dim(xi[[1]]))) return(list(names(xi[[1]])))
 		else return(dimnames(xi[[1]]))
