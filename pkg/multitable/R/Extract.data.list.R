@@ -16,7 +16,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	nd <- nmc - 2
 	
 	# return unmodified x if no subscripts are passed and check for
-	# the passing of a single matrix (not allowed).
+	# the passing of a single matrix (not allowed for data lists).
 	if(nd==1){
 		if(mc[[3]] == bquote()) return(x)
 		if(is.matrix(eval(mc[[3]],envir=parent.frame())))
@@ -28,7 +28,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	###################################
 	if((nd==1) && vextract){
 		
-		# obtain subscript at determine its mode
+		# obtain subscript and determine its mode
 		ss <- eval(mc[[3]],envir=parent.frame())
 		mode.ss <- mode(ss)
 		
@@ -145,27 +145,48 @@ function(x,...,drop=TRUE,vextract=TRUE){
 	nx <- names(x)
 	if(!any(nx %in% i))
 		stop("can't add variables this way...try using [[ instead of $...and don't forget to specify match.dimids")
+	
+	# removing variables by replacing with NULL
 	if(is.null(value)){
 		ni <- which(nx==i)
 		return(x[-ni])
 	}
+	
+	# best to work with x as a list, rather than data list
+	# because the base extraction methods are faster and
+	# avoid recursive calling of multitable extraction methods
+	# which makes debugging harder
 	xl <- unclass(x)
+	
+	
 	if(length(xl[[i]])!=length(value))
 		stop("length of replacement value does not
 			match length of the variable to be replaced")
+	
+	# treat factors specially to ensure that levels in the 
+	# replacement value that are absent in the current value
+	# are included properly
 	if(is.factor(xl[[i]])){
 		levels.in <- levels(xl[[i]])
 		levels.add <- as.character(unique(value))
 		levels(xl[[i]]) <- union(levels.in,levels.add)
 	}
+	
+	# treat characters specially by converting them into
+	# a factor, and preserving their dimensions (which is
+	# a bit ugly since as.factor removes dimensions)
 	if(is.character(value)){
 		dimvalue <- dim(value)
 		value <- as.factor(value)
 		dim(value) <- dimvalue
 	}
+	
+	# retain the appropriate attributes for the replaced
+	# variable
 	attr.xl <- datalistVARattributes(xl[[i]])
 	xl[[i]] <- value
 	datalistVARattributes(xl[[i]]) <- attr.xl
+	
 	class(xl) <- "data.list"
 	return(xl)
 }
@@ -173,6 +194,8 @@ function(x,...,drop=TRUE,vextract=TRUE){
 `[[<-.data.list` <- function(x,i,match.dimids,shape,drop=TRUE,value){
 	nx <- names(x)
 	if(is.character(i)){
+		
+		# adding a new variable:
 		if(!any(nx %in% i)){
 			x <- unclass(x)
 			if(missing(match.dimids)){
@@ -192,11 +215,17 @@ function(x,...,drop=TRUE,vextract=TRUE){
 			stop("subscript out of bounds")
 	}
 	else stop("invalid subscript type")
+
+	# removing variables by replacing with NULL
+	# slightly more complicated then with $<-.data.list
+	# because of the possibility of numeric i
 	if(is.null(value)){
-		if(is.character(i)) ni <- which(names(x)==i)
+		if(is.character(i)) ni <- which(nx==i)
 		else if(is.numeric(i)) ni <- i
 		return(x[-ni,drop=drop])
 	}
+	
+	# the rest is identical to $<-.data.list
 	xl <- unclass(x)
 	if(length(xl[[i]])!=length(value))
 		stop("length of replacement value does not match length of the variable to be replaced")
