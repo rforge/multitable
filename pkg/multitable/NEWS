@@ -1,5 +1,23 @@
 *************************************
 **				   **
+**	multitable version 1.2	   **
+**				   **
+*************************************
+
+BUG FIXES
+
+	the print.data.list method was printing the 
+	subsetdim attribute.  this is now fixed.
+
+	when data.list was called with a single
+	data frame and matrix, an error resulted
+	whenever dim matching was to be done by
+	matching dimnames even if the matrix and
+	data frame were compatible.  this is now
+	fixed.
+
+*************************************
+**				   **
 **	multitable version 1.1	   **
 **				   **
 *************************************

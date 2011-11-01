@@ -127,3 +127,12 @@ test_that("automatic dimension matching with data.frame inputs",{
 	dl2 <- data.list(A,B,match.dimids=list(c("small","large"),"small"))
 	expect_that(dl1,equals(dl2))
 })
+
+test_that("two different ways to NULL-out a variable are equivalent",{
+	library(multitable)
+	data(fake.community)
+	dl1 <- dl2 <- fake.community
+	dl1[["body.size"]] <- NULL
+	dl2$body.size <- NULL
+	expect_that(dl1,equals(dl2))
+})
