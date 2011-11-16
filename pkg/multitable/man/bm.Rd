@@ -2,7 +2,7 @@
 \alias{bm}
 \title{Data list benchmark}
 \description{
-Extract the 'benchmark' variable from a data list
+Extract the 'benchmark' variable from a data list.
 }
 \usage{
 bm(x)

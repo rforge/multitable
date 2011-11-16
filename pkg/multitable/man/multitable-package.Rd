@@ -4,13 +4,13 @@
 \docType{package}
 \title{Simultaneous manipulation of multiple arrays of data, with data.list objects}
 \description{
-Many data sets do not easily fit into a single data frame.  Storing such data in a single data frame often results in either large numbers of meaningless missing values or storage of redundant information; yet storing them in multiple data frames often results in long difficult-to-read workflows.  The multitable package introduces a new data object called a \code{\link{data.list}}, which organises several data tables as a single \R object.  The primary goal of \pkg{multitable} is to provide a more intuitive syntax for manipulating multiple-table data in \R.  As data.lists can be coerced to data.frames, they can be used with all \R functions that accept an object that is coercible to a data.frame (e.g. \code{\link{lm}}; \code{\link{plot}}; \code{lme}; and many more).}
+Many data sets do not easily fit into a single data frame.  Storing such data in a single data frame often results in either large numbers of meaningless missing values or storage of redundant information; yet storing them in multiple data frames often results in long difficult-to-read workflows.  The multitable package introduces a new data object called a \code{\link{data.list}}, which organises several data tables as a single \R object.  The primary goal of \pkg{multitable} is to provide a more intuitive framework for manipulating multiple-table data in \R.  As data.lists can be coerced to data.frames, they can be used with all \R functions that accept an object that is coercible to a data.frame (e.g. \code{\link{lm}}; \code{\link{plot}}; \code{lme}; and many more).}
 \details{
 \tabular{ll}{
 Package: \tab multitable\cr
 Type: \tab Package\cr
-Version: \tab 1.1\cr
-Date: \tab 2011-10-20\cr
+Version: \tab 1.3\cr
+Date: \tab 2011-11-15\cr
 Suggests: \tab MASS, lattice, testthat\cr
 License: \tab GPL-2\cr
 URL: \tab http://multitable.r-forge.r-project.org/\cr
