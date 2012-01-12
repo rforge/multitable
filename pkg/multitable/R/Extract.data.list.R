@@ -203,6 +203,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 					stop("match.dimids or shape required for this assignment")
 				else
 					match.dimids <- attr(x,"match.dimids")[[shape]]
+					if(is.null(match.dimids)) stop("shape did not match any existing variable")
 			}
 			match.dimids <- c(attr(x,"match.dimids"),list(match.dimids))
 			x[[i]] <- value
