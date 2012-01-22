@@ -11,6 +11,17 @@ NEW FEATURES
 	one level and null list elements
 	respectively.
 
+	some *slightly* better error messages.
+
+NEW DOCUMENTATION
+
+	corrected an important error in the 
+	documentation for the Extract.data.list 
+	help file.  in particular the distinction
+	between [[<-.default and [[<-.data.list
+	is not properly described in the details
+	section.
+
 *************************************
 **				   **
 **	multitable version 1.2	   **
