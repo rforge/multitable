@@ -136,3 +136,36 @@ test_that("two different ways to NULL-out a variable are equivalent",{
 	dl2$body.size <- NULL
 	expect_that(dl1,equals(dl2))
 })
+
+test_that("names of the variables themselves and corresponding names of the match.dimids attribute of data lists should match",{
+	library(multitable)
+	data(fake.community)
+	names(fake.community) <- letters[1:6]
+	fc.names <- names(fake.community)
+	fc.match.dimids.names <- names(attr(fake.community,"match.dimids"))
+	expect_that(fc.names,equals(fc.match.dimids.names))
+})
+
+test_that("aperm.factor doesn't screw up zombie levels",{
+	library(multitable)
+	
+	A <- structure(factor(letters[7:16], levels = letters[1:16]), dim = c(5,2))
+	B <- aperm(A, c(1,2))
+	expect_that(A,equals(B))
+	
+	A <- structure(factor(letters[7:16]), dim = c(5,2))
+	B <- aperm(A, c(1,2))
+	expect_that(A,equals(B))
+	
+	A <- structure(factor(7:16, levels = 1:16), dim = c(5,2))
+	B <- aperm(A, c(1,2))
+	expect_that(A,equals(B))
+	
+	A <- structure(factor(7:16, levels = 1:16), dim = c(5,2))
+	B <- aperm(aperm(A, c(2,1)),c(2,1))
+	expect_that(A,equals(B))
+	
+	A <- structure(factor(7:16, levels = rank(runif(50))), dim = c(5,2))
+	B <- aperm(aperm(A, c(2,1)),c(2,1))
+	expect_that(A,equals(B))
+})

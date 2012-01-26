@@ -18,3 +18,12 @@ big.kronecker <- function(x,...){
 	x[[2]] <- NULL
 	Recall(x,...)
 }
+
+
+
+# get the dimids from a data list
+#
+# used in: dims_to_vars
+#
+get.dimids <- function(dl)
+	attr(dl, "match.dimids")[[attr(dl, "bm")]]

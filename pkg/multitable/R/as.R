@@ -131,7 +131,8 @@ make.match.dimids <- function(x,dimids){
 	
 	# get a logical vector indicating which elements
 	# in x have non-null dimnames.
-	notnullnames <- !sapply(innames,is.null)
+	#notnullnames <- !sapply(innames,is.null) # think this line is a bug...
+	notnullnames <- !sapply(ulinnames,is.null) # that this line fixes???
 	
 	if(all(notnullnames) && !is.null(ulinnames)){
 		# 2a. this condition is evaluated when the dimensions
@@ -379,7 +380,9 @@ function(x, drop.attr=TRUE, factorsTOstrings=FALSE,...){
 as.data.frame.data.list <-
 function(x, row.names = NULL, optional = FALSE, scheme = "repeat", mold, ...){
 	if(missing(mold)) mold <- data.list.mold(x)
-	out <- lapply(seq_along(x),function(i)as.vector(x[[i]][mold[[i]]]))
+	#out <- lapply(seq_along(x), function(i) as.vector(x[[i]][mold[[i]]]))
+	out <- lapply(seq_along(x), function(i) 
+		structure(x[[i]][mold[[i]]], dim = NULL))
 	names(out) <- varnames(x)
 	if(is.null(row.names)) row.names <- attr(mold,"df.rownames")
 	as.data.frame(out, row.names = row.names, optional = optional,...)

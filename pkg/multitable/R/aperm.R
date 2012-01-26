@@ -1,13 +1,23 @@
+# TODO:  test for behaviour with ordered levels, probably some problems here.
+
 aperm.factor <-
 function(a, perm, ...){
-	# a stupid workaround for the behaviour of aperm to convert to numeric
+	# a stupid workaround for the behaviour of aperm to unclass factors
 	a.dim <- dim(a)
 	a.names <- dimnames(a)
 	a.levels <- attr(a,"levels")
-	a <- structure(as.character(a),dim=a.dim)
-	a <- aperm(a,perm,...)
-	a <- structure(as.factor(a),
-		dim=a.dim[perm],dimnames=a.names[perm],levels=a.levels)
+
+	# this is very important...it makes sure that factor() makes an 
+	# appropriate comparison between the variable and its levels.
+	a <- as(a, mode(a.levels))
+
+	a <- structure(a,dim=a.dim)
+	a <- aperm.default(a,perm,...)
+	
+	# very important to set levels inside factor() rather than
+	# in structure!!!!
+	a <- structure(factor(a, levels = a.levels),
+		dim=a.dim[perm],dimnames=a.names[perm])
 	return(a)
 }
 

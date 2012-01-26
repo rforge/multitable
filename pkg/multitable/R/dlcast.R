@@ -1,4 +1,4 @@
-#\name{dlcast}
+ #\name{dlcast}
 #\description{Cast a list of molten data frames into a data list.}
 #  \item{x}{A list of molten data frames}
 #  \item{dimids}{See \code{\link{data.list}}}
@@ -17,7 +17,7 @@
 #	- at least one data frame must contain all of the dimensions of replication 
 #	  in all of the data frames.
 
-dlcast <- function(x,dimids,fill=rep(NA,length(x))){
+dlcast <- function(x, dimids, fill=rep(NA,length(x)), placeholders){
 	# if x is a data list already, do nothing
 	if(is.data.list(x)) return(x)
 
@@ -47,7 +47,7 @@ dlcast <- function(x,dimids,fill=rep(NA,length(x))){
 		# (note: the idea behind this implementation here
 		# was due to both levi waldron and i through
 		# discussions during a trip he took to montreal.)
-		dim.namesi <- lapply(dims[[i]],get.dim.names,x)
+		dim.namesi <- lapply(dims[[i]], get.dim.names, x, ddrop)
 		full <- mouter(dim.namesi,FUN=paste,sep=".")
 		if(is.null(full)) stop("some tables lack identified replication dimensions")
 		dfull <- dim(full)
@@ -72,15 +72,26 @@ dlcast <- function(x,dimids,fill=rep(NA,length(x))){
 		names(out[[i]]) <- vars[[i]]
 	}
 	
-	out <- as.data.list(out,match.dimids=dims)
+	out <- as.data.list(out, match.dimids = dims)
+	
+	if(!missing(placeholders))
+		for(i in seq_along(ddrop))
+			out <- remove.placeholders(out, placeholders[i])
+	
 	return(out)
 }
 
 # return a vector with the unique names in the columns of x
 # with names in dimsi
-get.dim.names <- function(dimsi,x){
+get.dim.names <- function(dimsi, x, ddrop){
 	dim.name.list <- lapply(lapply(x,'[[',dimsi),as.character)
 	unique(unlist(dim.name.list))
+}
+
+remove.placeholders <- function(dl, placeholder){
+	dnames <- dimnames(dl)
+	ss <- lapply(dnames, `!=`, placeholder)
+	do.call(`[.data.list`, c(bquote(dl), ss), quote = FALSE)
 }
 
 # vr: a character vector of names of variables

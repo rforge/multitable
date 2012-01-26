@@ -1,13 +1,17 @@
 print.data.list <-
 function(x, ...){
 	
+	repdim <- dim(x)
+	x <- unclass(x)
+	
 	# print each variable in x
 	for(i in seq_along(x)){
 		
 		# get information about the variable
 		subsetdim <- attr(x[[i]],"subsetdim")
 		attr(x[[i]],"subsetdim") <- NULL
-		varname <- varnames(x)[i]	# could be out of the loop?
+		#varname <- varnames(x)[i]	# could be out of the loop?
+		varname <- names(x)[i]
 		
 		if(is.null(varname)) varname <- i
 		
@@ -27,7 +31,7 @@ function(x, ...){
 	
 	# print overall replication dimensions
 	cat("REPLICATION DIMENSIONS: \n")
-	repdim <- dim(x)
+	#repdim <- dim(x)
 	names(repdim) <- names(subsetdim)
 	print(repdim)
 }

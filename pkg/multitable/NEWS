@@ -1,3 +1,6 @@
+slightly more detailed news:
+svn log svn://svn.r-forge.r-project.org/svnroot/multitable
+
 *************************************
 **				   **
 **	multitable version 1.3	   **
@@ -11,7 +14,55 @@ NEW FEATURES
 	one level and null list elements
 	respectively.
 
+	added a data list method for the generic
+	functions 'with' and 'within' in base.
+	note that within.data.list is still
+	considered experimental.
+
+	added a dims_to_vars function that 
+	creates new variables out of dimensions
+	of replication.  i found myself doing
+	this enough to warrant a function.
+
+	added a utility function (not loaded to
+	the namespace) called get.dimids, with a
+	self explanatory purpose.
+
+	added an argument 'placeholders' to 
+	dlcast that allows cases to be ignored 
+	(e.g. useful for when some sites in a 
+	community ecology data set have no 
+	species, in which case the empty site 
+	can be dropped).  at the request of an 
+	extremely helpful reviewer of the JSS
+	paper.
+
 	some *slightly* better error messages.
+
+BUG FIXES
+
+	when the names of the variables of a data
+	list were changed using the `names<-` 
+	function, the corresponding names of the
+	match.dimids attribute of the data list
+	were left unchanged.  this bug 
+	occassionally caused problems when trying 
+	to use the shape argument in the 
+	`[[<-.data.list` function because there is 
+	a comparison between the shape argument 
+	and the names of the match.dimids 
+	attribute.  the bug was fixed by adding
+	a specific `names<-` method for data 
+	lists that explicitly changes the 
+	match.dimids attribute names.
+
+	fixed an issue with aperm.factor that 
+	caused factor-valued variables in data
+	lists to get out-of-order.
+
+	fixed an internal problem with 
+	make.match.dimids.  it wasn't identifying
+	variables with NULL dimnames properly.
 
 NEW DOCUMENTATION
 
