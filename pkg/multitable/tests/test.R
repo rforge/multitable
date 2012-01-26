@@ -1,6 +1,6 @@
 library(testthat)
 
-context("data list subscripting")
+context("multitable package")
 
 test_that("repdims are calculated correctly",{
 	library(multitable)
@@ -146,7 +146,7 @@ test_that("names of the variables themselves and corresponding names of the matc
 	expect_that(fc.names,equals(fc.match.dimids.names))
 })
 
-test_that("aperm.factor doesn't screw up zombie levels",{
+test_that("aperm.factor doesn't screw up factor valued variables",{
 	library(multitable)
 	
 	A <- structure(factor(letters[7:16], levels = letters[1:16]), dim = c(5,2))
@@ -168,4 +168,49 @@ test_that("aperm.factor doesn't screw up zombie levels",{
 	A <- structure(factor(7:16, levels = rank(runif(50))), dim = c(5,2))
 	B <- aperm(aperm(A, c(2,1)),c(2,1))
 	expect_that(A,equals(B))
+	
+	A <- structure(factor(2:25, levels = 1:50), dim = c(4,3,2))
+	B <- aperm(A, c(1,2,3))
+	expect_that(A,equals(B))
+	B <- aperm(aperm(A, c(2,3,1)), c(3,1,2))
+})
+
+test_that("with.data.list works as expected",{
+	library(multitable)
+	
+	dl <- data.list(A = matrix(runif(10), 5, 2), B = runif(2))
+	expect_that(with(dl, A %*% B), equals(dl$A %*% dl$B))
+	
+	sum1 <- with(dl, A + B, "as.data.frame")
+	sum2 <- as.data.frame(dl)$A + as.data.frame(dl)$B
+	expect_that(sum1, equals(sum2))
+})
+
+test_that("placeholder cases can be removed properly (test due to a reviewer of the JSS manuscript)",{
+	library(multitable)
+	
+	x <- data.frame(
+   		samples = paste("Sample", c(1,1,2,2,3,4), sep="."),
+		species = c(paste("Species", c(1,1,1,2,3), sep="."), "NONE"),
+   		count = c(1,2,10,3,4,0)
+   	)
+	samp <- data.frame(samples=levels(x$samples), var1=c(1,2,1,2))
+	taxa <- data.frame(species=levels(x$species), var2=c("b","a","b","a"))
+	rownames(samp) <- samp$samples
+	rownames(taxa) <- taxa$species
+	dl1 <- dlcast(list(x,samp,taxa), c("samples","species"), fill=c(0,NA,NA), 
+		placeholders = c("NONE", "Sample.4"))
+	
+	x <- data.frame(
+	   	samples = paste("Sample", c(1,1,2,2,3), sep="."),
+		species = paste("Species", c(1,1,1,2,3), sep="."),
+	   	count = c(1,2,10,3,4)
+	)
+	samp <- data.frame(samples=levels(x$samples), var1=c(1,2,1))
+	taxa <- data.frame(species=levels(x$species), var2=c("a","b","a"))
+	rownames(samp) <- samp$samples
+	rownames(taxa) <- taxa$species
+	dl2 <- dlcast(list(x,samp,taxa), c("samples","species"), fill=c(0,NA,NA))
+	
+	expect_that(dl1, equals(dl2))
 })

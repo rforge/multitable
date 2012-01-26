@@ -47,7 +47,7 @@ dlcast <- function(x, dimids, fill=rep(NA,length(x)), placeholders){
 		# (note: the idea behind this implementation here
 		# was due to both levi waldron and i through
 		# discussions during a trip he took to montreal.)
-		dim.namesi <- lapply(dims[[i]], get.dim.names, x, ddrop)
+		dim.namesi <- lapply(dims[[i]], get.dim.names, x)
 		full <- mouter(dim.namesi,FUN=paste,sep=".")
 		if(is.null(full)) stop("some tables lack identified replication dimensions")
 		dfull <- dim(full)
@@ -75,7 +75,7 @@ dlcast <- function(x, dimids, fill=rep(NA,length(x)), placeholders){
 	out <- as.data.list(out, match.dimids = dims)
 	
 	if(!missing(placeholders))
-		for(i in seq_along(ddrop))
+		for(i in seq_along(placeholders))
 			out <- remove.placeholders(out, placeholders[i])
 	
 	return(out)
@@ -83,7 +83,7 @@ dlcast <- function(x, dimids, fill=rep(NA,length(x)), placeholders){
 
 # return a vector with the unique names in the columns of x
 # with names in dimsi
-get.dim.names <- function(dimsi, x, ddrop){
+get.dim.names <- function(dimsi, x){
 	dim.name.list <- lapply(lapply(x,'[[',dimsi),as.character)
 	unique(unlist(dim.name.list))
 }
