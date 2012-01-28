@@ -37,6 +37,16 @@ NEW FEATURES
 	extremely helpful reviewer of the JSS
 	paper.
 
+	convenience functions variable and
+	variableGroups for creating simple
+	data lists.  particularly useful in
+	conjunction with the + and - operators
+	discussed below.
+
+	the + and - operators now have methods
+	for data lists to add variables to or 
+	subtract variables from a data list.
+
 	some *slightly* better error messages.
 
 BUG FIXES

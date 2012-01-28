@@ -6,7 +6,8 @@
 
 # functions
 
-export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, is.data.list, repdim, aperm.data.list, variablize, read.multitable, read.multicsv, read.multidelim, read.fourthcorner, multifile.choose, dlcast, dropdl, dropl, within.data.list, dims_to_vars)
+export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, is.data.list, repdim, aperm.data.list, variablize, read.multitable, read.multicsv, read.multidelim, read.fourthcorner, multifile.choose, dlcast, dropdl, dropl, within.data.list, dims_to_vars,
+variable, variableGroup)
 
 # S3 methods
 
@@ -34,6 +35,7 @@ S3method(names, data.list)
 S3method("names<-", data.list)
 S3method(with, data.list)
 S3method(within, data.list)
+S3method(Ops, data.list)
 
 #import other packages
 

@@ -214,3 +214,85 @@ test_that("placeholder cases can be removed properly (test due to a reviewer of 
 	
 	expect_that(dl1, equals(dl2))
 })
+
+test_that("dims_to_vars works like [[<-.data.list",{
+	library(multitable)
+	data(fake.community)
+	
+	dl1 <- dims_to_vars(fake.community, "years")
+	dl2 <- fake.community
+	dl2[["years", match.dimids = "years"]] <- dimnames(dl2)[[2]]
+	expect_that(dl1, equals(dl2))
+	
+	dl1 <- dims_to_vars(fake.community)
+	dl2[["sites", match.dimids = "sites"]] <- dimnames(dl2)[[1]]
+	dl2[["species", match.dimids = "species"]] <- dimnames(dl2)[[3]]
+	dl2 <- dl2[c(1:6,8,7,9)] # must re-arrange the variable order
+							 # to get exact equivalence
+	expect_that(dl1, equals(dl2))	
+})
+
+test_that("variable addition works",{
+	library(multitable)
+	variable("A", matrix(runif(15), 5, 3), c("n","m")) + 
+	variable("B", letters[1:3], "m") + 
+	variable("C", runif(5), "n") + 
+	variable("D", array(runif(15*4), c(3,5,4)), c("m","n","p")) +
+	variableGroup(data.frame(a = runif(5), b = runif(5)), "n") + 
+	variableGroup(list(
+		c = matrix(runif(20), 4, 5),
+		d = matrix(runif(20), 4, 5)
+	), c("p","n"))
+})
+
+test_that("taxon names can be sorted without mismatch between taxon names and trait values",{
+	library(multitable)
+	
+	n <- 10
+	m <- 5
+	
+	set.seed(1)
+	species.names <- paste(
+		letters[ceiling(runif(m,0,26))],
+		letters[ceiling(runif(m,0,26))],
+		"_",
+		letters[ceiling(runif(m,0,26))],
+		letters[ceiling(runif(m,0,26))],
+		sep = ""
+	)
+	site.names <- paste(
+		letters[ceiling(runif(n,0,26))],
+		letters[ceiling(runif(n,0,26))],
+		letters[ceiling(runif(n,0,26))],
+		letters[ceiling(runif(n,0,26))],
+		sep = ""
+	)
+	
+	abundance <- matrix(runif(n*m), n, m, dimnames = list(site.names, species.names))
+	env <- structure(runif(n), names = site.names)
+	trait <- factor(structure(letters[ceiling(runif(m,0,26))], names = species.names), 
+		levels = letters[1:26])
+	
+	dl1 <- 
+		variable("abundance", abundance, c("sites","species")) + 
+		variable("env", env, "sites") +
+		variable("trait", trait, "species")
+	dl1 <- dl1[, order(trait)]
+	
+	abundance <- abundance[, order(trait)]
+	trait <- trait[order(trait)]
+	dl2 <- 
+		variable("abundance", abundance, c("sites","species")) + 
+		variable("env", env, "sites") +
+		variable("trait", trait, "species")
+		
+	expect_that(dl1, equals(dl2))
+})
+
+test_that("data lists with duplicated dimids should fail to be created",{
+	library(multitable)
+	em <- try(variable("square.matrix", matrix(runif(4),2,2), rep("n",2)), silent = TRUE)[1]
+	
+	expect_that(em,equals("Error in as.data.list.default(x, match.dimids = list(dimids), drop = FALSE) : \n  the dimensions of replication for\neach variable must be different\nfrom each other\n"))
+
+})

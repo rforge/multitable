@@ -28,6 +28,11 @@ list")
 	if(check.full.rep(match.dimids) && check) stop(
 "at least one variable must be
 replicated along all dimensions")
+
+	if(check.unique.dimids(match.dimids) && check) stop(
+"the dimensions of replication for
+each variable must be different
+from each other")
 	
 	# some elements of x may themselves be lists of
 	# variables (e.g. data frames). but data lists are
@@ -286,6 +291,10 @@ function(match.dimids){
 	dims <- lapply(match.dimids,match,table=mt)
 	any(sapply(dims,function(x)any(is.na(x))))
 }
+
+check.unique.dimids <- 
+function(match.dimids) # return FALSE if no duplicated dimids
+	any(unlist(lapply(match.dimids, duplicated)))
 
 split.dfs <-
 function(x,match.dimids){
