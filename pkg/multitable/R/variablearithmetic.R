@@ -27,13 +27,16 @@ Ops.data.list <- function(e1, e2){
 		stop(paste(FUN, "method for class data.list not yet writen"))
 }
 
-variable <- function(name, x, dimids){
+variable <- function(x, dimids, name){
 	if(is.data.frame(x))
 		x <- as.matrix(x)
 	if(is.recursive(x))
 		stop("lists not allowed -- perhaps try using variableGroup?")
-	out <- as.data.list(x, match.dimids = list(dimids), drop = FALSE)
-	names(out) <- name
+	out <- data.list(x, match.dimids = list(dimids), drop = FALSE)
+	if(!missing(name))
+		names(out) <- name[1]
+	else
+		names(out) <- as.character(substitute(x))
 	return(out)
 }
 

@@ -21,9 +21,9 @@ Operators for adding (subtracting) the variables in one data list to (from) the 
 Useful with \code{\link{variable}} and \code{\link{variableGroup}}.
 }
 \examples{
-variable("A", matrix(runif(15), 5, 3), c("n","m")) + 
-	variable("B", letters[1:3], "m")
+variable(matrix(runif(15), 5, 3), c("n","m"), "A") + 
+	variable(letters[1:3], "m", "B")
 
 data(fake.community)
-fake.community + variable("cuteness", c(10, 0, 3), "species")
+fake.community + variable(c(10, 0, 3), "species", "cuteness")
 }

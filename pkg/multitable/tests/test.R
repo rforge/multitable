@@ -234,10 +234,10 @@ test_that("dims_to_vars works like [[<-.data.list",{
 
 test_that("variable addition works",{
 	library(multitable)
-	variable("A", matrix(runif(15), 5, 3), c("n","m")) + 
-	variable("B", letters[1:3], "m") + 
-	variable("C", runif(5), "n") + 
-	variable("D", array(runif(15*4), c(3,5,4)), c("m","n","p")) +
+	variable(matrix(runif(15), 5, 3), c("n","m"), "A") + 
+	variable(letters[1:3], "m", "B") + 
+	variable(runif(5), "n", "C") + 
+	variable(array(runif(15*4), c(3,5,4)), c("m","n","p"), "D") +
 	variableGroup(data.frame(a = runif(5), b = runif(5)), "n") + 
 	variableGroup(list(
 		c = matrix(runif(20), 4, 5),
@@ -274,30 +274,31 @@ test_that("taxon names can be sorted without mismatch between taxon names and tr
 		levels = letters[1:26])
 	
 	dl1 <- 
-		variable("abundance", abundance, c("sites","species")) + 
-		variable("env", env, "sites") +
-		variable("trait", trait, "species")
+		variable(abundance, c("sites","species"), "abundance") + 
+		variable(env, "sites", "env") +
+		variable(trait, "species", "trait")
 	dl1 <- dl1[, order(trait)]
 	
 	abundance <- abundance[, order(trait)]
 	trait <- trait[order(trait)]
 	dl2 <- 
-		variable("abundance", abundance, c("sites","species")) + 
-		variable("env", env, "sites") +
-		variable("trait", trait, "species")
+		variable(abundance, c("sites","species"), "abundance") + 
+		variable(env, "sites", "env") +
+		variable(trait, "species", "trait")
 		
 	expect_that(dl1, equals(dl2))
 })
 
 test_that("data lists with duplicated dimids should fail to be created",{
 	library(multitable)
-	em <- try(variable("square.matrix", matrix(1:4,2,2), rep("n",2)), silent = TRUE)[1]
+	em <- try(variable(matrix(1:4,2,2), rep("n",2), "square.matrix"), silent = TRUE)[1]
 	
-	expect_that(em,equals("Error in as.data.list.default(x, match.dimids = list(dimids), drop = FALSE) : \n  the dimensions of replication for\neach variable must be different\nfrom each other\n"))
+	expect_that(em,equals("Error in as.data.list.default(x, dimids, match.dimids, check = check,  : \n  the dimensions of replication for\neach variable must be different\nfrom each other\n"))
 
 })
 
 test_that("zombie factors in the dimid columns are handled appropriately with dlcast (test due to a reviewer of the JSS manuscript)",{
+	library(multitable)
 	
 	x <- data.frame(
 		samples = paste("Sample", c(1,1,2,2,3,4), sep="."),
@@ -326,4 +327,13 @@ test_that("zombie factors in the dimid columns are handled appropriately with dl
 	dlcast(list(x,samp,taxa), c("samples","species"), fill=c(0,NA,NA), placeholders = "NONE")
 	expect_that(levels(x$species)[-1], equals(dimnames(dl)[[2]]))
 
+})
+
+test_that("variables created with variable are named correctly",{
+	library(multitable)
+
+	A <- 1:2
+	dl <- variable(A, "sites")
+	
+	expect_that(names(dl), equals("A"))
 })

@@ -8,13 +8,13 @@ Create simple data lists
 These functions create data lists with a single variable (\code{variable}) or several variables with identical dimensions of replication (\code{variableGroup}).
 }
 \usage{
-variable(name, x, dimids)
+variable(x, dimids, name)
 variableGroup(x, dimids)
 }
 \arguments{
-  \item{name}{Character string giving the name of the variable}
   \item{x}{For \code{variable}, the variable (vector, matrix, or array); for \code{variableGroup}, a \code{\link{data.frame}} or \code{\link{list}} with the variables in the group.}
   \item{dimids}{Character vector of identifiers for the dimensions of replication of the variable(s).}
+  \item{name}{Character string giving the name of the variable}
 }
 \value{A \code{\link{data.list}} object.}
 \seealso{
@@ -24,13 +24,13 @@ To create more complex data lists see:  \code{\link{data.list}}; \code{\link{as.
 }
 \examples{
 ##
-variable("a variable", runif(5), "a dimension")
+variable(runif(5), "a dimension", "a variable")
 
 ## stringing variables together using the + operator
-variable("A", matrix(runif(15), 5, 3), c("n","m")) + 
-variable("B", letters[1:3], "m") + 
-variable("C", runif(5), "n") + 
-variable("D", array(runif(15*4), c(3,5,4)), c("m","n","p")) +
+variable(matrix(runif(15), 5, 3), c("n","m"), "A") + 
+variable(letters[1:3], "m", "B") + 
+variable(runif(5), "n", "C") + 
+variable(array(runif(15*4), c(3,5,4)), c("m","n","p"), "D") +
 variableGroup(data.frame(a = runif(5), b = runif(5)), "n") + 
 variableGroup(list(
 	c = matrix(runif(20), 4, 5),
