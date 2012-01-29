@@ -84,7 +84,9 @@ dlcast <- function(x, dimids, fill=rep(NA,length(x)), placeholders){
 # return a vector with the unique names in the columns of x
 # with names in dimsi
 get.dim.names <- function(dimsi, x){
-	dim.name.list <- lapply(lapply(x,'[[',dimsi),as.character)
+	#dim.name.list <- lapply(lapply(x,'[[',dimsi),as.character)	# old version doesn't work with zombies
+	dim.name.list <- lapply(lapply(lapply(x, '[[', dimsi), as.factor), levels) # works with zombie factors
+	#dim.name.list <- lapply(lapply(x, '[[', dimsi), levels) # doesn't work unless dimids columns are factors
 	unique(unlist(dim.name.list))
 }
 

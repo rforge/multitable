@@ -291,8 +291,39 @@ test_that("taxon names can be sorted without mismatch between taxon names and tr
 
 test_that("data lists with duplicated dimids should fail to be created",{
 	library(multitable)
-	em <- try(variable("square.matrix", matrix(runif(4),2,2), rep("n",2)), silent = TRUE)[1]
+	em <- try(variable("square.matrix", matrix(1:4,2,2), rep("n",2)), silent = TRUE)[1]
 	
 	expect_that(em,equals("Error in as.data.list.default(x, match.dimids = list(dimids), drop = FALSE) : \n  the dimensions of replication for\neach variable must be different\nfrom each other\n"))
+
+})
+
+test_that("zombie factors in the dimid columns are handled appropriately with dlcast (test due to a reviewer of the JSS manuscript)",{
+	
+	x <- data.frame(
+		samples = paste("Sample", c(1,1,2,2,3,4), sep="."),
+		species = c(paste("Species", c(1,1,1,2,3), sep="."), "NONE"),
+		count = c(1,2,10,3,4,0))
+	samp <- data.frame(samples=levels(x$sample), var1=1:2)
+	taxa <- data.frame(species=levels(x$species), var2=c("b","a"))
+	rownames(samp) <- samp$samples
+	rownames(taxa) <- taxa$species
+	
+	levels(x$species) <- c(levels(x$species), "sp.90","sp.91")
+	dl <- dlcast(list(x,samp,taxa), c("samples","species"), fill=c(0,NA,NA), placeholders = "NONE")
+	expect_that(levels(x$species)[-1], equals(dimnames(dl)[[2]]))
+
+	# make sure that it also works when dimid columns are not factors
+	x <- data.frame(
+		samples = c(1,1,2,2,3,4),
+		species = c(paste("Species", c(1,1,1,2,3), sep="."), "NONE"),
+		count = c(1,2,10,3,4,0))
+	samp <- data.frame(samples=1:4, var1=1:2)
+	taxa <- data.frame(species=levels(x$species), var2=c("b","a"))
+	rownames(samp) <- 1:4
+	rownames(taxa) <- taxa$species
+
+	levels(x$species) <- c(levels(x$species), "sp.90","sp.91")
+	dlcast(list(x,samp,taxa), c("samples","species"), fill=c(0,NA,NA), placeholders = "NONE")
+	expect_that(levels(x$species)[-1], equals(dimnames(dl)[[2]]))
 
 })

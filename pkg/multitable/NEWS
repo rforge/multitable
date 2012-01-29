@@ -47,6 +47,11 @@ NEW FEATURES
 	for data lists to add variables to or 
 	subtract variables from a data list.
 
+	zombie factors in dimids columns of 
+	data frames passed to dlcast are now
+	included in the dimensions properly.
+	unit tests added for this function.
+
 	some *slightly* better error messages.
 
 BUG FIXES
