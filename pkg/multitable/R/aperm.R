@@ -28,8 +28,8 @@ function(a, perm, ...){
 	match.dimids <- attr(a,"match.dimids")
 	match.dimids[[bm.a]] <- match.dimids[[bm.a]][perm]
 	l <- as.list(a)
-	l[[bm.a]] <- aperm(l[[bm.a]],perm)
-	as.data.list(l,match.dimids=match.dimids)
+	l[[bm.a]] <- aperm(l[[bm.a]], perm)
+	as.data.list(l, match.dimids=match.dimids, ...)
 }
 
 t.data.list <- function(x) aperm.data.list(x)

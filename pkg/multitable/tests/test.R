@@ -337,3 +337,22 @@ test_that("variables created with variable are named correctly",{
 	
 	expect_that(names(dl), equals("A"))
 })
+
+test_that("automatic variable naming works with variable",{
+	library(multitable)
+	
+	dl <- variable(matrix(runif(1:10), 5, 2), c("n","m"))
+	expect_that(names(dl), equals("matrix.runif(1:10).5.2"))
+})
+
+test_that("mismatched dimensions don't work with data list arithmetic",{
+	library(multitable)
+	em <- try(variable(matrix(runif(10),5,2),c("n","m")) + 
+		variable(runif(6), "n"), silent = TRUE)[1]
+	expect_that(em, equals("Error in Ops.data.list(variable(matrix(runif(10), 5, 2), c(\"n\", \"m\")),  : \n  some shared dimensions do not have the same length in both data lists\n"))
+})
+
+test_that("data list arithmetic always results in a data list",{
+	dl <- variable(letters[1:5],"1") + variable(runif(5),"1")
+	expect_that(class(dl), equals("data.list"))
+})
