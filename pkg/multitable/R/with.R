@@ -37,4 +37,3 @@ within.data.list <- function(data, expr, ...){
 	# convert back to a list), use as.data.list.
 	as.data.list(data, dimids = dimids)
 }
-

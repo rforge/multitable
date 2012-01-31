@@ -6,4 +6,3 @@ function(Y,X,Z,dnames=c("sites","species"),respname="community"){
 	names(dl) <- c(respname,"","")
 	as.data.list(dl,match.dimids = list(dnames,dnames[1],dnames[2]))
 }
-

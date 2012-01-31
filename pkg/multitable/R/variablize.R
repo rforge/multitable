@@ -57,4 +57,3 @@ variablize.data.list <- function(x,...){
 	# concatenate all of the resulting data frames together
 	do.call(data.frame,x)
 }
-

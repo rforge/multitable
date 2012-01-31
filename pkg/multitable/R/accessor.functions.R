@@ -35,4 +35,3 @@ dimnames.data.list <- function(x) dimnames(bm(x))
 	class(x) <- "data.list"
 	return(x)
 }
-

@@ -91,4 +91,3 @@ variableGroup <- function(x, dimids){
 
 dimids <- function(dl)
 	attr(dl, "match.dimids")[[attr(dl, "bm")]]
-
