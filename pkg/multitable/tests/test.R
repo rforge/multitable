@@ -361,7 +361,7 @@ test_that("dlmelt is an inverse of dlcast (up to the order of replicates)",{
 	library(multitable)
 	data(fake.community)
 	
-	fake.community.tortured <- dlcast(dlmelt(fake.community), c("sites","years","species"))
+	fake.community.tortured <- dlcast(dlmelt(fake.community))
 	fake.community.sorted <- fake.community[
 		order(dimnames(fake.community)[[1]]),
 		order(dimnames(fake.community)[[2]]),

@@ -5,13 +5,14 @@
 Cast a list of molten (i.e. long-format) (i.e. database-like) data frames into a data list.
 }
 \usage{
-dlcast(x, dimids, fill, placeholders)
+dlcast(x, dimids, fill, placeholders, ...)
 }
 \arguments{
   \item{x}{A list of long-format data frames}
-  \item{dimids}{See \code{\link{data.list}}}
+  \item{dimids}{See \code{\link{data.list}}.  If missing, a reasonable guess is made, which is the column names shared by all data frames in \code{x}.}
   \item{fill}{A vector the same \code{\link{length}} as \code{x}, giving the value to use for structural missing values for each of the data frames in \code{x}.}
   \item{placeholders}{Character vector giving elements of the \code{dimids} columns that are to be omitted.}.
+  \item{...}{Additional arguments to pass to \code{link{as.data.list}} and \code{\link{data.list}}.}
 }
 \details{
 This is one of several ways to create \code{data.list} objects.  It is useful when the data are stored as several long-format \code{data.frame} objects. For the purposes of \code{dlcast}, a long-format data frame is a data frame with one named column for each variable, one named column for each dimension of replication (called \code{idvar}s in the \code{reshape2} package), and one row for each (possibly multivariate) sample.  Several data frames will allow variables to differ in their dimensions of replication.  In order to combine several data frames into a valid data list, at least one data frame must contain all of the dimensions of replication in all of the data frames.  Each data frame column that corresponds to a dimension of replication must be coercible to \code{\link{factor}}.

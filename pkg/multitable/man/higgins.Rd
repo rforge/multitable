@@ -7,7 +7,7 @@ Stream fish
 \description{
 Real community data.
 }
-\usage{data(croche)}
+\usage{data(higgins)}
 
 \source{
 Higgins 2009.  Aquatic Ecology.

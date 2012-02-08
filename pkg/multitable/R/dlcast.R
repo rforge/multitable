@@ -17,7 +17,7 @@
 #	- at least one data frame must contain all of the dimensions of replication 
 #	  in all of the data frames.
 
-dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders){
+dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders, ...){
 	# if x is a data list already, do nothing
 	if(is.data.list(x)) return(x)
 
@@ -25,13 +25,18 @@ dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders){
 	if(!is.list(x) || is.data.frame(x)) x <- list(x)
 	x <- lapply(x,as.data.frame)
 	
+	# create default dimids
+	xnames <- lapply(x,names)
+	ul.xnames <- unlist(xnames)
+	if(missing(dimids))
+		dimids <- ul.xnames[duplicated(ul.xnames)]
+	
 	# figure out the names of columns that are dimensions
 	# of replication (dims) and the names of columns that
 	# are variables (vars)
-	xnames <- lapply(x,names)
-	dims <- lapply(xnames,intersect,dimids)
-	vars <- setdiff(unlist(xnames),dimids)
-	vars <- lapply(xnames,intersect,vars)
+	dims <- lapply(xnames, intersect, dimids)
+	vars <- setdiff(ul.xnames, dimids)
+	vars <- lapply(xnames, intersect, vars)
 	
 	# cast each data frame into an array with appropirate
 	# dimensions
@@ -49,9 +54,12 @@ dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders){
 		# discussions during a trip he took to montreal.)
 		dim.namesi <- lapply(dims[[i]], get.dim.names, x)
 		full <- mouter(dim.namesi,FUN=paste,sep=".")
-		if(is.null(full)) stop("some tables lack identified replication dimensions")
+		if(is.null(full))
+			stop("some tables lack identified replication dimensions")
 		dfull <- dim(full)
 		if(is.null(dfull)) dfull <- length(full)
+		if(prod(dfull) < nrow(x[[i]]))
+			stop("not enough dimids to specify a data list for these data")
 		
 		# concatenate the replication dimension entries 
 		# in each row of the data frame. these are the
@@ -72,7 +80,7 @@ dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders){
 		names(out[[i]]) <- vars[[i]]
 	}
 	
-	out <- as.data.list(out, match.dimids = dims)
+	out <- as.data.list(out, match.dimids = dims, ...)
 	
 	if(!missing(placeholders))
 		for(i in seq_along(placeholders))
