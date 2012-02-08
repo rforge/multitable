@@ -23,6 +23,7 @@ A data list.
 }
 \seealso{
 For other ways to create \code{data.list} objects:  \code{\link{data.list}}; \code{\link{as.data.list}}; \code{\link{read.multitable}}.
+For an approximate inverse of \code{dlcast}, see \code{\link{dlmelt}}.
 }
 \examples{
 ## a fictitious data set with a fourth-corner problem

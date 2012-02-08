@@ -1,4 +1,4 @@
- #\name{dlcast}
+#\name{dlcast}
 #\description{Cast a list of molten data frames into a data list.}
 #  \item{x}{A list of molten data frames}
 #  \item{dimids}{See \code{\link{data.list}}}
@@ -17,7 +17,7 @@
 #	- at least one data frame must contain all of the dimensions of replication 
 #	  in all of the data frames.
 
-dlcast <- function(x, dimids, fill=rep(NA,length(x)), placeholders){
+dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders){
 	# if x is a data list already, do nothing
 	if(is.data.list(x)) return(x)
 

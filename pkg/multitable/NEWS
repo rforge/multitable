@@ -52,6 +52,9 @@ NEW FEATURES
 	included in the dimensions properly.
 	unit tests added for this function.
 
+	added a dlmelt function, which is an
+	approximate inverse to dlcast.
+
 	some *slightly* better error messages.
 
 BUG FIXES

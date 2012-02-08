@@ -356,3 +356,17 @@ test_that("data list arithmetic always results in a data list",{
 	dl <- variable(letters[1:5],"1") + variable(runif(5),"1")
 	expect_that(class(dl), equals("data.list"))
 })
+
+test_that("dlmelt is an inverse of dlcast (up to the order of replicates)",{
+	library(multitable)
+	data(fake.community)
+	
+	fake.community.tortured <- dlcast(dlmelt(fake.community), c("sites","years","species"))
+	fake.community.sorted <- fake.community[
+		order(dimnames(fake.community)[[1]]),
+		order(dimnames(fake.community)[[2]]),
+		order(dimnames(fake.community)[[3]])
+	]
+	
+	expect_that(fake.community.sorted, equals(fake.community.tortured))
+})
