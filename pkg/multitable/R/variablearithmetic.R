@@ -45,7 +45,9 @@ Ops.data.list <- function(e1, e2){
 		e1 <- unclass(e1)
 		e2 <- unclass(e2)
 		
-		toadd <- !(e2 %in% e1)
+		unique.values <- !(e2 %in% e1)
+		unique.names <- !(names(e2) %in% names(e1))
+		toadd <- mapply('||', unique.values, unique.names)
 		
 		l <- c(e1, e2[toadd])
 		match.dimids <- c(attr(e1, "match.dimids"), attr(e2, "match.dimids")[toadd])
