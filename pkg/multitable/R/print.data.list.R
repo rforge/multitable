@@ -9,7 +9,8 @@ function(x, ...){
 		
 		# get information about the variable
 		subsetdim <- attr(x[[i]],"subsetdim")
-		attr(x[[i]],"subsetdim") <- NULL
+		attr(x[[i]], "subsetdim") <- NULL
+		attr(x[[i]], "contrasts") <- NULL
 		#varname <- varnames(x)[i]	# could be out of the loop?
 		varname <- names(x)[i]
 		
@@ -19,8 +20,9 @@ function(x, ...){
 		cat(paste(varname,":\n",sep=""))
 		cat(rep("-",nchar(varname)),"\n",sep="")
 		
-		# print the variable
-		print(x[[i]])
+		# print the variable (the call to [ is intended to remove attributes)
+		print(do.call(`[`, c(list(x[[i]]), lapply(dim(x[[i]]), seq.int))))
+		#print(x[[i]]) # older version of the above line
 		
 		# print replication dimensions for variable
 		cat("Replicated along:  || ",
@@ -35,3 +37,5 @@ function(x, ...){
 	names(repdim) <- names(subsetdim)
 	print(repdim)
 }
+
+

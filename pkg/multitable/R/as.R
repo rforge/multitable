@@ -316,8 +316,16 @@ not allowed in data lists")
 			if(is.null(dx)) dnx <- names(x[[i]][[j]])
 			else dnx <- dimnames(x[[i]][[j]])
 			if(is.character(x[[i]][[j]])){
+				# where dimensioned factors lose their attributes
+				x.attr <- attributes(x[[i]][[j]])
+				which.other.attr <- !(names(x.attr) %in% c("dim","levels","dimnames","class"))
+				other.attr <- x.attr[which.other.attr]
 				x[[i]][[j]] <- as.factor(x[[i]][[j]])
 				dim(x[[i]][[j]]) <- dx
+				
+				# try to keep attributes (see aperm.factor for similar approach)
+				for(ii in seq_along(other.attr))
+					attr(x[[i]][[j]], names(other.attr)[[ii]]) <- other.attr[[ii]]
 			}
 			if(is.null(dx)){
 				attr(x[[i]][[j]],"dim") <- length(x[[i]][[j]])	
@@ -348,18 +356,27 @@ function(x,bm,repdim){
 
 subsetdim <-
 function(x,bm,repdim){
-	inds <- lapply(x$match.dimids,match,table=x$match.dimids[[bm]])
+	inds <- lapply(x$match.dimids, match, table=x$match.dimids[[bm]])
 	for(i in seq_along(x$x)){
 		ord.inds <- order(inds[[i]])
-		x$x[[i]] <- aperm(x$x[[i]],ord.inds)
+		notfactor <- !is.factor(x$x[[i]])
+		if(notfactor){ # try to keep attributes (see aperm.factor for similar approach)
+			x.attr <- attributes(x$x[[i]])
+			which.other.attr <- !(names(x.attr) %in% c("dim","levels","dimnames","class"))
+			other.attr <- x.attr[which.other.attr]
+		}
+		x$x[[i]] <- aperm(x$x[[i]], ord.inds)
+		if(notfactor) # try to keep attributes (see aperm.factor for similar approach)
+			for(ii in seq_along(other.attr))
+				attr(x$x[[i]], names(other.attr)[[ii]]) <- other.attr[[ii]]
 		x$match.dimids[[i]] <- x$match.dimids[[i]][ord.inds]
 	}
-	inds <- lapply(x$match.dimids,match,table=x$match.dimids[[bm]])
+	inds <- lapply(x$match.dimids, match, table=x$match.dimids[[bm]])
 	nd <- length(repdim)
 	for(i in seq_along(x$x)){
-		attr(x$x[[i]],"subsetdim") <- rep(FALSE,nd)
-		attr(x$x[[i]],"subsetdim")[inds[[i]]] <- TRUE
-		names(attr(x$x[[i]],"subsetdim")) <- x$match.dimids[[bm]]
+		attr(x$x[[i]], "subsetdim") <- rep(FALSE,nd)
+		attr(x$x[[i]], "subsetdim")[inds[[i]]] <- TRUE
+		names(attr(x$x[[i]], "subsetdim")) <- x$match.dimids[[bm]]
 	}
 	return(x)
 }

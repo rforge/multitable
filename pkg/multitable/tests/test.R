@@ -370,3 +370,51 @@ test_that("dlmelt is an inverse of dlcast (up to the order of replicates)",{
 	
 	expect_that(fake.community.sorted, equals(fake.community.tortured))
 })
+
+test_that("dlapply works like apply on each variable",{
+	data(higgins)
+	sum.higgins <- as.list(dlapply(higgins, 1, quantile))[[1]]
+	expect_that(apply(higgins[[1]], 1, quantile), equals(sum.higgins))
+})
+
+test_that("ordered factors survive data list creation",{
+	library(multitable)
+
+	A <- matrix(1:12, 3, 4)
+	B <- ordered(c("a","b","b","a"))
+
+	dl <- data.list(A, B)
+
+	expect_that(is.ordered(dl$B), equals(is.ordered(B)))
+})
+
+test_that("the ordering of ordered factors survive data list creation",{
+	library(multitable)
+	A <- matrix(1:12, 3, 4)
+	B <- ordered(c("a","b","b","a"))
+
+	dl <- data.list(A, B)
+
+	expect_that(is.ordered(dl$B), equals(is.ordered(B)))
+})
+
+test_that("contrasts attached to factors survive data list creation",{
+	library(multitable)
+	A <- matrix(1:12, 3, 4)
+	B <- ordered(c("a","b","b","a"))
+	contrasts(B) <- contrasts(B)
+
+	dl <- data.list(A, B)
+
+	expect_that(is.null(attr(dl$B, "contrasts")), equals(FALSE))
+})
+
+test_that("'ordinatry' attributes survive data list creation",{
+	library(multitable)
+	A <- matrix(1:12, 3, 4)
+	B <- 1:3
+	attr(A, "foo") <- "bar"
+	dl <- data.list(A, B)
+	
+	expect_that(attr(A, "foo"), equals(attr(dl$A, "foo")))
+})
