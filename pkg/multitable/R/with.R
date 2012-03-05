@@ -3,9 +3,6 @@ with.data.list <- function(data, expr, func = "I", ...){
 	eval(substitute(expr), func(data, ...), enclos = parent.frame())
 }
 
-
-
-
 within.data.list <- function(data, expr, ...){
 	
 	# CURRENTLY EXPERIMENTAL -- BETTER TO USE

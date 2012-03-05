@@ -6,6 +6,8 @@ str.data.list <- function(object, give.attr = FALSE, hide.internals = TRUE, ...)
 }
 
 summary.data.list <- function(object, ...){
+	# unclassing is necessary for sapply to
+	# retain the attributes of each variable!
 	x <- unclass(object)
 	return(sapply(x,attr,"subsetdim"))
 }

@@ -21,7 +21,7 @@ Operators for adding (subtracting) the variables in one data list to (from) the 
 Useful with \code{\link{variable}} and \code{\link{variableGroup}}.
 }
 \examples{
-variable(matrix(runif(15), 5, 3), c("n","m"), "A") + 
+variable(matrix(runif(15), 5, 3), c("n", "m"), "A") + 
 	variable(letters[1:3], "m", "B")
 
 data(fake.community)

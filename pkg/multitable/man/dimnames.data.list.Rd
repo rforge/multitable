@@ -22,6 +22,6 @@ dimnames(fake.community)
 dimnames(fake.community)[[1]] <- letters[1:6]
 dimnames(fake.community)
 dimnames(fake.community) <- list(
-	letters[7:12],letters[13:15],letters[16:18])
+	letters[7:12], letters[13:15], letters[16:18])
 dimnames(fake.community)	
 }

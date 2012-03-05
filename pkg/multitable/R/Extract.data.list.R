@@ -1,5 +1,5 @@
 `[.data.list` <-
-function(x,...,drop=TRUE,vextract=TRUE){
+function(x, ..., drop=TRUE, vextract=TRUE){
 	
 	mc <- match.call()
 
@@ -56,9 +56,9 @@ function(x,...,drop=TRUE,vextract=TRUE){
 		return(xdl)
 	}
 	
-	###################################
-	## array-like extraction
-	###################################
+	####################################################
+	## array-like (dimension of replication) extraction
+	####################################################
 	repdim <- dim(x)
 	if(nd!=length(repdim)) stop("incorrect number of dimensions")
 	dim.names <- dimnames(bm(x))
@@ -144,7 +144,7 @@ function(x,...,drop=TRUE,vextract=TRUE){
 `$<-.data.list` <- function(x,i,value){
 	nx <- names(x)
 	if(!any(nx %in% i))
-		stop("can't add variables this way...try using [[ instead of $...and don't forget to specify match.dimids")
+		stop("can't add variables this way...try using [[ instead of $...and don't forget to specify match.dimids or shape")
 	
 	# removing variables by replacing with NULL
 	if(is.null(value)){

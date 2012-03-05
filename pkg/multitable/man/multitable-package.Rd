@@ -46,11 +46,11 @@ summary(fake.community)
 ######################################################
 
 # extract two years of data.
-fake.community[,c("2008","2009"),]
+fake.community[, c("2008", "2009"), ]
 
 # extraction using both numerical and character
 # vectors.
-fake.community[1:3,"1537",1]
+fake.community[1:3, "1537", 1]
 
 # subscripting data lists is designed to be as
 # intuitive as possible to R users.  above are
@@ -66,8 +66,8 @@ fake.community[1:3,"1537",1]
 # transformation occurs much like it would with
 # data frames.
 fake.community$abundance <- log1p(fake.community$abundance)
-fake.community$temperature[,"1537"] <- c(5,10,30,20,-80,-10)	
-fake.community$precipitation[,"1537"] <- c(5,50,75,50,2,7)
+fake.community$temperature[, "1537"] <- c(5, 10, 30, 20, -80, -10)	
+fake.community$precipitation[, "1537"] <- c(5, 50, 75, 50, 2, 7)
 fake.community$body.size["moss"] <- 1
 fake.community
 
@@ -77,14 +77,14 @@ fake.community
 
 # we can pass data lists to lm just as we would pass
 # data frames.
-lm(abundance ~ body.size*temperature, data=fake.community)
-lm(abundance ~ homeotherm*temperature, data=fake.community)
+lm(abundance ~ body.size*temperature, data = fake.community)
+lm(abundance ~ homeotherm*temperature, data = fake.community)
 
 # this works for any function that tries to coerce 
 # data to a data frame, such as the robust linear
 # model function from MASS.
 library("MASS")
-rlm(abundance ~ body.size*temperature, data=fake.community)
+rlm(abundance ~ body.size*temperature, data = fake.community)
 
 ######################################################
 # SECTION 6: Coercing data lists to data frames
@@ -93,13 +93,13 @@ rlm(abundance ~ body.size*temperature, data=fake.community)
 # data frames are easily coerced to data frames via
 # the as.data.frame method for data.list objects.
 fake.community.df <- as.data.frame(fake.community)
-fake.community.df[,-6]
+fake.community.df[, -6]
 
 # therefore, data list objects can easily be passed to
 # any R function accepting a data frame, after they
 # have been converted to a data frame.
 library("lattice")
-xyplot(abundance ~ temperature | body.size, data=fake.community.df)
+xyplot(abundance ~ temperature | body.size, data = fake.community.df)
 
 # for further information about coercing in multitable:
 ?as.data.list
@@ -112,25 +112,25 @@ xyplot(abundance ~ temperature | body.size, data=fake.community.df)
 # a data list.
 abundance <- data.frame(
 	sites=c(
-		"midlatitude","subtropical","tropical","equatorial",
-		"arctic","midlatitude","tropical","equatorial",
+		"midlatitude", "subtropical", "tropical", "equatorial",
+		"arctic", "midlatitude", "tropical", "equatorial",
 		"subtropical"
 	),
-	species=c(rep("capybara",4),rep("moss",4),"vampire"),
-	abundance=c(4,10,8,7,5,6,9,3,1)
+	species=c(rep("capybara", 4),rep("moss", 4), "vampire"),
+	abundance=c(4, 10, 8, 7, 5, 6, 9, 3, 1)
 )
 environment <- data.frame(
 	sites=c(
-		"subarctic","midlatitude","subtropical",
-		"tropical","equatorial"
+		"subarctic", "midlatitude", "subtropical",
+		"tropical", "equatorial"
 	),
-	temperature=c(0,10,20,50,30),
-	precipitation=c(40,20,100,150,200)
+	temperature=c(0, 10, 20, 50, 30),
+	precipitation=c(40, 20, 100, 150, 200)
 )
 trait <- data.frame(
-	species=c("capybara","moss","vampire"),
-	body.size=c(140,5,190),
-	metabolic.rate=c(20,5,0)
+	species=c("capybara", "moss", "vampire"),
+	body.size=c(140, 5, 190),
+	metabolic.rate=c(20, 5, 0)
 )
 abundance
 environment
@@ -143,8 +143,8 @@ trait
 # dlcast how to fill in any structural missing 
 # values.
 dl <- dlcast(list(abundance,environment,trait),
-	dimids=c("sites","species"),
-	fill=c(0,NA,NA)
+	dimids=c("sites", "species"),
+	fill=c(0, NA, NA)
 )
 dl
 
@@ -152,4 +152,5 @@ dl
 ?data.list
 ?as.data.list
 ?read.multitable
+?variable
 }

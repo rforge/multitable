@@ -9,14 +9,14 @@
 These functions are used to read several text files and create a data list from them.
 }
 \usage{
-read.multitable(files, dimids, fill = rep(NA,length(files)), ...)
+read.multitable(files, dimids, fill = rep(NA, length(files)), ...)
 
-read.multicsv(files, dimids, fill = rep(NA,length(files)), ...)
+read.multicsv(files, dimids, fill = rep(NA, length(files)), ...)
 
-read.multidelim(files, dimids, fill = rep(NA,length(files)), ...)
+read.multidelim(files, dimids, fill = rep(NA, length(files)), ...)
 
-read.fourthcorner(community, environment, traits, dimids=c("sites","species"), 
-community.name="abundance", ...)
+read.fourthcorner(community, environment, traits, dimids=c("sites", "species"), 
+community.name = "abundance", ...)
 
 multifile.choose(n)
 }

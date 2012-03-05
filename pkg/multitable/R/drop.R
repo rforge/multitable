@@ -32,7 +32,7 @@ dropdl <- function(x){
 # a drop function for the variables in an unclassed data list.
 # this is primarily a utility function for dropdl.
 # dla stands for data list array
-dropdla <- function(a,todrop){
+dropdla <- function(a, todrop){
 
 	# adjust the subsetdim attribute
 	ssd <- attr(a,"subsetdim")

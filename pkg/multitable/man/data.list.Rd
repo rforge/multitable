@@ -74,30 +74,30 @@ A \code{data.list} object which is a list with one element for each variable pas
 ## shares the same dimensions (in this case 10-by-5 matrices).
 ## We also see here how \code{data.list} automatically converts 
 ## character vectors to factors.
-a1 <- matrix(runif(50),10,5)
-a2 <- matrix(runif(50),10,5)
-a3 <- matrix(runif(50),10,5)
-a <- list(a1,a2,a3)
+a1 <- matrix(runif(50), 10, 5)
+a2 <- matrix(runif(50), 10, 5)
+a3 <- matrix(runif(50), 10, 5)
+a <- list(a1, a2, a3)
 b <- runif(10)
 c <- letters[1:5]
-data.list(a,b,c)
+data.list(a, b, c)
 
 ## Here we illustrate the use of dimension matching by
 ## dimension naming.
-a <- lapply(a,`dimnames<-`,list(letters[1:10],LETTERS[1:5]))
+a <- lapply(a, `dimnames<-`, list(letters[1:10], LETTERS[1:5]))
 names(b) <- letters[1:10]
 names(c) <- LETTERS[1:5]
-data.list(a,b,c)
+data.list(a, b, c)
 
 ## If we want to name the dimension identifiers themselves
 ## we can use \code{dimids}.
-data.list(a,b,c,dimids=c("small letters","large letters"))
+data.list(a, b, c, dimids = c("small letters", "large letters"))
 
 ## Or we could explicitly specify the pattern of dimension
 ## sharing using \code{match.dimids}.
 md <- list(
-	c("small letters","large letters"),
+	c("small letters", "large letters"),
 	"small letters",
 	"large letters")
-data.list(a,b,c,match.dimids=md)
+data.list(a, b, c, match.dimids = md)
 }

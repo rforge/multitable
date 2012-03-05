@@ -2,7 +2,7 @@
 \alias{dropdl}
 \alias{dropl}
 \title{Drop Data List Dimensions}
-\description{Delete the dimensions of a data list with only one level.}
+\description{Delete the dimensions of a data list.}
 \usage{
 dropdl(x)
 

@@ -7,7 +7,10 @@ test_that("repdims are calculated correctly",{
 	data(fake.community)
 	fake.community <- fake.community[-1,,]
 	
-	expect_that(attr(fake.community,"repdim"),equals(c(5,3,3)))
+	repdims <- c(5,3,3)
+	names(repdims) <- multitable:::dimids(fake.community)
+	
+	expect_that(attr(fake.community,"repdim"), equals(repdims))
 })
 
 test_that("logical subscripting too long",{
@@ -25,8 +28,11 @@ test_that("long logical subscripting with 1D data lists",{
 	data(fake.community)
 	fake.community <- fake.community[4:6,drop=FALSE]
 	fake.community <- fake.community[rep(TRUE,4),vextract=FALSE]
+	repdims <- 4
+	names(repdims) <- 'species'
 	
-	expect_that(attr(fake.community,"repdim"),equals(4))
+	
+	expect_that(attr(fake.community,"repdim"),equals(repdims))
 	expect_that(is.na(fake.community[[1]][[4]]),is_true())
 	expect_that(is.na(fake.community[[2]][[4]]),is_true())
 	expect_that(is.na(fake.community[[3]][[4]]),is_true())
@@ -417,4 +423,15 @@ test_that("'ordinatry' attributes survive data list creation",{
 	dl <- data.list(A, B)
 	
 	expect_that(attr(A, "foo"), equals(attr(dl$A, "foo")))
+})
+
+test_that("order of the MARGINs is respected by dlapply",{
+	library(multitable)
+	data(higgins)
+
+	dl <- higgins[1:4,,]
+	dl1 <- dlapply(dl, c(3, 1, 2), I)
+	dl2 <- aperm(dl, c(3, 1, 2))
+	
+	expect_that(dl1, equals(dl2))
 })

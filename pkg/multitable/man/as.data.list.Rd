@@ -42,7 +42,7 @@ factorsTOstrings = FALSE, ...)
   \item{...}{Additional arguments (passed to the default method in \code{as.data.frame.data.list}).}
 }
 \details{
-Ultimately, all functions that create \code{data.list} objects (i.e. \code{\link{data.list}}; \code{\link{dlcast}}; \code{\link{read.multitable}}) are wrappers for \code{as.data.list}.  From a practical perspective the \code{as.data.list} function is very similar to \code{data.list}, with the following principal differences: \itemize{
+Ultimately, all functions that create \code{data.list} objects (i.e. \code{\link{data.list}}; \code{\link{dlcast}}; \code{\link{read.multitable}}; \code{\link{variable}}; \code{\link{variableGroup}}) are wrappers for \code{as.data.list}.  From a practical perspective the \code{as.data.list} function is very similar to \code{data.list}, with the following principal differences: \itemize{
   \item{The \code{as.data.list} function requires that multiple objects be organised in a \code{list} (\code{x}) whereas \code{data.list} uses a \code{...} argument.}
   \item{Like \code{data.frame}, \code{data.list} automatically names variables as \code{\link{character}} versions of the names passed to \code{...}, whereas variables must be named explicitly with \code{as.data.list}.}
 }
@@ -74,38 +74,38 @@ is.array(fake.community$abundance)	# TRUE
 ## \code{data.list} and \code{as.data.list}. compare with 
 ## the similar example in \code{\link{data.list}}. notice
 ## the naming problems with the latter method.
-a1 <- matrix(runif(50),10,5)
-a2 <- matrix(runif(50),10,5)
-a3 <- matrix(runif(50),10,5)
-a <- list(a1,a2,a3)
+a1 <- matrix(runif(50), 10, 5)
+a2 <- matrix(runif(50), 10, 5)
+a3 <- matrix(runif(50), 10, 5)
+a <- list(a1, a2, a3)
 b <- runif(10)
 c <- letters[1:5]
-data.list(a,b,c)
-as.data.list(list(a,b,c))
+data.list(a, b, c)
+as.data.list(list(a, b, c))
 
 ## coercing to a data frame with explicit mold creation
 fake.mold <- data.list.mold(fake.community)
 fake.mold
 as.data.frame(fake.community)
-as.data.frame(fake.community,mold=fake.mold)
+as.data.frame(fake.community, mold = fake.mold)
 
 ## we can coerce a similar data list faster using this
 ## \code{fake.mold} object
 fc.rnd <- fake.community
-fc.rnd$abundance <- fc.rnd$abundance[sample(6),,]
-as.data.frame(fc.rnd,mold=fake.mold)
+fc.rnd$abundance <- fc.rnd$abundance[sample(6), , ]
+as.data.frame(fc.rnd,mold = fake.mold)
 
 ## unless drop=FALSE, simple data lists are immediately
 ## coerced into data frames -- simple data don't require
 ## data lists
 x <- runif(10)
 as.data.list(x)
-as.data.list(x,drop=FALSE)
+as.data.list(x, drop = FALSE)
 
 ## different ways to coerce a data list to a list.
 ## each way can produce slightly different results.
 as.list(fake.community)
-as.list(fake.community,drop.attr=FALSE)
+as.list(fake.community, drop.attr = FALSE)
 unclass(fake.community)
-lapply(fake.community,I)
+lapply(fake.community, I)
 }

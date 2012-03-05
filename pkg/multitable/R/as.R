@@ -2,13 +2,13 @@ is.data.list <-
 function(x) inherits(x, "data.list")
 
 as.data.list <-
-function(x,...) UseMethod("as.data.list")
+function(x, ...) UseMethod("as.data.list")
 
 as.data.list.data.list <- 
-function(x,...) return(x)
+function(x, ...) return(x)
 
 as.data.list.default <-
-function(x,dimids,match.dimids,check = TRUE,drop=TRUE,...){
+function(x, dimids, match.dimids, check = TRUE, drop = TRUE, ...){
 
 	# x really needs to be a list!
 	if((!is.list(x))||is.data.frame(x)) x <- list(x)
@@ -17,10 +17,10 @@ function(x,dimids,match.dimids,check = TRUE,drop=TRUE,...){
 	# for automatically generating the pattern of
 	# dimension sharing between the objects to be
 	# combined into a data list.
-	if(missing(match.dimids)) match.dimids <- make.match.dimids(x,dimids)
+	if(missing(match.dimids)) match.dimids <- make.match.dimids(x, dimids)
 		
 	if(!is.list(match.dimids)) stop("match.dimids must be a list")
-	if(length(x)!=length(match.dimids)) stop(
+	if(length(x) != length(match.dimids)) stop(
 "match.dimids must have the same
 number of elements as the list of
 objects to be combined into a data
@@ -44,7 +44,7 @@ from each other")
 	# this spliting. it then combines the result with
 	# the match.dimids list in a two-element list of
 	# lists (1) x and (2) match.dimids. 
-	x <- split.dfs(x,match.dimids)
+	x <- split.dfs(x, match.dimids)
 	
 	# one of the rules of data lists is that each data
 	# list must have at least one variable that is
@@ -58,13 +58,14 @@ from each other")
 	# the dimensions of a data list (or repdim's) are
 	# simply the dimensions of the benchmark variable.
 	repdim <- dim(x$x[[bm]])
+	names(repdim) <- match.dimids[[bm]]
 	
 	# all data list variables MUST have names, so if
 	# you won't do it...i will. its just good practice
 	# to name your variables. and the check.dims function
 	# that comes next requires it in order to give 
 	# informative error messages.
-	if(is.null(names(x$x))) names(x$x) <- paste("V",seq_along(x$x),sep="")
+	if(is.null(names(x$x))) names(x$x) <- paste("V", seq_along(x$x), sep="")
 
 	# if match.dimids have been specified such that 
 	# the lengths of matched dimensions are not 
@@ -72,7 +73,7 @@ from each other")
 	# the check.dims function will give an informative
 	# error message about which variable might be
 	# causing such a problem.
-	if(check) check.dims(x,bm,repdim)
+	if(check) check.dims(x, bm, repdim)
 
 	# all variables in a data list must have an 
 	# attribute called "subsetdim", which is a
@@ -80,7 +81,7 @@ from each other")
 	# that has TRUE for dimensions along which
 	# it is replicated and FALSE otherwise. the
 	# subsetdim function adds this attribute.
-	x <- subsetdim(x,bm,repdim)
+	x <- subsetdim(x, bm, repdim)
 	
 	# split up match.dimids and x and prepare them
 	# for output.
@@ -91,19 +92,19 @@ from each other")
 	
 	# it is important to make sure that all variables
 	# have the same dimnames for shared dimensions.
-	x <- make.dimnames.consistent(x,bm)
+	x <- make.dimnames.consistent(x, bm)
 	
 	# data lists with only one dimension of replication
 	# are conceptually equivalent to data frames.
 	# therefore, the default behaviour is to formally
 	# convert such data lists to data frames but this
 	# behaviour can be changed via the `drop' argument.
-	if((length(repdim)==1) && drop) return(as.data.frame(x))
+	if((length(repdim) == 1) && drop) return(as.data.frame(x))
 
 	return(x)
 }
 
-make.match.dimids <- function(x,dimids){
+make.match.dimids <- function(x, dimids){
 	# the purpose of this function is to figure out
 	# how the elements in x are related if the
 	# relationships are not specified explicitly in 
@@ -131,8 +132,8 @@ make.match.dimids <- function(x,dimids){
 	# retrieving the names associated with it.
 	# see the comments for get.input.names
 	# for more detail. 
-	innames <- lapply(x,get.input.names)
-	ulinnames <- unlist(innames,recursive=FALSE)
+	innames <- lapply(x, get.input.names)
+	ulinnames <- unlist(innames, recursive=FALSE)
 	
 	# get a logical vector indicating which elements
 	# in x have non-null dimnames.
@@ -149,7 +150,7 @@ make.match.dimids <- function(x,dimids){
 		# is a comparison to make (i.e. the dimnames are not
 		# all unique and there is more than one variable)
 		unique.dimnames <- unique(ulinnames)
-		allunique <- length(unique.dimnames)==length(ulinnames)
+		allunique <- length(unique.dimnames) == length(ulinnames)
 		morethanonevar <- length(x) > 1
 		if(allunique && morethanonevar)
 			stop(
@@ -167,14 +168,14 @@ dimensions with other variables")
 		# 	[1] 1 2
 		# 	$B
 		# 	[1] 1
-		mat.ndims <- lapply(innames,match,unique.dimnames)
+		mat.ndims <- lapply(innames, match, unique.dimnames)
 
 		# now create a vector of the sizes of the indexed
 		# dimensions in mat.ndims (wfr stands for 'which
 		# fully replicated' because the dimensions overall
 		# are equal to the dimensions of a fully replicated
 		# variable -- e.g. benchmark variable)
-		indims.wfr <- sapply(unique.dimnames,length)
+		indims.wfr <- sapply(unique.dimnames, length)
 
 		# check that the dimensions of each element in x 
 		# are fully replicated, when its time to do so
@@ -186,10 +187,10 @@ dimensions with other variables")
 		# dimensions of the elements in x.
 		 
 		# get the dimensions of the elements in x
-		indims <- lapply(x,get.input.dims)
+		indims <- lapply(x, get.input.dims)
 		
 		# find out which one is fully replicated (wfr)
-		wfr <- which.max(sapply(indims,length))
+		wfr <- which.max(sapply(indims, length))
 		
 		# get a vector of the sizes of the data list 
 		# dimensions (compare with indims.wfr in the 
@@ -209,7 +210,7 @@ of the help file for data.list.")
 		}
 		
 		# see the explanation above for mat.ndims
-		mat.ndims <- lapply(indims,match,indims.wfr)
+		mat.ndims <- lapply(indims, match, indims.wfr)
 		
 		# set check to FALSE so that length-based matching
 		# is only tried one time
@@ -217,10 +218,10 @@ of the help file for data.list.")
 	}
 	
 	# make sure the dimension ids (dimids) exist
-	if(missing(dimids)) dimids <- paste("D",seq_along(indims.wfr),sep="")
+	if(missing(dimids)) dimids <- paste("D", seq_along(indims.wfr), sep="")
 	
 	# see ?as.data.list for definition of match.dimids
-	match.dimids <- lapply(mat.ndims,function(ii)dimids[ii])
+	match.dimids <- lapply(mat.ndims, function(ii) dimids[ii])
 	
 	# make sure that match.dimids is fully replicated.
 	# if not, the condition will be evaluated, which
@@ -228,7 +229,7 @@ of the help file for data.list.")
 	# one more time to match the dimids
 	if(check.full.rep(match.dimids) && check){
 		names(x[[1]]) <- dimnames(x[[1]]) <- NULL
-		match.dimids <- make.match.dimids(x,dimids)
+		match.dimids <- make.match.dimids(x, dimids)
 	}
 	
 	##### possible paths through the algorithm: #####
@@ -248,15 +249,27 @@ of the help file for data.list.")
 }
 
 get.input.dims <- function(xi){
-	if(is.null(dim(xi)) & is.atomic(xi)) return(length(xi))
+
+	if(is.null(dim(xi)) & is.atomic(xi))
+		return(length(xi))
+
 	else if(is.recursive(xi) & is.atomic(xi[[1]])){
-		if(is.null(dim(xi[[1]]))) return(length(xi[[1]]))
-		else return(dim(xi[[1]]))
+		
+		if(is.null(dim(xi[[1]])))
+			return(length(xi[[1]]))
+		else
+			return(dim(xi[[1]]))
+
 	}
-	else if(is.recursive(xi)) stop(
+
+	else if(is.recursive(xi))
+		stop(
 "recursive tables must contain only
 atomic elements")
-	else return(dim(xi))
+	
+	else
+		return(dim(xi))
+
 }
 
 get.input.names <- function(xi){
@@ -270,15 +283,25 @@ get.input.names <- function(xi){
 	# (non-data frame) list: work with the first element and extract
 	#						 its names
 	
-	if(is.data.frame(xi)) return(list(rownames(xi)))
-	else if(is.null(dim(xi)) & is.atomic(xi)) return(list(names(xi)))
+	if(is.data.frame(xi))
+		return(list(rownames(xi)))
+		
+	else if(is.null(dim(xi)) & is.atomic(xi))
+		return(list(names(xi)))
+	
 	else if(is.recursive(xi) & is.atomic(xi[[1]])){
-		if(is.null(dim(xi[[1]]))) return(list(names(xi[[1]])))
-		else return(dimnames(xi[[1]]))
+		
+		if(is.null(dim(xi[[1]])))
+			return(list(names(xi[[1]])))
+		else
+			return(dimnames(xi[[1]]))
 	}
-	else if(is.recursive(xi)) stop(
+	
+	else if(is.recursive(xi))
+		stop(
 "recursive tables must contain
 only atomic elements")
+	
 	else return(dimnames(xi))	
 }
 
@@ -287,9 +310,9 @@ function(match.dimids){
 	# return FALSE if match.dimids contains a fully replicated
 	# (e.g. benchmark) variable and TRUE otherwise.
 	
-	mt <- match.dimids[[which.max(sapply(match.dimids,length))]]
-	dims <- lapply(match.dimids,match,table=mt)
-	any(sapply(dims,function(x)any(is.na(x))))
+	mt <- match.dimids[[which.max(sapply(match.dimids, length))]]
+	dims <- lapply(match.dimids, match, table = mt)
+	any(sapply(dims, function(x) any(is.na(x))))
 }
 
 check.unique.dimids <- 
@@ -297,28 +320,43 @@ function(match.dimids) # return FALSE if no duplicated dimids
 	any(unlist(lapply(match.dimids, duplicated)))
 
 split.dfs <-
-function(x,match.dimids){
+function(x, match.dimids){
+	
+	# altered x and match.dimids
 	x.alt <- list()
 	match.dimids.alt <- list()
+	
+	# loop over all data frames in x
 	for(i in seq_along(x)){
+		
+		# all x[[i]] must be lists...
 		if(!is.list(x[[i]])){
 			x[[i]] <- list(x[[i]])
 			names(x[[i]]) <- names(x)[i]
 		}
+		
+		# ...and if they don't have names, name them
 		else if(is.null(names(x[[i]])))
-			names(x[[i]]) <- paste(names(x)[i],seq_along(x[[i]]),sep=".")
+			names(x[[i]]) <- paste(names(x)[i], seq_along(x[[i]]), sep = ".")
+		
+		# loop over all elements of these lists
 		for(j in seq_along(x[[i]])){
+			
 			if(length(x[[i]][[j]])==0)
 				stop(
 "variables with zero length are
 not allowed in data lists")
+			
+			# save the dimensions and dimnames of the variables
+			# to be added back if necessary
 			dx <- dim(x[[i]][[j]])
 			if(is.null(dx)) dnx <- names(x[[i]][[j]])
 			else dnx <- dimnames(x[[i]][[j]])
+			
+			# convert characters to factors
 			if(is.character(x[[i]][[j]])){
-				# where dimensioned factors lose their attributes
 				x.attr <- attributes(x[[i]][[j]])
-				which.other.attr <- !(names(x.attr) %in% c("dim","levels","dimnames","class"))
+				which.other.attr <- !(names(x.attr) %in% c("dim", "levels", "dimnames", "class"))
 				other.attr <- x.attr[which.other.attr]
 				x[[i]][[j]] <- as.factor(x[[i]][[j]])
 				dim(x[[i]][[j]]) <- dx
@@ -327,36 +365,44 @@ not allowed in data lists")
 				for(ii in seq_along(other.attr))
 					attr(x[[i]][[j]], names(other.attr)[[ii]]) <- other.attr[[ii]]
 			}
+			
+			# put names (and maybe dimensions) back
 			if(is.null(dx)){
-				attr(x[[i]][[j]],"dim") <- length(x[[i]][[j]])	
+				attr(x[[i]][[j]], "dim") <- length(x[[i]][[j]])	
 				names(x[[i]][[j]]) <- dnx
 			}
 			else dimnames(x[[i]][[j]]) <- dnx
+		
 		}
-		match.dimids.alt <- c(match.dimids.alt,rep(list(match.dimids[[i]]),length(x[[i]])))
-		x.alt <- c(x.alt,x[[i]])
+		
+		# grow the new data and their match.dimids
+		match.dimids.alt <- c(match.dimids.alt, rep(list(match.dimids[[i]]), length(x[[i]])))
+		x.alt <- c(x.alt, x[[i]])
 	}
-	return(list(x=x.alt,match.dimids=match.dimids.alt))
+	
+	return(list(x = x.alt, match.dimids = match.dimids.alt))
 }
 
 which.fully.replicated <-
 function(x) which.max(sapply(x,function(xi)length(dim(xi))))
 
 check.dims <-
-function(x,bm,repdim){
+function(x, bm, repdim){
 	rdn.bm <- x$match.dimids[[bm]]
 	for(i in seq_along(x$x)[-bm]){
 		for(j in seq_along(x$match.dimids[[i]])){
-			repdimij <- repdim[rdn.bm==x$match.dimids[[i]][j]]
+			repdimij <- repdim[rdn.bm == x$match.dimids[[i]][j]]
 			dimij <- dim(x$x[[i]])[j]
-			if(repdimij!=dimij) stop(paste("incompatible dimensions in",names(x$x)[i]))
+			if(repdimij != dimij) stop(paste("incompatible dimensions in", names(x$x)[i]))
 		}
 	}
 }
 
 subsetdim <-
-function(x,bm,repdim){
-	inds <- lapply(x$match.dimids, match, table=x$match.dimids[[bm]])
+function(x, bm, repdim){
+	
+	inds <- lapply(x$match.dimids, match, table = x$match.dimids[[bm]])
+	
 	for(i in seq_along(x$x)){
 		ord.inds <- order(inds[[i]])
 		notfactor <- !is.factor(x$x[[i]])
@@ -371,7 +417,7 @@ function(x,bm,repdim){
 				attr(x$x[[i]], names(other.attr)[[ii]]) <- other.attr[[ii]]
 		x$match.dimids[[i]] <- x$match.dimids[[i]][ord.inds]
 	}
-	inds <- lapply(x$match.dimids, match, table=x$match.dimids[[bm]])
+	inds <- lapply(x$match.dimids, match, table = x$match.dimids[[bm]])
 	nd <- length(repdim)
 	for(i in seq_along(x$x)){
 		attr(x$x[[i]], "subsetdim") <- rep(FALSE,nd)
@@ -384,21 +430,21 @@ function(x,bm,repdim){
 make.dimnames.consistent <-
 function(x,bm){
 	dimnames(x) <- dimnames(bm(x))
-	if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x),function(di)seq_len(di))
+	if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x), function(di) seq_len(di))
 	return(x)
 }
 
 as.list.data.list <-
-function(x, drop.attr=TRUE, factorsTOstrings=FALSE,...){
+function(x, drop.attr=TRUE, factorsTOstrings=FALSE, ...){
 	if(factorsTOstrings)
 		out <- lapply(x,function(xx)
 			if(is.factor(xx)) as.character(xx) else xx)
 	else out <- unclass(x)
 	if(drop.attr){
-		for(i in seq_along(x)) attr(out[[i]],"subsetdim") <- NULL
-		attr(out,"match.dimids") <- NULL
-		attr(out,"bm") <- NULL
-		attr(out,"repdim") <- NULL
+		for(i in seq_along(x)) attr(out[[i]], "subsetdim") <- NULL
+		attr(out, "match.dimids") <- NULL
+		attr(out, "bm") <- NULL
+		attr(out, "repdim") <- NULL
 	}
 	return(out)
 }
@@ -410,25 +456,25 @@ function(x, row.names = NULL, optional = FALSE, scheme = "repeat", mold, ...){
 	out <- lapply(seq_along(x), function(i) 
 		structure(x[[i]][mold[[i]]], dim = NULL))
 	names(out) <- varnames(x)
-	if(is.null(row.names)) row.names <- attr(mold,"df.rownames")
+	if(is.null(row.names)) row.names <- attr(mold, "df.rownames")
 	as.data.frame(out, row.names = row.names, optional = optional,...)
 }
 
 as.matrix.data.list <- 
 function(x, ...){
-	fac <- mapply("||",sapply(x,is.factor),sapply(x,is.character))
+	fac <- mapply("||", sapply(x, is.factor), sapply(x, is.character))
 	if(all(!fac)||all(fac))
 		return(as.matrix(as.data.frame(x)))
 	x.attr <- attributes(x)
 	x.df <- as.data.frame(x)
 	x.num <- x.df[!fac]
 	x.fac <- x.df[fac]
-	list(x.num=as.matrix(x.num),x.fac=as.matrix(x.fac))
+	list(x.num = as.matrix(x.num), x.fac = as.matrix(x.fac))
 }
 
 data.list.mold <-
 function(x){
-	df.rownames <- as.vector(mouter(dimnames(x),FUN=paste,sep="."))
+	df.rownames <- as.vector(mouter(dimnames(x), FUN=paste, sep = "."))
 	# an alternative to the above line (that reverses the order of the 
 	# dimensions) is:
 	# df.rownames <- big.kronecker(rev(dimnames(x)),FUN=paste,sep=".")
@@ -437,10 +483,10 @@ function(x){
 	xmold <- list()
 	for(i in seq_along(x)){
 		xmold[[i]] <- seq_along(x[[i]])
-		dms <- attr(x[[i]],"subsetdim")
-		prms <- c(which(dms),which(!dms))
-		xmold[[i]] <- aperm(array(xmold[[i]],repdims[prms]),order(prms))
+		dms <- attr(x[[i]], "subsetdim")
+		prms <- c(which(dms), which(!dms))
+		xmold[[i]] <- aperm(array(xmold[[i]], repdims[prms]), order(prms))
 		dim(xmold[[i]]) <- NULL
 	}
-	structure(xmold,df.rownames=df.rownames)
+	structure(xmold, df.rownames = df.rownames)
 }

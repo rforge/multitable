@@ -6,9 +6,9 @@
 \title{Extract or replace parts of a data list}
 \description{Operators acting on data list objects to extract or replace parts.}
 \usage{
-\method{[}{data.list}(x,...,drop=TRUE,vextract=TRUE)
-\method{$}{data.list}(x,i) <- value
-\method{[[}{data.list}(x,i,match.dimids,shape,drop=TRUE) <- value
+\method{[}{data.list}(x, ..., drop = TRUE, vextract = TRUE)
+\method{$}{data.list}(x, i) <- value
+\method{[[}{data.list}(x, i, match.dimids, shape, drop = TRUE) <- value
 }
 \arguments{
   \item{x}{A \code{\link{data.list}} object.}
@@ -16,7 +16,7 @@
   \item{value}{Replacement value.}
   \item{...}{Vectors to subscript the data list.}
   \item{drop}{If TRUE, single dimension data lists that result from subscripting are coerced to data frames (i.e. their replication dimensions are 'dropped').}
-  \item{vextract}{If TRUE, variable extraction is done whenever only a single argument is passed to \code{...}.  If FALSE, variable extraction is not allowed.  Sometimes it is useful to set \code{vextract=FALSE} whenever single-dimension data lists are expecting dimension-wise subscripting.}
+  \item{vextract}{If TRUE, variable extraction is done whenever only a single argument is passed to \code{...}.  If FALSE, variable extraction is not allowed.  Sometimes it is useful to set \code{vextract = FALSE} whenever single-dimension data lists are expecting dimension-wise subscripting.}
   \item{match.dimids}{A character vector supplying the dimids (ids of the replication dimensions) that \code{value} is replicated along, iff \code{i} is a variable name that does not yet exist in the data list, \code{x}.  Ignored if \code{shape} is provided.}
   \item{shape}{A single character string giving the name of an already existing variable in \code{x}, whose dimensions will be used for the new variable, \code{i}.}
 }
@@ -47,14 +47,14 @@ data(fake.community)
 fake.community
 
 ## array-like extraction
-fake.community[1:3,,]
-fake.community["arctic",c("2009","2008"),c(TRUE,TRUE,FALSE)]
+fake.community[1:3, , ]
+fake.community["arctic", c("2009", "2008"), c(TRUE, TRUE, FALSE)]
 
 ## list-like extraction
 fake.community["abundance"]
 fake.community["body.size"]
-fake.community["body.size",drop=FALSE]
-fake.community[c("abundance","body.size")]
+fake.community["body.size", drop = FALSE]
+fake.community[c("abundance", "body.size")]
 fake.community[1:3]
 
 ## assignment
@@ -64,9 +64,9 @@ fake.community$body.size <- fake.community$precipitation <- NULL
 fake.community
 
 ## adding a new variable to an existing data list
-fake.community[["newvar",match.dimids="years"]] <- letters[1:3]
-fake.community[["reallynewvar",shape="metabolic.rate"]] <- runif(3)
-fake.community[["sites",match.dimids="sites"]] <- 
+fake.community[["newvar", match.dimids = "years"]] <- letters[1:3]
+fake.community[["reallynewvar", shape = "metabolic.rate"]] <- runif(3)
+fake.community[["sites", match.dimids = "sites"]] <- 
 	dimnames(fake.community)[[1]]
 fake.community
 }

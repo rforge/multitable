@@ -1,5 +1,5 @@
 dims_to_vars <- function(dl, dimids){
-	all.dimids <- get.dimids(dl)
+	all.dimids <- get.dimids(dl)  # maybe change to dimids instead of get.dimids??
 	if(missing(dimids)) dimids <- all.dimids
 	dim.names <- dimnames(dl)[ match(dimids, all.dimids) ]
 	

@@ -1,30 +1,25 @@
 aperm.factor <-
 function(a, perm, ...){
-	# a stupid workaround for the behaviour of aperm to unclass factors
-	a.dim <- dim(a)
-	a.names <- dimnames(a)
-	a.levels <- attr(a,"levels")
-	a.ord <- is.ordered(a)
-	a.attr <- attributes(a)
-	which.other.attr <- !(names(a.attr) %in% c("dim","levels","dimnames","class"))
-	other.attr <- a.attr[which.other.attr]
 	
+	# a stupid workaround for the behaviour of aperm to unclass factors
+	a.info <- factor.info(a)
+		
 	# this is very important...it makes sure that factor() makes an 
 	# appropriate comparison between the variable and its levels.
-	a <- as(a, mode(a.levels))
+	a <- as(a, mode(a.info$a.levels))
 
-	a <- structure(a, dim = a.dim)
+	a <- structure(a, dim = a.info$a.dim)
 	a <- aperm.default(a, perm, ...)
 	
 	# very important to set levels inside factor() rather than
 	# in structure!!!!
-	a <- structure(factor(a, levels = a.levels, ordered = a.ord),
-		dim = a.dim[perm], dimnames = a.names[perm])
+	a <- structure(factor(a, levels = a.info$a.levels, ordered = a.info$a.ord),
+		dim = a.info$a.dim[perm], dimnames = a.info$a.names[perm])
 	
 	# add all 'other' attributes (i.e. attributes not involved in
 	# being a factor)
-	for(i in seq_along(other.attr))
-		attr(a, names(other.attr)[[i]]) <- other.attr[[i]]
+	for(i in seq_along(a.info$other.attr))
+		attr(a, names(a.info$other.attr)[[i]]) <- a.info$other.attr[[i]]
 
 	return(a)
 }
@@ -41,3 +36,19 @@ function(a, perm, ...){
 }
 
 t.data.list <- function(x) aperm.data.list(x)
+
+factor.info <- function(a){
+	
+	a.attr <- attributes(a)
+	which.other.attr <- !(names(a.attr) %in% c("dim","levels","dimnames","class"))
+	other.attr <- a.attr[which.other.attr]
+	
+	return(list(
+		a.dim = dim(a),
+		a.names = dimnames(a),
+		a.levels = attr(a,"levels"),
+		a.ord = is.ordered(a),
+		a.attr = a.attr,
+		other.attr = other.attr
+	))
+}
