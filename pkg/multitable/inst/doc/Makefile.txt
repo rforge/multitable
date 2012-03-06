@@ -1,4 +1,0 @@
-all:  multitable.pdf
-multitable.pdf : multitable.tex
-	texi2dvi --pdf --clean multitable.tex
-	-rm -f multitable-*.pdf
