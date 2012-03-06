@@ -15,7 +15,6 @@ files <- paste("Croche",c("abundance","environment","timescales","traits"),"LONG
 setwd("/users/stevenwalker/documents/manuscripts/bilinear/data/beatrix/")
 croche <- read.multicsv(files,c("time","basin","taxon"))
 
-
 #########################
 # MANIPULATE DATA:
 # 
