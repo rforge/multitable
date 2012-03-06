@@ -55,6 +55,10 @@ NEW FEATURES
 	added a dlmelt function, which is an
 	approximate inverse to dlcast.
 
+	added a dlapply function, which is a
+	multiple-table generalisation of the
+	standard apply function in base R.
+
 	some *slightly* better error messages.
 
 BUG FIXES
