@@ -20,6 +20,9 @@ function(x, ...){
 		cat(paste(varname,":\n",sep=""))
 		cat(rep("-",nchar(varname)),"\n",sep="")
 		
+		# if dimnames are named, delete the names to stop from too much printing
+		names(dimnames(x[[i]])) <- NULL
+		
 		# print the variable (the call to [ is intended to remove attributes)
 		print(do.call(`[`, c(list(x[[i]]), lapply(dim(x[[i]]), seq.int), list(drop = FALSE))))
 		#print(x[[i]]) # older version of the above line
