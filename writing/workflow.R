@@ -94,11 +94,15 @@ fm.df <- function(...) as.data.frame(fm.dl(...))
 
 setwd("/users/stevenwalker/documents/multitable/multitable/writing/")
 
-croche.lme <- lme(sqrt.abundance ~ -1 + I(scaled.Length^2),
+croche.lme <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
 	data = as.data.frame(croche),
 	random = ~ scaled.week + I(scaled.week^2) | taxon,
 	weights = varIdent(form = ~ 1 | taxon),
 	method = "ML")
+
+croche.lme2 <- update(croche.lme, fixed. = . ~ . + scaled.Length:scaled.week)
+
+anova(croche.lme, croche.lme2) # p = 0.1395 -- no interaction effect
 
 croche[["fitted.lme", shape = "abundance"]] <- 
 	structure(fitted(croche.lme), dim = c(10,12), names = NULL, label = NULL)
@@ -109,20 +113,19 @@ ggplot(as.data.frame(croche)) +
 	facet_wrap( ~ taxonlength, ncol = 3) + 
 	geom_point(aes(week, I(sqrt.abundance^2), group = taxon)) + 
 	stat_smooth(aes(week, I(fitted.lme^2)), n = 100, se = FALSE, colour = 'black', alpha = 0.5, geom = 'line') + 
+	#geom_point(aes(week, I(fitted.lme^2), group = taxon), colour = 'blue') + 
 	scale_y_continuous("Abundance", trans = 'sqrt') + 
 	scale_x_continuous("Julian day", breaks = c(180, 220, 260, 300))
-ggsave("randomeffectsfit.pdf",
-	height = 7, width = 6.5)
+ggsave("randomeffectsfit.pdf", height = 7, width = 6.5)
 
 clme <- fm.df(croche.lme, "lme")
 ggplot(clme) +
 	facet_wrap( ~ tax, ncol = 3) +
 	geom_abline(slope = 0, intercept = 0, alpha = 0.5) +
-	geom_point(aes(fit, res)) +
+	geom_line(aes(fit, res)) +
 	scale_x_continuous("Fitted values") +
 	scale_y_continuous("Normalised residuals", breaks = c(-1, 0, 1, 2))
-ggsave("randomeffectsresiduals.pdf",
-	height = 7, width = 6.5)
+ggsave("randomeffectsresiduals.pdf", height = 7, width = 6.5)
 
 #########################
 # FIXED EFFECTS MODELS:
@@ -153,8 +156,7 @@ ggplot(fms.df) +
 	scale_x_continuous("Fitted values") +
 	scale_y_continuous("Residuals") + 
 	scale_shape_manual("Taxon (length, mm)", values = 1:12)
-ggsave("fixedeffectsresiduals.pdf",
-	height = 6, width = 6.5)
+ggsave("fixedeffectsresiduals.pdf", height = 6, width = 6.5)
 
 
 #########################
@@ -175,7 +177,7 @@ croche[["cwm.lme.sd", shape = "cwm.lme"]] <- as.vector(sqrt((partfirstderivs^2) 
 cwmdf <- rbind(
 	data.frame(typ = "lin", cwm = lm(cwm ~ week, dropdl(croche[,1]))$fitted, week = croche$week),
 	#data.frame(typ = "quad", cwm = lm(cwm ~ week + I(week^2), dropdl(croche[,1]))$fitted, week = croche$week),
-	data.frame(typ = "lme", cwm = croche$cwm.lme, week = croche$week)
+	data.frame(typ = "lme", cwm = croche$cwm.lme.corr, week = croche$week)
 )
 
 cnt <- attr(scale(croche$Length), 'scaled:center')
@@ -188,8 +190,42 @@ ggplot(cwmdf) +
 	stat_smooth(aes(week, cwm, linetype = typ), se = FALSE, colour = 'black', alpha = 0.5, geom = 'line') + 
 	scale_x_continuous("Jullian day") +
 	scale_y_continuous("Community-weighted mean body length (mm)") + 
-	scale_linetype("Predictive model", labels = c("Linear","Hierarchical"), breaks = c("lin","lme")) + 
+	scale_linetype("Predictive model", labels = c("Summarised data model","Full data model"), breaks = c("lin","lme")) + 
 	geom_point(aes(week, cwm.unscaled), data = as.data.frame(dropdl(croche[,1]))) + 
 	geom_abline(slope = 0, intercept = min(croche$Length), size = 1)
-ggsave("cwmfits.pdf",
-	height = 4.5, width = 6.5)
+ggsave("cwmfits.pdf", height = 4.5, width = 6.5)
+
+
+
+
+vc <- sapply(getVarCov(croche.lme, type = 'conditional', individuals = 1:12), diag)
+pd <- matrix(predict(croche.lme, level = 1), 10, 12)
+dimnames(pd) <- dimnames(vc)
+matrix(rnorm(10*12, sd = sqrt(vc)), 10, 12)
+
+
+fitted(glm(abundance ~ -1 + I(scaled.Length^2) + (1 + scaled.week + I(scaled.week^2)):taxon, croche, family = quasipoisson))^2
+
+
+
+#########################
+# GLS MODEL FITS:
+#
+# 
+#########################
+
+croche.gls <- gls(sqrt.abundance ~ -1 + I(scaled.Length^2) + (taxon:(scaled.week + I(scaled.week^2))),
+	data = as.data.frame(croche),
+	weights = varIdent(form = ~ 1 | taxon))
+
+croche[["fitted.gls", shape = "abundance"]] <- 
+	structure(fitted(croche.gls), dim = c(10,12), names = NULL, label = NULL)
+croche[["fitted.gls.back", shape = "abundance"]] <- 
+	structure(fitted(croche.gls)^2, dim = c(10,12), names = NULL, label = NULL)
+
+ggplot(as.data.frame(croche)) + 
+	facet_wrap( ~ taxonlength, ncol = 3) + 
+	geom_point(aes(week, I(sqrt.abundance^2), group = taxon)) + 
+	stat_smooth(aes(week, I(fitted.gls^2)), n = 100, se = FALSE, colour = 'black', alpha = 0.5, geom = 'line') + 
+	scale_y_continuous("Abundance", trans = 'sqrt') + 
+	scale_x_continuous("Julian day", breaks = c(180, 220, 260, 300))
