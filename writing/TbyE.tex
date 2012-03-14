@@ -3,6 +3,7 @@
 \usepackage{tikz}
 \usepackage{textpos}
 \usepackage{verbatim}
+\usepackage{rotating}
 
 \input{mythesisdefs}
 \renewcommand{\listfigurename}{Figure legends}  % changes the name of the list of figures
@@ -76,15 +77,42 @@ In the control metacommunity (Figure \ref{fig:graphicalmodels}B), beta diversity
 
 The information lost by community-weighted analyses is not just a theoretical issue, but can also have consequences for interpreting real data.  We now illustrate these consequences by analysing the dynamics of the zooplankton community in a basin of Lac Croche, Qu\'{e}bec, Canada.  The densities of twelve zooplankton taxa were sampled ten times throughout the summer of 2008 between ?? and ??.    Talk about definition of `taxa'????
 
-For simplicity of exposition, we focus on the relationship between density, a single gradient, and a single trait.  However, our ideas are applicable to any measure of abundance and occurrence and arbitrarily many gradients and traits.  We use Julian day as our gradient, as lakes undergo many environmental changes throughout the summer such as a deepening thermocline and increasing water temperature.  We use average body length (mm) as our trait, as body size is likely to influence how different zooplankton taxa respond to seasonal environmental changes.  ***NEEDS TO BE MUCH BETTER HERE***.  When referring to this data set specifically, we denote density, Julian day, and body length as \texttt{den}, \texttt{day}, and \texttt{size} respectively.  When referring to a general data set, we denote abundance (or occurrence), gradients, and traits as $y_{ij}$, $x_i$, and $z_j$.
+For simplicity of exposition, we focus on the relationship between density, a single gradient, and a single trait.  However, our ideas are applicable to any measure of abundance and occurrence and arbitrarily many gradients and traits.  We use Julian day as our gradient, as lakes undergo many environmental changes throughout the summer season such as a deepening thermocline and increasing water temperature.  We use average body length (mm) as our trait, as body size is likely to influence how different zooplankton taxa respond to seasonal environmental changes.  ***NEEDS TO BE MUCH BETTER HERE***.  When referring to this data set specifically, we denote density, Julian day, and body length as \texttt{den}, \texttt{day}, and \texttt{size} respectively.  When referring to a general data set, we denote abundance (or occurrence), gradients, and traits as $y_{ij}$, $x_i$, and $z_j$.
 
 %In particular, we show that the response of a community-weighted trait along an environmental gradient can be driven by a single group, indicating that inferred patterns may not have very much relevance at the community level.  We then demonstrate how more detailed modelling of the joint effects of a gradient and a functional trait on species' abundances provides a much clearer picture of community structure.
 
 \subsection{Statistical models}
 
-We consider two types of models: summarised- and full-data-models.  Summarised-data-models use a trait-abundance summary (e.g. community-weighted means; functional diversity indices) as response variables and gradients as explanatory variables.  Full-data-models use abundance (or occurrence) as a response variable and gradients and traits as explanatory variables.  Although full-data models are not based on data summaries, they can be used to make inferences about summaries.  The summary that we focus on in this article is the community-weighted mean.
+Our central argument is that models based on the full (un-summarised) data provide a richer tool for description, explanation, and prediction than models based on data summaries.  Models that are based on summarised data can only be used to explain patterns in these summaries, and not in the full data,
+\begin{equation}
+\begin{tikzpicture}
+  \node (full) at (0,0) {full data};
+  \node (sum) at (5,0) {summarised data};
+  \node (mod) at (9,0) {model};
+  \draw[->] (full) to node [above] {\scriptsize summarisation} (sum);
+  \draw[->] (sum) to [out = 11, in = 160] node [above] {\scriptsize fitting} (mod);
+  \draw[->] (mod) to [out = -160, in = -11] node [below] {\scriptsize explanation} (sum);
+\end{tikzpicture}
+\end{equation}
+However, models based on the full data can potentially be used to explain patterns in either the full data themselves, or in any summary of them,
+\begin{equation}
+\begin{tikzpicture}
+  \node (full) at (0,3.5) {full data};
+  \node (mod) at (4,3.5) {model};
+  \node (sum) at (2,0) {summarised data};
+  \draw[->] (full) to [out = 10, in = 170] node [above] {\scriptsize fitting} (mod);
+  \draw[->] (mod) to [out = -170, in = -10] node [below] {\scriptsize explanation} (full);
+  \draw[->] (full) to node [below, rotate = -60] {\scriptsize summarisation} (sum);
+  \draw[->] (mod) to node [below, rotate = 60] {\scriptsize explanation} (sum);
+\end{tikzpicture}
+\end{equation}
 
-A brief explanation of how full-data-models can make inferences about community-weighted means follows (Appendix ?? gives a more formal treatment).  The community-weighted means, $\bar{z}_i$, depend on the abundances, $y_{ij}$, and the traits, $z_j$ (Eq.??).  A fitted full-data-model results in fitted probability distributions for each of the $y_{ij}$.  These probability distributions induce probability distributions for each of the community-weighted means, because these summaries depend on the $y_{ij}$.  The averages of these distributions for the community-weighted means provide good point estimates of the true community-weighted means.  Therefore, even though full-data-models do not model data summaries directly, they can be used to make inferences about such summaries.
+More specifically, summarised-data-models in the present context use trait-abundance summaries (e.g. community-weighted means; functional diversity indices) as response variables and gradients (e.g. temperature; time since disturbance) as explanatory variables.  The full-data-models use abundance (or occurrence) as a response variable and gradients and traits as explanatory variables.  The summary that we focus on in this article is the community-weighted mean.  Appendix ?? describes the mathematical details of how to use full-data-models to make inferences about community-weighted means.
+
+%Although full-data models are not based on data summaries, they can be used to make inferences about summaries.
+
+%In particular, note that community-weighted means, $\bar{z}_i$, depend on both abundances, $y_{ij}$, and traits, $z_j$ (Eq.??).  A fitted full-data-model results in fitted probability distributions for each of the $y_{ij}$.  These distributions induce subsequent probability distributions for each of the community-weighted means, because these summaries depend on the $y_{ij}$.  The averages of these distributions for the community-weighted means provide point estimates of the true community-weighted means.  Therefore, even though full-data-models do not model data summaries directly, they can be used to make inferences about such summaries.
+
 
 %In trait-based community ecology, it is not sufficient to describe how different taxa respond to gradients.  Instead, we seek to understand what traits are responsible for this interspecific variation in gradient responses.  Therefore, our main causal question of interest is:  what are the effects of interactions between gradients and traits on abundance (or occurrence)?  We begin to explore this question by considering models of the form,
 
@@ -116,7 +144,7 @@ where the $\mathrm{g}_l$ are known functions of the site characteristics and the
 \beta_{lj} \sim \mathcal{N}(0,\sigma_l^2)
 \end{equation}
 
-This model is highly flexible and can account for a wide variety of taxon effects, main gradient effects, main trait effects, and effects on beta diversity.  The main challenge in applying our approach is to identify which of these types of effects are required to adequately model a particular data set (e.g. Lac Croche).  Rather than applying an automatic model selection algorithm (e.g. minimum AIC; step-wise F-tests), we recommend visually examining the residuals of tentative models in order to identify effects that either should or should not be included in the final model (e.g. \citenp{GelmanAndHill2007}; \citenp{ZuurEtAl2009}); ***why this approach????.  We use raw residuals, $y_{ij} - \hat{y}_{ij}$, for fixed effects models (Eqs??) and normalised residuals for mixed-effects models, which have the benefit of being approximately normally distributed with mean zero and standard deviation one for each taxon if model assumptions are met \citep{PinheiroAndBates2000}.  We used the \texttt{R} \texttt{lm} and \texttt{lme} functions for fitting fixed- and mixed-effects models \citep{R2009}.
+This model is highly flexible and can account of a wide variety of taxon effects, main gradient effects, main trait effects, and effects on beta diversity.  The main challenge in applying our approach is to identify which of these types of effects are required to adequately model a particular data set (e.g. Lac Croche).  Rather than applying an automatic model selection algorithm (e.g. minimum AIC; step-wise F-tests), we recommend visually examining the residuals of tentative models in order to identify effects that either should or should not be included in the final model (e.g. \citenp{GelmanAndHill2007}; \citenp{ZuurEtAl2009}); ***why this approach???? (Appendix ??).  We used the \texttt{R} \texttt{lm} and \texttt{lme} functions for fitting fixed- and mixed-effects models \citep{R2009}.
 
 %\subsection{Model identification, fitting, and checking}
 
@@ -126,7 +154,7 @@ This model is highly flexible and can account for a wide variety of taxon effect
 
 \section{Results}
 
-Community-weighted body length was negatively related \texttt{day}, implying that communities became more dominated by smaller-bodied species throughout the season.  This negative relationship was detected by both a summarised-data-model (ordinary linear regression, solid line in Figure ??, $F = 65.1$, $p < 0.001$) and full-data-model (linear mixed-effects model, curved dotted line in Figure ??, model assessment to follow).  Unlike the summarised-data-model, the full-data-model predicts a deceleration of the rate of decline in community-weighted body length.  This deceleration keeps the predicted values greater than the minimum possible community-weighted mean (i.e. the body length of the smallest species, given by the thick horizontal line in Figure \ref{fig:cwmfits}); in contrast, the linear model predicted unrealistically low community-weighted means late in the season.  More importantly, the full-data-model provides a more rich description of the data, as it is not only able to describe the community-weighted mean pattern but also the full non-summarised data (lines in Figure \ref{fig:randomeffectsfit}).  The remaining results explain how this model was selected.
+Community-weighted body length was negatively related to \texttt{day}, implying that communities became more dominated by smaller-bodied species throughout the season.  This negative relationship was detected by both a summarised-data-model (ordinary linear regression, solid line in Figure \ref{fig:cwmfits}, $F = 65.1$, $p < 0.001$) and full-data-model (linear mixed-effects model, curved dotted line in Figure \ref{fig:cwmfits}, conditional-LR $= 137.4$, $p < 0.001$).  Unlike the summarised-data-model, the full-data-model predicts a deceleration of the rate of decline in community-weighted body length.  This deceleration keeps the predicted values greater than the minimum possible community-weighted mean (i.e. the body length of the smallest species, given by the thick horizontal line in Figure \ref{fig:cwmfits}); in contrast, the linear model predicted unrealistically low community-weighted means late in the season.  
 
 \begin{figure}
 \includegraphics{cwmfits.pdf}
@@ -134,34 +162,19 @@ Community-weighted body length was negatively related \texttt{day}, implying tha
 \label{fig:cwmfits}
 \end{figure}
 
+The form of this fitted full-data-model is,
+\begin{equation}
+\mathtt{den} \sim \mathtt{size} + \mathtt{size}^2 + (\mathtt{length} + \mathtt{length}^2 | \mathtt{taxon})
+\end{equation}
+
+More importantly, the full-data-model provides a more rich description of the data, as it is not only able to describe the community-weighted mean pattern but also the full non-summarised data (lines in Figure \ref{fig:randomeffectsfit}).  The data for each species in Figure ?? are plotted in separate panels, which are ordered by body length.  This ordering helps to assess the degree to which body length explains inter-specific variation in gradient responses.  
+
 \begin{figure}
 \includegraphics{randomeffectsfit.pdf}
 \caption{}
 \label{fig:randomeffectsfit}
 \end{figure}
 
-\subsection{Building the full-data-model}
-
-Residual plots revealed assumption violations of six summarised-data-models (Figure \ref{fig:fixedeffectsresiduals}).  Julian \texttt{day} alone explains very little variation in \texttt{den} (Figure \ref{fig:fixedeffectsresiduals}, \texttt{den} $\sim$ \texttt{day}).  In contrast with \texttt{day}, body \texttt{size} alone explains much more variation but there is a strong quadratic trend in the residuals (Figure \ref{fig:fixedeffectsresiduals}, \texttt{den} $\sim$ \texttt{size}), suggesting that moderately sized species are least abundant (Figure \ref{fig:fixedeffectsresiduals}, \texttt{den} $\sim$ \texttt{size} + \texttt{size} $\hat{}$ 2).  Although \texttt{day} explained very little variation on its own, perhaps its interaction with \texttt{size} explains more?  However, the interaction between \texttt{day} and \texttt{size} was only able to explain a little more variation than the quadratic \texttt{size} model (Figure \ref{fig:fixedeffectsresiduals}, compare \texttt{den} $\sim$ \texttt{size} + \texttt{size} $\hat{}$ 2) with \texttt{den} $\sim$ \texttt{day} + (\texttt{size} + \texttt{size} $\hat{}$ 2)).
-
-\begin{figure}
-\includegraphics{fixedeffectsresiduals.pdf}
-\caption{}
-\label{fig:fixedeffectsresiduals}
-\end{figure}
-
-The first four fixed-effects models all show signs of taxon effects.  The most evident such pattern is the fact that colonial rotifers tend to have positive residuals (upward triangles in Figure ??).  Such taxon effects suggest that a model with \texttt{taxon} as a factor will explain variation.  Indeed, a fixed effects model with only \texttt{taxon} as a factor explains much more variation than the other four models (Figure ?, \texttt{abnd} $\sim$ \texttt{taxon}).  However, there are still taxon-effects present in the residuals of this model.  In particular, all taxa do not appear to all have the same residual variance (e.g. the residuals for colonial rotifers are more variable than for the other taxa).  Finally, taxon-specific relationships between \texttt{den} and \texttt{day} explain some more variation, but do not eliminate the need for taxon-specific residual variances (Figure ??).
-
-Taken together, these six fixed-effects models suggest that a better model for these data would include (1) a quadratic effect of \texttt{size}; (2) taxon-specific residuals; and (3) a \texttt{taxon}-specific effect of \texttt{day} (and possibly its square).  We fit a mixed-effects model with these properties to the data (Appendix for details).  The normalised residuals for this model show no obvious violations of its assumptions (Figure \ref{fig:randomeffectsresiduals}), conferring confidence in inferences draw from it.  For example, we infer that there is little evidence of an interaction between \texttt{day} and \texttt{size} \emph{per se}, with more support for interactions between \texttt{day} and other unmeasured (or unconsidered) traits as evidenced by the need to account for taxon-specific \texttt{day} effects.  Furthermore, we failed to reject our selected model against an alternative with a fixed effect of the interaction between \texttt{day} and \texttt{size} (LR $= 2.18$, $p = 0.14$).
-
-%%%%%%%%%%%%%
-% appendix material???
-%%%%%%%%%%%%%
-\begin{figure}
-\includegraphics{randomeffectsresiduals.pdf}
-\caption{}
-\label{fig:randomeffectsresiduals}
-\end{figure}
 
 \section{discussion}
 
@@ -174,6 +187,7 @@ Extensions of the modelling approach (e.g. censoring; link functions; etc.).
 %Simply by looking at the residuals for six fixed-effects models, we have uncovered much information about the data.  
 
 Polar bears!
+
 
 \bibliographystyle{ecology}
 % ***   Set the bibliography file.   ***

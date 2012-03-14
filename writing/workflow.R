@@ -32,10 +32,10 @@ croche <- croche[c("abundance","week","Length")]
 
 # create taxon variables
 croche[["taxon", match.dimids = "taxon"]] <- c(
-	"D cat","D long & dent","Bosmina long","Holo gib",
-	"Cal cope","Cycl cope","nauplii","Cal adults",
-	"Cycl adults","Rot colonial","Rot armoured",
-	"Rot unprotected"
+	"Bosmina long","Cal cope","Cal adults",
+	"Cycl cope","Cycl adults","D cat",
+	"D long & dent","Holo gib","nauplii",
+	"Rot armoured","Rot colonial","Rot unprotected"
 )
 
 # sort the data alphabetically by taxon name
@@ -94,29 +94,119 @@ fm.df <- function(...) as.data.frame(fm.dl(...))
 
 setwd("/users/stevenwalker/documents/multitable/multitable/writing/")
 
-croche.lme <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
+croche.lme.ML <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
 	data = as.data.frame(croche),
 	random = ~ scaled.week + I(scaled.week^2) | taxon,
 	weights = varIdent(form = ~ 1 | taxon),
 	method = "ML")
 
+croche.lme2.ML <- update(croche.lme.ML, fixed. = . ~ . + scaled.Length:scaled.week)
+
+anova(croche.lme.ML, croche.lme2.ML) # p = 0.1395 -- no interaction effect
+
+croche.lm <- lm(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2), croche)
+
+croche.lme <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
+	data = as.data.frame(croche),
+	random = ~ scaled.week + I(scaled.week^2) | taxon,
+	weights = varIdent(form = ~ 1 | taxon),
+	method = "REML")
+
 croche.lme2 <- update(croche.lme, fixed. = . ~ . + scaled.Length:scaled.week)
 
-anova(croche.lme, croche.lme2) # p = 0.1395 -- no interaction effect
-
 croche[["fitted.lme", shape = "abundance"]] <- 
-	structure(fitted(croche.lme), dim = c(10,12), names = NULL, label = NULL)
-croche[["fitted.lme.back", shape = "abundance"]] <- 
-	structure(fitted(croche.lme)^2, dim = c(10,12), names = NULL, label = NULL)
+	structure(croche.lme$fitted[,2], dim = c(10,12), names = NULL, label = NULL)
+croche[["fitted.lme.fix", shape = "abundance"]] <- 
+	structure(croche.lme$fitted[,1], dim = c(10,12), names = NULL, label = NULL)
+croche[["fitted.lme2", shape = "abundance"]] <- 
+	structure(croche.lme2$fitted[,2], dim = c(10,12), names = NULL, label = NULL)
+croche[["fitted.lme2.fix", shape = "abundance"]] <- 
+	structure(croche.lme2$fitted[,1], dim = c(10,12), names = NULL, label = NULL)
+
+
+h <- 0.0001 # amount to displace observations fro computing numerical derivatives
+#displaced.fits <- list()
+#for(i in 1: 120){
+#	print(i)
+#	crochetmp <- croche
+#	crochetmp$sqrt.abundance[i] <- croche$sqrt.abundance[i] + h
+#	displaced.fits[[i]] <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
+#		data = as.data.frame(crochetmp),
+#		random = ~ scaled.week + I(scaled.week^2) | taxon,
+#		weights = varIdent(form = ~ 1 | taxon),
+#		method = "REML")
+#}
+#save(displaced.fits, file = 'displacedfits.rda')
+
+load('displacedfits.rda')
+yhat.disp <- diag(sapply(displaced.fits, fitted))
+yhat <- croche$fitted.lme
+# effective degrees of freedom (note that its 
+# between 2 (number of fixed effects) and 38 (
+# number of random effects))
+edf <- sum((yhat.disp - yhat)/h)
+# effective number of parameters (edf + number of
+# variance parameters (one per taxon))
+ep <- edf + 12
+
+cond.res.vars <- rapply(getVarCov(croche.lme, type = 'conditional', individual = 1:12), diag)
+dev <- -2*sum(dnorm(croche$sqrt.abundance, mean = croche$fitted.lme, sd = sqrt(cond.res.vars), log = TRUE))
+
+croche[['var.null', shape = 'taxon']] <- diag(var(croche$sqrt.abundance))
+croche[['mean.null', shape = 'taxon']] <- apply(croche$sqrt.abundance, 2, mean)
+dev0 <- sum(-2*with(
+	as.data.frame(croche[c('sqrt.abundance','var.null','mean.null')]),
+	dnorm(
+		sqrt.abundance - mean.null, 
+		sd = sqrt(var.null),
+		log = TRUE
+	)
+))
+
+aic <- dev + 2*ep
+aic0 <- dev0 + 4
+LLR <- dev0 - dev
+LLR.edf <- ep - 2
+pchisq(LLR, LLR.edf, lower.tail = FALSE) # rediculously low p-value, as expected
+
+cdf <- as.data.frame(croche)
+refdf <- rbind(
+	data.frame(mdl = 1, typ = "cond", 
+		week = cdf$week, 
+		fit = cdf$fitted.lme,
+		taxonlength = cdf$taxonlength),
+	data.frame(mdl = 1, typ = "marg", 
+		week = cdf$week,
+		fit = cdf$fitted.lme.fix,
+		taxonlength = cdf$taxonlength),
+	data.frame(mdl = 0.5, typ = "cond", 
+		week = cdf$week, 
+		fit = cdf$fitted.lme2,
+		taxonlength = cdf$taxonlength),
+	data.frame(mdl = 0.5, typ = "marg", 
+		week = cdf$week,
+		fit = cdf$fitted.lme2.fix,
+		taxonlength = cdf$taxonlength)
+)
 
 ggplot(as.data.frame(croche)) + 
 	facet_wrap( ~ taxonlength, ncol = 3) + 
 	geom_point(aes(week, I(sqrt.abundance^2), group = taxon)) + 
-	stat_smooth(aes(week, I(fitted.lme^2)), n = 100, se = FALSE, colour = 'black', alpha = 0.5, geom = 'line') + 
-	#geom_point(aes(week, I(fitted.lme^2), group = taxon), colour = 'blue') + 
-	scale_y_continuous("Abundance", trans = 'sqrt') + 
-	scale_x_continuous("Julian day", breaks = c(180, 220, 260, 300))
-ggsave("randomeffectsfit.pdf", height = 7, width = 6.5)
+	geom_line(aes(week, I(fit^2), group = interaction(mdl, typ), 
+		linetype = typ, colour = as.factor(mdl)), 
+		stat = 'smooth', data = refdf, se = FALSE) + 
+	scale_y_continuous("Abundance", trans = 'sqrt', breaks = c(0.00, 0.04, 0.16)) + 
+	scale_x_continuous("Julian day", breaks = c(200, 240, 280)) + 
+	scale_colour_manual('Predictive model', breaks = as.factor(c(0.5, 1)), values = c('red','black'),
+		labels = c(
+			'Unselected (with fixed size-day \ninteraction)', 
+			'\nSelected model (without interaction) \n')) + 
+	scale_linetype('Prediction type', breaks = c('cond','marg'),
+		labels = c(
+			'Conditional (i.e. fixed size and day \neffects, and random taxon effects)', 
+			'\nMarginal (i.e. fixed trait effects only)')) +
+	opts(legend.position = 'top')
+ggsave("randomeffectsfit.pdf", height = 8, width = 5.5)
 
 clme <- fm.df(croche.lme, "lme")
 ggplot(clme) +
@@ -174,11 +264,15 @@ residvars <- sapply(getVarCov(croche.lme, type = "conditional", 1:12),function(x
 croche[["cwm.lme.corr", shape = "cwm.lme"]] <- croche$cwm.lme + as.vector(0.5 * partsecondderivs %*% residvars)
 croche[["cwm.lme.sd", shape = "cwm.lme"]] <- as.vector(sqrt((partfirstderivs^2) %*% residvars))
 
+croche.cwm.lm <- lm(cwm ~ week, dropdl(croche[,1]))
+
 cwmdf <- rbind(
-	data.frame(typ = "lin", cwm = lm(cwm ~ week, dropdl(croche[,1]))$fitted, week = croche$week),
+	data.frame(typ = "lin", cwm = croche.cwm.lm$fitted, week = croche$week),
 	#data.frame(typ = "quad", cwm = lm(cwm ~ week + I(week^2), dropdl(croche[,1]))$fitted, week = croche$week),
 	data.frame(typ = "lme", cwm = croche$cwm.lme.corr, week = croche$week)
 )
+
+anova(croche.cwm.lm)
 
 cnt <- attr(scale(croche$Length), 'scaled:center')
 scl <- attr(scale(croche$Length), 'scaled:scale')
@@ -192,8 +286,9 @@ ggplot(cwmdf) +
 	scale_y_continuous("Community-weighted mean body length (mm)") + 
 	scale_linetype("Predictive model", labels = c("Summarised data model","Full data model"), breaks = c("lin","lme")) + 
 	geom_point(aes(week, cwm.unscaled), data = as.data.frame(dropdl(croche[,1]))) + 
-	geom_abline(slope = 0, intercept = min(croche$Length), size = 1)
-ggsave("cwmfits.pdf", height = 4.5, width = 6.5)
+	geom_abline(slope = 0, intercept = min(croche$Length), size = 1) + 
+	opts(legend.position = 'top')
+ggsave("cwmfits.pdf", height = 4.5, width = 4.5)
 
 
 
