@@ -14,9 +14,12 @@
 %\title{What are we missing with community-weighted traits?}
 %\title{Understanding the variation lost by community-weighted traits}
 %\title{What information is lost by community-weighted mean traits and other trait-based statistical procedures?  The importance of residual analysis}
-\title{Information loss via community-weighted averaging and other trait-based analyses:  how signal + noise modeling can help}
 %\title{Taxon effects and other phenomena left undetected by trait-based community ecology:  a mixed-effects approach}
 %\title{A mixed modelling approach to combining both taxonomic and trait-based information }
+%\title{Information loss via community-weighted averaging and other trait-based analyses:  how signal + noise modeling can help}
+%\title{Alternatives to the `summarise first, ask questions later' approach to trait-based statistical community ecology}
+%\title{What information is lost when trait data are summarised, before they are modelled? The case of community-weighted means}
+\title{Summarising trait data with community-weighted means leads to information loss}
 \runninghead{T-by-E interactions}
 \author{Steven C. Walker}
 \coauthor{Guillaume Gu\'{e}nard, Pierre Legendre, Beatrix Beisner}
@@ -30,31 +33,34 @@
 \raggedright
 \parindent=1.5em
 
-\abstract{
+% Taxa vary in their responses to gradients because they also vary in their functional traits.
+\abstract{Diversity varies along gradients because taxa respond to gradients according to their functional traits.  Functional trait summaries (e.g. community-weighted means; functional diversity indices) are used to study such relationships between traits and gradients.  However, potentially important information is lost when data are summarised in this way.  Here we describe a conceptual graphical model that clarifies how information is obscured by a common type of summarisation:  community-weighted averaging.  This model reveals that community-weighted means will conceal patterns when unconsidered traits are important determinants of species' gradient responses---but that such lost information reappears in models of the full un-summarised data in the form of taxon effects, which represent variation caused by unconsidered traits and neutral historical contingencies.  We describe an example from seasonal zooplankton community dynamics of such information loss: community-weighted body size was strongly related to a seasonal gradient, but mixed-effects models of the full un-summarised data revealed that body size actually explained very little variation in gradient responses.  Strong relationships between trait summaries and gradients do not provide convincing evidence that the traits being summarised are strongly related to the gradients.  Mixed-effects models of un-summarised data are more informative than analyses of summarised data.}
 
-}
+\keywords{community ecology, community-weighted means, functional diversity, functional traits, gradient analysis, information loss, mixed-effects models, taxon effects.}
 
 \section{Introduction}
 
-Perhaps one of community ecology's few laws is that species respond differently to spatial, temporal, and environmental gradients \citep{Gleason1917,Whittaker1967}.  These differences are not entirely due to neutral historical contingencies, but are maintained by corresponding differences in the traits of species (e.g. \citenp{Tilman1982}; \citenp{Reynolds1984}; \citenp{Tilman1988}; \citenp{LegendreEtAl1997}; \citenp{Tilman2004}; \citenp{AckerlyAndCornwell2007}), which implies that gradients can be characterised and understood in terms of the traits of the species that vary along them.  The methodology of community-weighted mean traits is often used for such characterisations (e.g. \citenp{EhleringerAndCooper1988}; \citenp{DiazAndCabido1997}; \citenp{terSteegeEtAl2006}; \citenp{DiazEtAl2007}; \citenp{FortunelEtAl2009}; \citenp{LavorelEtAl2011}; \citenp{SpasojevicAndSuding2011}).  In this approach, traits are averaged over the species found in a series of replicate sites.  This averaging is done in a weighted manner where the weights are measures of the relative abundance or occurrence of the species at each site.  Community-weighted means can be used to address questions such as:  `are cooler sites associated with larger-bodied species on average?' or `are more urbanized sites associated with a higher proportion of invasive species?'.  By relating species characteristics to site characteristics in this way, ecologists are building the empirical foundation necessary for unifying community ecology with mechanistic approaches in physiological ecology and biogeochemistry (e.g. \citenp{McGillEtAl2006}).
+Perhaps one of the few laws in community ecology is that species respond differently to spatial, temporal, and environmental gradients \citep{Gleason1917,Whittaker1967}.  These differences are not entirely due to neutral historical contingencies, but are maintained by corresponding differences in the traits of species (e.g. \citenp{Tilman1982}; \citenp{Reynolds1984}; \citenp{AckerlyAndCornwell2007}), which implies that the ecological relevance of gradients can be characterised and understood in terms of the traits of the species that vary along them.  The methodology of calculating community-weighted mean traits is often used for such characterisations (e.g. \citenp{EhleringerAndCooper1988}; \citenp{terSteegeEtAl2006}; \citenp{DiazEtAl2007}; \citenp{SpasojevicAndSuding2011}).  In this approach, trait values are averaged over the species found in a series of sites.  This averaging is done in a weighted manner where the weights correspond to the relative abundance or other occurrence measure of the species at each site.  Community-weighted means can be used to address questions such as:  `are cooler sites associated with larger-bodied species on average?' or `are more urbanized sites associated with a higher proportion of invasive species?'.  By relating species characteristics to site characteristics in this way, ecologists are building the empirical foundation necessary for unifying community ecology with mechanistic approaches in physiological ecology and biogeochemistry (e.g. \citenp{McGillEtAl2006}).
 
-Still, potentially important information is lost when community-weighted means are used, because averaging removes variation.  The most common way to manage this problem is to use functional and taxonomic diversity indices (e.g. \citenp{PetcheyAndGaston2002}; \citenp{WalkerEtAl2008}) to quantify variation around community-weighted means (e.g. \citenp{DiazEtAl2007}; \citenp{SpasojevicAndSuding2011})---more indices capture more information.  However, this approach raises challenging questions about which indices to use (e.g. \citenp{PodaniAndSchmera2006}; \citenp{PetcheyAndGaston2007}; \citenp{PoosEtAl2009}).  Another approach is to use randomisation tests to directly assess hypotheses about the relationships between species and site characteristics and site-by-species abundance (or occurrence) matrices (e.g. \citenp{DoledecEtAl1996}; \citenp{LegendreEtAl1997}; \citenp{AckerlyAndCornwell2007}; \citenp{DrayAndLegendre2008}; \citenp{CormontEtAl2011}).  However, because this approach specifies only the null and not the alternative model, it risks having low power for detecting the most interesting departures from the null---a form of information loss.
+Still, potentially important information is lost when community-weighted means are used, because averaging removes variation.  The most common way to manage this problem is to use functional and taxonomic diversity indices (e.g. \citenp{PetcheyAndGaston2002}; \citenp{WalkerEtAl2008}) to quantify variation around community-weighted means (e.g. \citenp{DiazEtAl2007}; \citenp{SpasojevicAndSuding2011})---more indices capture more information.  However, this approach raises challenging questions about which indices to use (e.g. \citenp{PodaniAndSchmera2006}; \citenp{PoosEtAl2009}).  Another approach is to use randomisation tests to directly assess hypotheses about the relationships between species and site characteristics and site-by-species abundance (or occurrence) matrices (e.g. \citenp{DoledecEtAl1996}; \citenp{LegendreEtAl1997}; \citenp{AckerlyAndCornwell2007}; \citenp{DrayAndLegendre2008}; \citenp{CormontEtAl2011}).  However, because this approach specifies only the null and not the alternative model, it risks having low power for detecting interesting departures from the null---a form of information loss.
 
-Here we argue that information loss in trait-based community studies can be assessed by fitting statistical models to sites-by-species abundance (or occurrence) matrices, using site and species characteristics as explanatory variables.  The key to this approach is that the models are fitted to the full data, not a summarised version of them.  The fitted abundances (or occurrences) of such full-data-models can also be used to make inferences about community-weighted means and other functional diversity summaries, but with the added benefit of providing diagnostic tools for assessing information lost by summarisation.  Models that are capable of providing such tools have only recently begun to be considered (e.g. \citenp{WebbEtAl2010}; \citenp{IvesAndHelmus2011}).  Here we (1) propose simple conceptual  graphical models that identify the types of information that can be lost via community-weighted averaging and (2) demonstrate how full-data-modelling can clarify what information is lost by trait-based summaries, using data on a zooplankton community in Lac Croche, Qu\'{e}bec, Canada.
+Here we argue that information loss in trait-based community studies can be assessed by fitting statistical models to sites-by-species abundance (or occurrence) matrices, using site and species characteristics as explanatory variables.  The key to this approach is that the models are fitted to the full data, not a summarised version of them.  The fitted abundances (or occurrences) of such full-data-models can also be used to make inferences about community-weighted means and other functional diversity summaries, but with the added benefit of providing diagnostic tools for assessing information lost by summarisation.  Models capable of providing such tools have only recently begun to be considered (e.g. \citenp{WebbEtAl2010}; \citenp{IvesAndHelmus2011}).  Here we (1) use graphical models to identify the types of information that can be lost via community-weighted averaging and (2) demonstrate how full-data-modelling clarifies what information is lost by trait-based summaries, using data on a zooplankton community in Lac Croche, Qu\'{e}bec, Canada.
 
 %  This approach provides a decomposition of the data into signal and noise.  Therefore, one can check the residuals for systematic trends, the existence of which indicates missing information in the signal portion of the model---suggesting model improvements.  
 
 \section{Illustrative graphical models}
+\label{sec:graphmod}
 
 Let $y_{ij}$ be the abundance or occurrence of species $j (= 1, ..., m)$ at site $i (= 1, ..., n)$ and $z_j$ be the value of a particular trait for species $j$.  The community-weighted mean of this trait is,
 \begin{equation} 
 \bar{z}_i = \sum_{j=1}^m \frac{y_{ij} z_j}{y_{ij}}
 \label{eq:cwmdef}
 \end{equation}
-This equation allows us to summarise the $nm$ species abundances and $m$ trait values into $n$ community-weighted means.  Therefore, the original data are composed of $\frac{m(n + 1)}{n} \approx m$ ($\equiv$ species richness) times as many numbers as the summarised data, indicating the potential for information loss via summarisation.  The purpose of this paper is to explore the consequences of this information loss when studying communities along gradients.
-%, and to propose an alternative to community-weighted means.
+This equation allows one to summarise the $nm$ species abundances and $m$ trait values into $n$ community-weighted means.  The original data are therefore composed of $\frac{m(n + 1)}{n} \approx m$ ($\equiv$ species richness) times as many numbers as the summarised data, indicating the potential for information loss via summarisation.
 
-Our key theoretical result is that a single pattern of community-weighted means can arise from otherwise distinguishable metacommunities.  Consider the simulated positive relationship between a community-weighted mean trait and an environmental gradient in Figure \ref{fig:graphicalmodels}A.  This figure consists of seven different curves from different hypothetical metacommunities of eleven species each (Figures \ref{fig:graphicalmodels}B-H), but the curves are so similar that they are indistinguishable.  The first metacommunity (Figure \ref{fig:graphicalmodels}B) serves as a control because it is one of the simplest scenarios consistent with the increasing curve in Figure \ref{fig:graphicalmodels}A.  In this metacommunity, species with large trait values respond positively to the gradient whereas those with small values respond negatively---a trait-gradient interaction.  Still, many other scenarios are also consistent with Figure \ref{fig:graphicalmodels}A.
+%The purpose of this paper is to explore the consequences of this information loss when studying communities along gradients, and to propose an alternative to community-weighted means.
+
+Our key conceptual result is that a single pattern of community-weighted means can arise from otherwise distinguishable communities.  Consider the simulated positive relationship between a community-weighted mean trait and an environmental gradient in Figure \ref{fig:graphicalmodels}A.  This figure consists of seven different curves from different hypothetical metacommunities of eleven species each (Figures \ref{fig:graphicalmodels}B-H), but the curves are so similar that they are indistinguishable.  The first metacommunity (Figure \ref{fig:graphicalmodels}B) serves as a control because it is one of the simplest scenarios consistent with the increasing curve in Figure \ref{fig:graphicalmodels}A.  In this metacommunity, species with large trait values respond positively to the gradient whereas those with small values respond negatively---a trait-gradient interaction.  Still, many other scenarios are also consistent with Figure \ref{fig:graphicalmodels}A.
 
 \begin{figure}
 
@@ -71,69 +77,78 @@ In the control metacommunity (Figure \ref{fig:graphicalmodels}B), there is no ov
 
 In the control metacommunity (Figure \ref{fig:graphicalmodels}B), beta diversity is relatively low (species with positive trait values are abundant at one side of the gradient while those with negative values are abundant at the other); we refer to cases where this is not true as effects on beta diversity.  For example, the metacommunity in Figure \ref{fig:graphicalmodels}G has much higher beta diversity because species have more restricted environmental tolerances.  Figure \ref{fig:graphicalmodels}H gives a more complex example, where species with more extreme trait values have higher abundances.  Effects on beta diversity are not detectable with community-weighted means.
 
+The information lost by community-weighted analyses is not just a theoretical issue, but can also have consequences for interpreting real data.  We now illustrate these consequences by modelling the dynamics of the zooplankton community in a basin of Lac Croche, Qu\'{e}bec, Canada.
+
 \section{Methods}
 
 \subsection{Data}
 
-The information lost by community-weighted analyses is not just a theoretical issue, but can also have consequences for interpreting real data.  We now illustrate these consequences by analysing the dynamics of the zooplankton community in a basin of Lac Croche, Qu\'{e}bec, Canada.  The densities of twelve zooplankton taxa were sampled ten times throughout the summer of 2008 between ?? and ??.    Talk about definition of `taxa'????
+The data were collected as part of a study that experimentally manipulated the thermocline depth of two basins in Lac Croche \citep{CantinEtAl2011}; we use data from an un-manipulated control basin here.  The densities of twelve zooplankton taxa were sampled fortnightly between June 26 and October 29, 2008.  We use an inclusive definition of taxon, meaning any classification of individual organisms.  For simplicity of exposition, we focus on the relationships between density, a single gradient, and a single trait.  However, our ideas are applicable to any measure of abundance and occurrence and arbitrarily many gradients and traits.  We use Julian day as our gradient, as lakes undergo many environmental changes throughout the summer season such as a deepening thermocline and increasing water temperature.  We use average body length (mm) as our trait, as body size is likely to influence how different zooplankton taxa respond to seasonal environmental changes.   %Field methods are described by \citet{CantinEtAl2011}.
 
-For simplicity of exposition, we focus on the relationship between density, a single gradient, and a single trait.  However, our ideas are applicable to any measure of abundance and occurrence and arbitrarily many gradients and traits.  We use Julian day as our gradient, as lakes undergo many environmental changes throughout the summer season such as a deepening thermocline and increasing water temperature.  We use average body length (mm) as our trait, as body size is likely to influence how different zooplankton taxa respond to seasonal environmental changes.  ***NEEDS TO BE MUCH BETTER HERE***.  When referring to this data set specifically, we denote density, Julian day, and body length as \texttt{den}, \texttt{day}, and \texttt{size} respectively.  When referring to a general data set, we denote abundance (or occurrence), gradients, and traits as $y_{ij}$, $x_i$, and $z_j$.
-
-%In particular, we show that the response of a community-weighted trait along an environmental gradient can be driven by a single group, indicating that inferred patterns may not have very much relevance at the community level.  We then demonstrate how more detailed modelling of the joint effects of a gradient and a functional trait on species' abundances provides a much clearer picture of community structure.
+When referring to this data set specifically, we denote density, Julian day, body length, and community-weighted body length as \texttt{den}, \texttt{day}, \texttt{size}, and \texttt{cwm} respectively.  When referring to a general data set, we denote abundance (or occurrence), gradients, traits, and community-weighted traits as $y_{ij}$, $x_i$, $z_j$, and $\bar{z}_i$.  We focus on comparing the relative merits of models based on un-summarised data, $(y_{ij}, x_i, z_j)$ (e.g. Figures \ref{fig:graphicalmodels}B-H), and data that have been summarised by taking community-weighted means, $(\bar{z}_i, x_i)$ (e.g. Figure \ref{fig:graphicalmodels}A).  Although we focus on community-weighted means, our general arguments hold for most summary metrics in trait-based community ecology.
 
 \subsection{Statistical models}
 
-Our central argument is that models based on the full (un-summarised) data provide a richer tool for description, explanation, and prediction than models based on data summaries.  Models that are based on summarised data can only be used to explain patterns in these summaries, and not in the full data,
+We argue that models based on un-summarised data, $(y_{ij}, x_i, z_j)$, provide richer tools for description, explanation, and prediction than models based on data summaries, $(\bar{z}_i, x_i)$.  Models based on  summarised data can be used to explain patterns in these summaries, but not in the full data,
 \begin{equation}
 \begin{tikzpicture}
   \node (full) at (0,0) {full data};
   \node (sum) at (5,0) {summarised data};
   \node (mod) at (9,0) {model};
-  \draw[->] (full) to node [above] {\scriptsize summarisation} (sum);
-  \draw[->] (sum) to [out = 11, in = 160] node [above] {\scriptsize fitting} (mod);
-  \draw[->] (mod) to [out = -160, in = -11] node [below] {\scriptsize explanation} (sum);
+  \draw[->] (full) to node [above]
+    {\scriptsize summarisation} (sum);
+  \draw[->] (sum) to [out = 11, in = 160] node [above]
+    {\scriptsize fitting} (mod);
+  \draw[->] (mod) to [out = -160, in = -11] node [below]
+    {\scriptsize explanation} (sum);
 \end{tikzpicture}
 \end{equation}
 However, models based on the full data can potentially be used to explain patterns in either the full data themselves, or in any summary of them,
 \begin{equation}
 \begin{tikzpicture}
-  \node (full) at (0,3.5) {full data};
-  \node (mod) at (4,3.5) {model};
-  \node (sum) at (2,0) {summarised data};
-  \draw[->] (full) to [out = 10, in = 170] node [above] {\scriptsize fitting} (mod);
-  \draw[->] (mod) to [out = -170, in = -10] node [below] {\scriptsize explanation} (full);
-  \draw[->] (full) to node [below, rotate = -60] {\scriptsize summarisation} (sum);
-  \draw[->] (mod) to node [below, rotate = 60] {\scriptsize explanation} (sum);
+  \node (full) at (0,0) {full data};
+  \node (mod) at (3.5,0) {model};
+  \node (sum) at (8,0) {summarised data};
+  \draw[->] (full) to [out = 10, in = 170] node [above] 
+    {\scriptsize fitting} (mod);
+  \draw[->] (mod) to [out = -170, in = -10] node [below]
+    {\scriptsize explanation} (full);
+  \draw[->] (full) to [out = 30, in = 173] node [above]
+    {\scriptsize summarisation} (sum);
+  \draw[->] (mod) to node [below]
+    {\scriptsize explanation} (sum);
 \end{tikzpicture}
 \end{equation}
+We do not prescribe the specific form that such models should take in any particular trait-based study, as this decision depends on a variety of factors, including data attributes and research goals.  However, we describe a variety of linear model forms that illustrate the important differences between summarised- and full-data-modelling.
 
-More specifically, summarised-data-models in the present context use trait-abundance summaries (e.g. community-weighted means; functional diversity indices) as response variables and gradients (e.g. temperature; time since disturbance) as explanatory variables.  The full-data-models use abundance (or occurrence) as a response variable and gradients and traits as explanatory variables.  The summary that we focus on in this article is the community-weighted mean.  Appendix ?? describes the mathematical details of how to use full-data-models to make inferences about community-weighted means.
+We consider summarised-data-models of the form,
+\begin{equation}
+\hat{\bar{z}}_i = c + \sum_k b_k \mathrm{f}_k (x_i)
+\end{equation}
+where the $\hat{\bar{z}}_i$ are fitted values for the community-weighted means, $\bar{z}_i$ (Eq. \ref{eq:cwmdef}), the $\mathrm{f}_k$ are assumed functions (i.e. transformations) of the gradient, and $c$ and the $b_k$ are coefficients.  For simplicity we assume homogeneous and normal errors.  Note that the abundances, $y_{ij}$, and traits, $z_j$, only enter this model through the community-weighted means, $\bar{z}_i$, which summarise them.
 
-%Although full-data models are not based on data summaries, they can be used to make inferences about summaries.
-
-%In particular, note that community-weighted means, $\bar{z}_i$, depend on both abundances, $y_{ij}$, and traits, $z_j$ (Eq.??).  A fitted full-data-model results in fitted probability distributions for each of the $y_{ij}$.  These distributions induce subsequent probability distributions for each of the community-weighted means, because these summaries depend on the $y_{ij}$.  The averages of these distributions for the community-weighted means provide point estimates of the true community-weighted means.  Therefore, even though full-data-models do not model data summaries directly, they can be used to make inferences about such summaries.
-
-
-%In trait-based community ecology, it is not sufficient to describe how different taxa respond to gradients.  Instead, we seek to understand what traits are responsible for this interspecific variation in gradient responses.  Therefore, our main causal question of interest is:  what are the effects of interactions between gradients and traits on abundance (or occurrence)?  We begin to explore this question by considering models of the form,
-
-For simplicity of exposition, the full-data-models that we consider are linear with one site and one taxon characteristic only.  However, our methods are applicable to generalised linear models with arbitrary numbers of explanatory variables (Appendix).  We begin with fixed-effects models of the form,
+To the contrary, full-data-models are fitted directly to the un-summarised data ($y_{ij}$, $x_i$, $z_j$).  Consider first a fixed-effects model,
 \begin{equation}
 \hat{y}_{ij} = c + 
 	\sum_k b_k \mathrm{f}_k (x_i, z_j)
+\label{eq:fixed}
 \end{equation}
-where the $\hat{y}_{ij}$ are fitted values for the $y_{ij}$, the $\mathrm{f}_k$ are known functions of the site and taxon characteristics, the $b_k$ are coefficients, and the $y_{ij}$ are distributed normally with means $\hat{y}_{ij}$,
+where the $\hat{y}_{ij}$ are fitted values for the $y_{ij}$, the $\mathrm{f}_k$ are assumed functions of the gradient and trait, $c$ and the $b_k$ are coefficients, and the $y_{ij}$ are distributed normally with means $\hat{y}_{ij}$ and variance $\sigma^2$,
 \begin{equation}
 y_{ij} \sim \mathcal{N}(\hat{y}_{ij},\sigma^2)
 \end{equation}
-This model is a generalisation of the trait-based model considered by \citet{CormontEtAl2011} and is known in the statistics literature as a bilinear model \citep{Gabriel1998}.  The \citet{CormontEtAl2011} model is the special case for which $\mathrm{f}_1(x_i, z_j) = x_i$, $\mathrm{f}_2(x_i, z_j) = z_j$, and $\mathrm{f}_3(x_i, z_j) = x_i z_j$.  The third function accounts for standard multiplicative interactions between the site and taxon characteristics.  Note also however that this model can characterise main gradient effects (Fig. ??) by the first function, as well as main trait effects by the second; thus, we view the approach of \citet{CormontEtAl2011} as an advance over standard community-weighted mean trait and functional diversity analyses.  By extending the model to include two other functions, $\mathrm{f}_4(x_i, z_j) = x_i^2$ and $\mathrm{f}_5(x_i, z_j) = x_i^2 z_j$, non-linearities in gradient responses can be modelled and therefore effects on beta diversity (Fig. ??) assessed.
 
-A major shortcoming of this bilinear model is that it does not account for taxon effects (Fig. ??), which will be present whenever there are unmeasured (or unconsidered) traits that explain substantial portions of variation in species' gradient responses (Section ??).  The simplest taxon effects are differences in residual variance among taxa.  We account for these effects by giving each taxon its own residual variance parameter,
+This full-data-model is a generalisation of the trait-based model considered by \citet{CormontEtAl2011} and is known in the statistics literature as a bilinear model \citep{Gabriel1998}.  The \citet{CormontEtAl2011} model is the special case for which $\mathrm{f}_1(x_i, z_j) = x_i$, $\mathrm{f}_2(x_i, z_j) = z_j$, and $\mathrm{f}_3(x_i, z_j) = x_i z_j$.  The third function accounts for standard multiplicative interactions between the site and taxon characteristics.  Note also however that this model can characterise main gradient effects (Fig. \ref{fig:graphicalmodels}E,F) by the first function, as well as main trait effects by the second; thus, we view the approach of \citet{CormontEtAl2011} as an advance over standard community-weighted mean trait and functional diversity analyses.  By extending the model to include two other functions, $\mathrm{f}_4(x_i, z_j) = x_i^2$ and $\mathrm{f}_5(x_i, z_j) = x_i^2 z_j$, effects on beta diversity (Fig. \ref{fig:graphicalmodels}G,H) can be modelled.
+
+%non-linearities in gradient responses can be modelled and therefore effects on beta diversity (Fig. \ref{fig:graphicalmodels}G,H) assessed.
+
+A major shortcoming of this bilinear model is that it does not account for taxon effects (Fig. \ref{fig:graphicalmodels}C,D), which will be present whenever there are unmeasured (or unconsidered) traits that explain substantial portions of variation in species' gradient responses (Section \ref{sec:graphmod}).  The simplest taxon effects are differences in residual variance among taxa.  We account for these effects by giving each taxon its own residual variance parameter, $\sigma_j^2$,
 \begin{equation}
 y_{ij} \sim \mathcal{N}(\hat{y}_{ij},\sigma_j^2)
 \end{equation}
 A more challenging type of taxon effect can be detected as a taxon-specific bias and / or trend in the residuals.  Because these taxon effects result from unmeasured (or unconsidered) traits, they offer little insight for trait-based community ecology.  Furthermore, incorporating fixed taxon effects into the model requires many degrees of freedom (proportional to species richness, $m$).  Still, taxon effects should be accounted for in order to provide reliable estimates of the effects of measured traits.
 
-Mixed effects models (refs?) often provide useful tools to account for nuisance sources of variability (taxon effects in this case), which are economical in degrees of freedom.  Here we modify Eq. ?? as a mixed model by adding random effects of the gradient, with taxon as the grouping factor,
+Mixed effects models (e.g. \citenp{PinheiroAndBates2000}) provide useful tools to account for nuisance sources of variability (taxon effects in this case), which are economical in degrees of freedom.  Here we modify Eq. \ref{eq:fixed} as a mixed model by adding random effects with taxon as the grouping factor,
 \begin{equation}
 \hat{y}_{ij} = c + 
 	\sum_k b_k \mathrm{f}_k (x_i, z_j) + 
@@ -144,50 +159,99 @@ where the $\mathrm{g}_l$ are known functions of the site characteristics and the
 \beta_{lj} \sim \mathcal{N}(0,\sigma_l^2)
 \end{equation}
 
-This model is highly flexible and can account of a wide variety of taxon effects, main gradient effects, main trait effects, and effects on beta diversity.  The main challenge in applying our approach is to identify which of these types of effects are required to adequately model a particular data set (e.g. Lac Croche).  Rather than applying an automatic model selection algorithm (e.g. minimum AIC; step-wise F-tests), we recommend visually examining the residuals of tentative models in order to identify effects that either should or should not be included in the final model (e.g. \citenp{GelmanAndHill2007}; \citenp{ZuurEtAl2009}); ***why this approach???? (Appendix ??).  We used the \texttt{R} \texttt{lm} and \texttt{lme} functions for fitting fixed- and mixed-effects models \citep{R2009}.
+This model is flexible and can account for a variety of taxon effects, main gradient effects, main trait effects, and effects on beta diversity.  The main challenge in applying our full-data approach is to identify which of these types of effects are required to adequately model a particular data set.  Rather than applying an automatic model selection algorithm (e.g. minimum AIC; step-wise F-tests), we recommend visually examining the residuals of tentative models in order to identify effects that either should or should not be included (e.g. \citenp{GelmanAndHill2007}) (Appendix ??).
 
-%\subsection{Model identification, fitting, and checking}
-
-%We use visual inspection of residuals to identify when one of these types of effects is missing from a model.     Missing effects can usually be detected via an examination of the residuals.    
-
-%For inadequate models, we expect to find evidence of violated assumptions in the residuals.
+We selected three models to analyse the data, using the \citet{WilkinsonAndRogers1973} `tilde' notation used in R to describe them.  In the summarised- data-model, \texttt{day} is used to linearly explain \texttt{cwm},
+\begin{equation}
+\mathtt{cwm} \sim \mathtt{day}
+\label{eq:sdm}
+\end{equation}
+The first full-data-model uses both fixed- and random-effects to explain \texttt{den},
+\begin{equation}
+\mathtt{den} \sim \mathtt{size} + \mathtt{size}^2 + (\mathtt{day} + \mathtt{day}^2 | \mathtt{taxon})
+\label{eq:fdmnointeraction}
+\end{equation}
+The fixed effects are linear and quadratic effects of body \texttt{size}; the random effects are linear and quadratic effects of \texttt{day}, with \texttt{taxon} as a grouping factor.  The \texttt{taxon} grouping factor accounts for taxon effects, while the $\mathtt{day^2}$ term accounts for effects on beta diversity.  Although there are no fixed main \texttt{day} effects, there are main \texttt{size} effects.  We also consider a second full-data-model with an extra fixed interaction of \texttt{size} and \texttt{day},
+\begin{equation}
+\mathtt{den} \sim \mathtt{size} + \mathtt{size}^2 + \mathtt{size:day} + (\mathtt{day} + \mathtt{day}^2 | \mathtt{taxon})
+\label{eq:fdminteraction}
+\end{equation}
+We fitted the random-effects models with the \texttt{lme} function in the \texttt{R nlme} package; for fixed-effects models we used \texttt{lm} in the \texttt{stats} package (\citenp{R2009}; \citenp{PinheiroAndBates2000}).  Appendix ?? describes the inferences that we make using these models.
 
 \section{Results}
 
-Community-weighted body length was negatively related to \texttt{day}, implying that communities became more dominated by smaller-bodied species throughout the season.  This negative relationship was detected by both a summarised-data-model (ordinary linear regression, solid line in Figure \ref{fig:cwmfits}, $F = 65.1$, $p < 0.001$) and full-data-model (linear mixed-effects model, curved dotted line in Figure \ref{fig:cwmfits}, conditional-LR $= 137.4$, $p < 0.001$).  Unlike the summarised-data-model, the full-data-model predicts a deceleration of the rate of decline in community-weighted body length.  This deceleration keeps the predicted values greater than the minimum possible community-weighted mean (i.e. the body length of the smallest species, given by the thick horizontal line in Figure \ref{fig:cwmfits}); in contrast, the linear model predicted unrealistically low community-weighted means late in the season.  
+Community-weighted body length, \texttt{cwm}, was negatively and strongly related to Julian \texttt{day}.  This negative relationship was detected using the summarised-data-model (ordinary linear regression, solid line in Figure \ref{fig:cwmfits}, $F = 18.9$, $p = 0.002$) as well as the full-data-models (curved broken lines in Figure \ref{fig:cwmfits}, conditional-LRs $= 116.0, 114.5$, $p < 0.001$ for both models), demonstrating increased dominance by smaller-bodied zooplankton later in the season.  However, this result does not demonstrate that body \texttt{size} and \texttt{day} have a strong causal link, as is revealed next by further analysis of the more informative full-data-models.
 
 \begin{figure}
 \includegraphics{cwmfits.pdf}
-\caption{}
+\caption{The relationship community-weighted mean body length and Julian day, with the fitted values of three models (Eqs. \ref{eq:sdm}, \ref{eq:fdmnointeraction}, \ref{eq:fdminteraction}).}%  Thick horizontal line denotes the minimum possible community-weighted mean body length (i.e. the length of the smallest species).}
 \label{fig:cwmfits}
 \end{figure}
 
-The form of this fitted full-data-model is,
-\begin{equation}
-\mathtt{den} \sim \mathtt{size} + \mathtt{size}^2 + (\mathtt{length} + \mathtt{length}^2 | \mathtt{taxon})
-\end{equation}
+A tight causal link between \texttt{size} and \texttt{day} implies that taxa of similar \texttt{size} respond similarly to the \texttt{day} gradient (i.e. an interaction between \texttt{size} and \texttt{day}).  The estimate of this interaction is $-0.013 \pm 0.017$ ($\pm$ 95\%C.I.), suggesting that smaller taxa tend to be more positively related with \texttt{day} than larger taxa (dotted red lines in Figure \ref{fig:randomeffectsfit}); but the confidence interval overlaps zero, indicating a lack of significance.  Furthermore, the three smallest taxa respond in completely different ways to \texttt{day} (top three panels in Figure \ref{fig:randomeffectsfit}).  This variety of responses implies that traits other than \texttt{size} are important sources of variation in \texttt{den}.  We use random taxon effects to estimate the importance of these unidentified sources, which appear quite important (compare solid versus dashed lines in Figure \ref{fig:randomeffectsfit}) further suggesting a weak causal link between \texttt{size} and \texttt{day}.  However, both \texttt{size} and \texttt{day} have strong effects.  The quadratic \texttt{size} term was significantly positive ($0.072 \pm 0.019$), meaning that intermediate sized taxa are less dense than smaller and larger taxa (dotted lines in Figure \ref{fig:randomeffectsfit}); the taxon-specific relationships between \texttt{day} and \texttt{den} show that \texttt{day} is also an important structuring factor (Figure \ref{fig:randomeffectsfit}).
 
-More importantly, the full-data-model provides a more rich description of the data, as it is not only able to describe the community-weighted mean pattern but also the full non-summarised data (lines in Figure \ref{fig:randomeffectsfit}).  The data for each species in Figure ?? are plotted in separate panels, which are ordered by body length.  This ordering helps to assess the degree to which body length explains inter-specific variation in gradient responses.  
+% although the negative $t$-value suggests that smaller taxa may tend to be more positively related with \texttt{day} than larger taxa (dotted red lines in Figure \ref{fig:randomeffectsfit}).  Thus, a strong relationship between \texttt{cwm} body size and \texttt{day} did not imply 
+
+
+
+%However, these full-data-models  can provide more insight into  useful information in the full data may have been absent in these summaries.
+
+%the use of summarised data may be have obscure the true relationships between \texttt{day}, \texttt{size}, and \texttt{den}.
+
+%Unlike the summarised-data-model, the full-data-models predict a deceleration in the rate of decline in \texttt{cwm}.  This deceleration keeps the predicted values greater than the minimum possible \texttt{cwm} (i.e. the body length of the smallest species---thick horizontal line in Figure \ref{fig:cwmfits}); in contrast, the summarised-data-model predicted \texttt{cwm} values below the minimum, late in the season.  
+
+%   The full-data-models suggest  tight link between \texttt{size} and \texttt{day} that is suggested by the summarised-data-models, as the interaction between \texttt{size} and \texttt{day} is not significant ($t = -1.6$, $p = 0.12$); although the negative $t$-value suggests that smaller taxa may tend to be more positively related with \texttt{day} than larger taxa (dotted red lines in Figure \ref{fig:randomeffectsfit}).  The \texttt{size} trait had a strong quadratic effect on \texttt{den}; in particular, intermediate sized taxa tend to be less dense than smaller and larger taxa (dotted lines in Figure \ref{fig:randomeffectsfit}, $0.072 \pm 0.019$, estimate $\pm$ 95\%C.I.).    Taxon effects explain a large proportion of the variation in the full data (compare solid versus dashed lines in Figure \ref{fig:randomeffectsfit}).  For example, the three smallest taxa (each with \texttt{size} = 0.18mm) respond in completely different ways to \texttt{day}; this is clear evidence of a taxon effect, because traits other than those modelled, must be responsible for this variation.
+
+%The full-data-models fitted the full data well (lines in Figure \ref{fig:randomeffectsfit}).  The data for each species in Figure ?? are plotted in separate panels, which are ordered by body length.  This ordering helps to assess the degree to which body length explains inter-specific variation in gradient responses.  
 
 \begin{figure}
 \includegraphics{randomeffectsfit.pdf}
-\caption{}
+\caption{Density (y-axis) as a function of Julian day (x-axis) for each taxon (different panels).  Taxa are ordered by body length (given in mm in parentheses).  Lines are fitted values from two full-data-models (Eqs. \ref{eq:fdmnointeraction}, \ref{eq:fdminteraction}).  Line colour indicates the model and line type indicates whether or not taxon effects are used to compute the fitted values.}
 \label{fig:randomeffectsfit}
 \end{figure}
 
+\section{Discussion}
 
-\section{discussion}
+It is tempting to interpret community-weighted mean traits as though they were the traits themselves, as opposed to measures of central tendency in those traits among taxa.  Our conceptual and empirical examples expose serious problems with such interpretations.  In particular, the existence of a strong relationship between a gradient and a community-weighted mean trait, does not provide evidence of a strong relationship between the gradient and the trait itself (compare Figures \ref{fig:cwmfits} and \ref{fig:randomeffectsfit}).  Furthermore, any particular relationship between a gradient and a community-weighted trait (or functional diversity index) is consistent with a variety of community structures (Figure \ref{fig:graphicalmodels}), and therefore ignores potentially interesting variation.
 
-If we stopped at the picture of community-weighted mean body length against Julian day, we would have made a story about the relationship between the gradient and body length \emph{per se}.  But, by taking our more detailed approach, we see that there is very little evidence for such a story.  In fact, the data are more consistent with the idea that one small-bodied taxon, colonial rotifers, increases in abundance throughout the season, and this is the primary driver of the decline of community-weighted mean body length.  Furthermore, the variance component due to taxon effects is very large (??).  Finally, after taking account of the taxon effects, the model found no evidence of an interaction between body length and Julian day, but rather that taxa with more extreme body lengths tend to be more abundant.  Thus our approach provides a much clearer picture of what the data are saying (i.e. much less information loss).
+Our results suggest that causal inference in trait-based community studies could be improved by incorporating taxonomic information.  Inferring causality with observational data is marred by the possibility of unobserved confounding factors.  In practice, these issues can be partially addressed by including available surrogates of confounding factors into statistical models.  Here we showed that random taxon effects can provide useful surrogates for unmeasured traits and historical contingencies with non-neglible effects on the responses of taxa to gradients.  Accounting for taxon effects in this way allowed us to demonstrate that the correlation between \texttt{day} and \texttt{cwm} (Figure \ref{fig:cwmfits}), is unlikely to have a simple causal basis.  
 
-Taxon effects may at first seem to be a problem in trait-based community ecology, but we see them as a valuable asset.  The presence of taxon effects provides a useful diagnostic for detecting whether unmeasured (or unconsidered) traits are important drivers of variation in species' responses to environmental, spatial, and temporal gradients.  Compare this situation with the usual case in observational statistics, in which there is no general diagnostic tool for detecting the influence of unmeasured variables---commonly leading to biased estimates of the effects of measured variables (e.g. ).  Not only have we demonstrated that taxon effects can provide an important diagnostic tool, but we have also illustrated how to use taxon effects in mixed-effects models to provide better estimates of the effects of measured traits of species' gradient responses.
+% via an interaction between \texttt{day} and \texttt{size}.   
 
-Extensions of the modelling approach (e.g. censoring; link functions; etc.).
+%This conclusion does not rule out the possibility that \texttt{day} and \texttt{size} are both implicated in a more complex causal, but rather 
+
+
+
+%Considering taxon effects may at first seem antithetical to trait-based ecology, where the goal is to replace taxon effects with trait effects.  Given this goal, we agree that the number of estimated trait effects should be maximised in any given analysis.  However, 
+
+%If all of the relevant traits are measured, it is possible that taxon effects will be unnecessary.  In practice however, it is rarely possible to find ensembles of traits that fully explain among-taxon variation in gradient responses.  Our approach of using taxonomic information as a surrogate for important unmeasured traits will often be useful for providing better estimates of the effects of focal traits of interest.
+
+%We also illustrated the consequences of ignoring taxonomic information in trait-based studies, by describing taxon effects  (Figure \ref{fig:randomeffectsfit}).  Taxon effects may at first seem to be a problem in trait-based community ecology, but we see them as a valuable asset for causal inference; they provide useful diagnostics for detecting whether unmeasured (or unidentified) traits are important sources of variation.
+
+%Although information is lost through community-weighted averaging and functional diversity indexing, these approaches have the advantage of statistical simplicity.  However, we have illustrated that standard software packages are available for more detailed and informative analyses.
+
+Summarised-data-models of functional trait summaries are analogous to ANOVA models based on block averages.  Such models are rarely used because within-block variation can provide useful information about effects at smaller scales (e.g. Simpson's paradox).  Hard work goes into collecting ecological data; ecological models should be based on all of this information.
+
+
+
+
+%If we had analysed the summarised data only (Fig. \ref{fig:cwmfits}), we would have concluded that there is a strong link between the Julian \texttt{day} gradient and body \texttt{size}.  However, by taking our more detailed full-data-modelling approach (Figure ??), we discovered that there is very little evidence for this interpretation.  In particular, the data are more consistent with the idea that one small-bodied taxon, colonial rotifers, increases in abundance throughout the season, and this is the primary driver of the decline of community-weighted mean body length.  Using full-data-models that account for these taxon effects, we found no evidence of an interaction between body \texttt{size} and Julian \texttt{day}.    Thus our approach provides a much clearer picture of what the data are saying (i.e. much less information loss).
+
+
+%  Compare this situation with the usual case in observational statistics, in which there is no general diagnostic tool for detecting the influence of unmeasured variables---commonly leading to biased estimates of the effects of measured variables (e.g. ).  Not only have we demonstrated that taxon effects can provide an important diagnostic tool, but we have also illustrated how to use taxon effects in mixed-effects models to provide better estimates of the effects of measured traits of species' gradient responses.
+
+%Extensions of the modelling approach (e.g. censoring; link functions; etc.).
+
+%Multiple traits and gradients...
+
+%Connections with genetics and random-effects models...
 
 %Simply by looking at the residuals for six fixed-effects models, we have uncovered much information about the data.  
 
-Polar bears!
 
+\section*{Acknowledgements}
+
+We Thank Laura Timms and NSERC...
 
 \bibliographystyle{ecology}
 % ***   Set the bibliography file.   ***
