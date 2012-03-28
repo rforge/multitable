@@ -127,22 +127,26 @@ croche[["fitted.lme2", shape = "abundance"]] <-
 	structure(croche.lme2$fitted[,2], dim = c(10,12), names = NULL, label = NULL)
 croche[["fitted.lme2.fix", shape = "abundance"]] <- 
 	structure(croche.lme2$fitted[,1], dim = c(10,12), names = NULL, label = NULL)
+croche[["fitted.lme3", shape = "abundance"]] <- 
+	structure(croche.lme3$fitted[,2], dim = c(10,12), names = NULL, label = NULL)
+croche[["fitted.lme3.fix", shape = "abundance"]] <- 
+	structure(croche.lme3$fitted[,1], dim = c(10,12), names = NULL, label = NULL)
 
-
-h <- 0.001 # amount to displace observations fro computing numerical derivatives
-displaced.fits <- displaced.fits2 <- displaced.fits3 <- list()
-for(i in 1:120){
-	print(i)
-	crochetmp <- croche
-	crochetmp$sqrt.abundance[i] <- croche$sqrt.abundance[i] + h
-	displaced.fits[[i]] <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
-		data = as.data.frame(crochetmp),
-		random = ~ scaled.week + I(scaled.week^2) | taxon,
-		weights = varIdent(form = ~ 1 | taxon),
-		method = "ML")
-	displaced.fits2[[i]] <- update(displaced.fits[[i]], fixed. = . ~ . + scaled.Length:scaled.week)
-	displaced.fits3[[i]] <- update(displaced.fits[[i]], fixed. = . ~ . + Predator.protection.:scaled.Length:scaled.week)
-}
+h <- 0.0002 # amount to displace observations fro computing numerical derivatives
+#displaced.fits <- displaced.fits2 <- displaced.fits3 <- list()
+#for(i in 1:120){
+#	print(i)
+#	crochetmp <- croche
+#	crochetmp$sqrt.abundance[i] <- croche$sqrt.abundance[i] + h
+#	displaced.fits[[i]] <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
+#		data = as.data.frame(crochetmp),
+#		random = ~ scaled.week + I(scaled.week^2) | taxon,
+#		weights = varIdent(form = ~ 1 | taxon),
+#		method = "ML")
+#	displaced.fits2[[i]] <- update(displaced.fits[[i]], fixed. = . ~ . + scaled.Length:scaled.week)
+#	displaced.fits3[[i]] <- update(displaced.fits[[i]], fixed. = . ~ . + Predator.protection.:scaled.Length:scaled.week)
+#}
+#system("say convergence limit reached")
 save(displaced.fits, file = 'displacedfits.rda')
 save(displaced.fits2, file = 'displacedfits2.rda')
 save(displaced.fits3, file = 'displacedfits3.rda')
@@ -154,20 +158,26 @@ yhat.disp <- diag(sapply(displaced.fits, fitted))
 yhat <- croche$fitted.lme
 yhat.disp2 <- diag(sapply(displaced.fits2, fitted))
 yhat2 <- croche$fitted.lme2
+yhat.disp3 <- diag(sapply(displaced.fits3, fitted))
+yhat3 <- croche$fitted.lme3
 # effective degrees of freedom (note that its 
 # between 2 (number of fixed effects) and 38 (total
 # number of effects))
 edf <- sum((yhat.disp - yhat)/h)
 edf2 <- sum((yhat.disp2 - yhat2)/h)
+edf3 <- sum((yhat.disp3 - yhat3)/h)
 # effective number of parameters (edf + number of
 # variance parameters (one per taxon))
 ep <- edf + 12
 ep2 <- edf2 + 12
+ep3 <- edf3 + 12
 
 cond.res.vars <- rapply(getVarCov(croche.lme, type = 'conditional', individual = 1:12), diag)
 dev <- -2*sum(dnorm(croche$sqrt.abundance, mean = croche$fitted.lme, sd = sqrt(cond.res.vars), log = TRUE))
 cond.res.vars2 <- rapply(getVarCov(croche.lme2, type = 'conditional', individual = 1:12), diag)
 dev2 <- -2*sum(dnorm(croche$sqrt.abundance, mean = croche$fitted.lme2, sd = sqrt(cond.res.vars2), log = TRUE))
+cond.res.vars3 <- rapply(getVarCov(croche.lme3, type = 'conditional', individual = 1:12), diag)
+dev3 <- -2*sum(dnorm(croche$sqrt.abundance, mean = croche$fitted.lme3, sd = sqrt(cond.res.vars3), log = TRUE))
 
 
 
@@ -184,6 +194,7 @@ dev0 <- sum(-2*with(
 
 aic <- dev + 2*ep
 aic2 <- dev2 + 2*ep2
+aic3 <- dev3 + 2*ep3
 aic0 <- dev0 + 4
 LLR <- dev0 - dev
 LLR.edf <- ep - 2
@@ -191,6 +202,9 @@ pchisq(LLR, LLR.edf, lower.tail = FALSE) # rediculously low p-value, as expected
 LLR2 <- dev0 - dev2
 LLR2.edf <- ep2 - 2
 pchisq(LLR2, LLR2.edf, lower.tail = FALSE) # rediculously low p-value, as expected
+LLR3 <- dev0 - dev3
+LLR3.edf <- ep3 - 2
+pchisq(LLR3, LLR3.edf, lower.tail = FALSE) # rediculously low p-value, as expected
 
 
 cdf <- as.data.frame(croche)
