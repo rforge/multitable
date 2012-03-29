@@ -58,7 +58,12 @@ from each other")
 	# the dimensions of a data list (or repdim's) are
 	# simply the dimensions of the benchmark variable.
 	repdim <- dim(x$x[[bm]])
-	names(repdim) <- match.dimids[[bm]]
+	names(repdim) <- x$match.dimids[[bm]] # fixed a bug here by the 'x$'
+										  # previously, for data with a
+										  # 'late' benchmark variable
+										  # without dimnames, 
+										  # match.dimids was an 'older'
+										  # version of x$match.dimids
 	
 	# all data list variables MUST have names, so if
 	# you won't do it...i will. its just good practice
@@ -137,10 +142,19 @@ make.match.dimids <- function(x, dimids){
 	
 	# get a logical vector indicating which elements
 	# in x have non-null dimnames.
-	#notnullnames <- !sapply(innames,is.null) # think this line is a bug...
-	notnullnames <- !sapply(ulinnames,is.null) # that this line fixes???
+	notnullnames <- !sapply(innames,is.null) # think this line is a bug...
+	#notnullnames <- !sapply(ulinnames,is.null) # that this line fixes???
 	
-	if(all(notnullnames) && !is.null(ulinnames)){
+	#if(all(notnullnames) && !is.null(ulinnames)){
+	# fixed a BUG here:  the !is.null(ulinnames) is not necessary,
+	# because ulinnames will never have a NULL first element (b/c
+	# unlist removes NULL elements).  the new condition is better
+	# because if the length of x is different than the length of 
+	# ulinnames, this indicates that either unlist (when creating
+	# ulinnames) or get.input.names (when creating innames) has 
+	# dropped some elements and this means that some of the innames 
+	# were NULL, which is what we want to avoid in this condition.
+	if(all(notnullnames) && (length(x) == length(ulinnames))){
 		# 2a. this condition is evaluated when the dimensions
 		# of the elements in x are 'fully named'
 		# therefore, this is where the algorithm tries

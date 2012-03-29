@@ -3,6 +3,29 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 
 *************************************
 **				   **
+**	multitable version 1.4	   **
+**				   **
+*************************************
+
+BUG FIXES
+
+	the data.list print method in version 1.3 
+	printed unnecessary information about the
+	dimensions of replication.  this has been
+	fixed.
+
+	some fourth-corner problem data sets
+	without dimnames were failing to be 
+	created with data.list. the reason was
+	because the condition indicating that
+	dimnames should be matched (to produce
+	the relationship structure) was TRUE,
+	even though dimnames were not present.
+	this has been fixed and many tests
+	added.
+
+*************************************
+**				   **
 **	multitable version 1.3	   **
 **				   **
 *************************************

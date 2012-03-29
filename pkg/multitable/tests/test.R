@@ -435,3 +435,89 @@ test_that("order of the MARGINs is respected by dlapply",{
 	
 	expect_that(dl1, equals(dl2))
 })
+
+test_that("data.list doesn't fail for standard fourth-corner problems without dim names",{
+	library(multitable)
+	set.seed(1)
+	
+	n <- 4
+	m <- 3
+	p <- 1
+	q <- 2
+
+	X <- matrix(rnorm(n*p), n, p)
+	Z <- matrix(rnorm(m*q), m, q)
+	C <- matrix(rnorm(p*q), p, q)
+
+	Y <- X %*% C %*% t(Z)
+
+	dl1 <- data.list(Y, as.data.frame(X), as.data.frame(Z))
+	dl2 <- data.list(as.data.frame(X), as.data.frame(Z), Y)
+	
+	expect_that(dl1, equals(dl2[c(4, 1, 2, 3)]))
+	
+	dl <- data.list(as.data.frame(X), Y, as.data.frame(Z))
+	dl <- data.list(as.data.frame(Z), Y, as.data.frame(X))
+	
+	X <- rnorm(n)
+	
+	dl1 <- data.list(Y, as.data.frame(X), as.data.frame(Z))
+	dl2 <- data.list(as.data.frame(X), as.data.frame(Z), Y)
+	
+	expect_that(dl1, equals(dl2[c(4, 1, 2, 3)]))
+	
+	dl <- data.list(as.data.frame(X), Y, as.data.frame(Z))
+	dl <- data.list(as.data.frame(Z), Y, as.data.frame(X))
+	
+	Z <- rnorm(m)
+	
+	dl1 <- data.list(Y, as.data.frame(X), as.data.frame(Z))
+	dl2 <- data.list(as.data.frame(X), as.data.frame(Z), Y)
+
+	expect_that(dl1, equals(dl2[c(3, 1, 2)]))
+
+	dl <- data.list(as.data.frame(X), Y, as.data.frame(Z))
+	dl <- data.list(as.data.frame(Z), Y, as.data.frame(X))	
+	
+})
+
+test_that("data.list doesn't fail for standard fourth-corner problems with dim names in Y",{
+	library(multitable)
+	set.seed(1)
+	
+	n <- 4
+	m <- 3
+	p <- 1
+	q <- 2
+
+	X <- matrix(rnorm(n*p), n, p)
+	Z <- matrix(rnorm(m*q), m, q)
+	C <- matrix(rnorm(p*q), p, q)
+
+	Y <- X %*% C %*% t(Z)
+	dimnames(Y) <- list(letters[1:n], letters[1:m])
+
+	dl <- data.list(as.data.frame(X), as.data.frame(Z), Y)	
+})
+
+test_that("data.list doesn't fail for mefa-like data structure (i.e. 4th corner w more than one response matrix)",{
+	library(multitable)
+	set.seed(1)
+	
+	n <- 4
+	m <- 3
+	p <- 1
+	q <- 2
+
+	X <- matrix(rnorm(n*p), n, p)
+	Z <- matrix(rnorm(m*q), m, q)
+	C <- matrix(rnorm(p*q), p, q)
+
+	Y1 <- X %*% C %*% t(Z) + matrix(rnorm(n*m), n, m)
+	Y2 <- X %*% C %*% t(Z) + matrix(rnorm(n*m), n, m)
+
+	dl1 <- data.list(Y1, Y2, as.data.frame(X), as.data.frame(Z))
+	dl2 <- data.list(as.data.frame(X), Y2, as.data.frame(Z), Y1)
+
+	expect_that(dl1, equals(dl2[c(5, 2, 1, 3, 4)]))
+})
