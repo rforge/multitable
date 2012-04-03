@@ -53,7 +53,7 @@ Here we argue that information loss in trait-based community studies can be asse
 
 Let $y_{ij}$ be the abundance or occurrence of species $j (= 1, ..., m)$ at site $i (= 1, ..., n)$ and $z_j$ be the value of a particular trait for species $j$.  The community-weighted mean of this trait is, \newpage
 \begin{equation} 
-\bar{z}_i = \sum_{j=1}^m \frac{y_{ij} z_j}{y_{ij}}
+\bar{z}_i = \frac{\sum_{j=1}^m y_{ij} z_j}{\sum_{j=1}^m y_{ij}}
 \label{eq:cwmdef}
 \end{equation}
 This equation allows one to summarise the $nm$ species abundances and $m$ trait values into $n$ community-weighted means.  The full data are composed of $\frac{m(n + 1)}{n} \approx m$ ($\equiv$ species richness) times as many numbers as the summarised data, indicating the potential for information loss via summarisation.

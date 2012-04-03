@@ -48,6 +48,7 @@ names(croche0) <- c('den', 'day', 'size', 'pp', 'taxon')
 df <- as.data.frame(croche0)
 rownames(df) <- NULL
 head(df, n = 12L)
+tail(df, n = 2L)
 
 # standardize Thermocline.Depth and Length and week
 croche[["scaled.week", shape = "week"]] <- as.vector(scale(croche$week))
@@ -175,89 +176,6 @@ croche[["fitted.lme3.ML", shape = "abundance"]] <-
 	structure(croche.lme3.ML$fitted[,2], dim = c(10,12), names = NULL, label = NULL)
 croche[["fitted.lme3.fix.ML", shape = "abundance"]] <- 
 	structure(croche.lme3.ML$fitted[,1], dim = c(10,12), names = NULL, label = NULL)
-
-
-h <- 0.0001 # amount to displace observations for computing numerical derivatives
-displaced.fits <- displaced.fits2 <- displaced.fits3 <- list()
-for(i in 1:120){
-	print(i)
-	crochetmp <- croche
-	crochetmp$sqrt.abundance[i] <- croche$sqrt.abundance[i] + h
-	displaced.fits[[i]] <- lme(sqrt.abundance ~ -1 + scaled.Length + I(scaled.Length^2),
-		data = as.data.frame(crochetmp),
-		random = ~ scaled.week + I(scaled.week^2) | taxon,
-		weights = varIdent(form = ~ 1 | taxon),
-		method = "ML")
-	displaced.fits2[[i]] <- update(displaced.fits[[i]], fixed. = . ~ . + scaled.Length:scaled.week)
-	displaced.fits3[[i]] <- update(displaced.fits[[i]], fixed. = . ~ . + Predator.protection.:scaled.Length:scaled.week)
-}
-system("say convergence limit reached")
-#save(displaced.fits, file = 'displacedfits.rda')
-#save(displaced.fits2, file = 'displacedfits2.rda')
-#save(displaced.fits3, file = 'displacedfits3.rda')
-
-load('displacedfits.rda')
-load('displacedfits2.rda')
-load('displacedfits3.rda')
-yhat.disp <- diag(sapply(displaced.fits, fitted))
-yhat <- as.numeric(croche$fitted.lme.ML)
-yhat.disp2 <- diag(sapply(displaced.fits2, fitted))
-yhat2 <- as.numeric(croche$fitted.lme2.ML)
-yhat.disp3 <- diag(sapply(displaced.fits3, fitted))
-yhat3 <- as.numeric(croche$fitted.lme3.ML)
-# effective degrees of freedom (note that its 
-# between 2 (number of fixed effects) and 38 (total
-# number of effects))
-edf <- sum((yhat.disp - yhat)/h)
-edf2 <- sum((yhat.disp2 - yhat2)/h)
-edf3 <- sum((yhat.disp3 - yhat3)/h)
-# effective number of parameters (edf + number of
-# variance parameters (one per taxon))
-ep <- edf + 12
-ep2 <- edf2 + 12
-ep3 <- edf3 + 12
-
-cond.res.vars <- rapply(getVarCov(croche.lme.ML, type = 'conditional', individual = 1:12), diag)
-dev <- -2*sum(dnorm(croche$sqrt.abundance, mean = croche$fitted.lme.ML, sd = sqrt(cond.res.vars), log = TRUE))
-cond.res.vars2 <- rapply(getVarCov(croche.lme2.ML, type = 'conditional', individual = 1:12), diag)
-dev2 <- -2*sum(dnorm(croche$sqrt.abundance, mean = croche$fitted.lme2.ML, sd = sqrt(cond.res.vars2), log = TRUE))
-cond.res.vars3 <- rapply(getVarCov(croche.lme3.ML, type = 'conditional', individual = 1:12), diag)
-dev3 <- -2*sum(dnorm(croche$sqrt.abundance, mean = croche$fitted.lme3.ML, sd = sqrt(cond.res.vars3), log = TRUE))
-
-
-
-croche[['var.null', shape = 'taxon']] <- diag(var(croche$sqrt.abundance))
-croche[['mean.null', shape = 'taxon']] <- apply(croche$sqrt.abundance, 2, mean)
-dev0 <- sum(-2*with(
-	as.data.frame(croche[c('sqrt.abundance','var.null','mean.null')]),
-	dnorm(
-		sqrt.abundance - mean.null, 
-		sd = sqrt(var.null),
-		log = TRUE
-	)
-))
-
-aic <- dev + 2*ep
-aic2 <- dev2 + 2*ep2
-aic3 <- dev3 + 2*ep3
-aic0 <- dev0 + 4
-
-LLR <- dev0 - dev
-LLR.edf <- ep - 2
-pchisq(LLR, LLR.edf, lower.tail = FALSE) # rediculously low p-value, as expected
-
-LLR2 <- dev0 - dev2
-LLR2.edf <- ep2 - 2
-pchisq(LLR2, LLR2.edf, lower.tail = FALSE) # rediculously low p-value, as expected
-
-LLR3 <- dev0 - dev3
-LLR3.edf <- ep3 - 2
-pchisq(LLR3, LLR3.edf, lower.tail = FALSE) # rediculously low p-value, as expected
-
-LLR.2 <- dev - dev2
-LLR.2.edf <- ep2 - ep
-pchisq(LLR.2, LLR.2.edf, lower.tail = FALSE) # rediculously low p-value, as expected
-
 
 
 cdf <- as.data.frame(croche)
@@ -452,3 +370,23 @@ ggplot(cwmdf) +
 	geom_abline(slope = 0, intercept = min(croche$Length), size = 1) + 
 	opts(legend.position = 'top', legend.direction = 'vertical')
 ggsave("cwmfits.pdf", height = 5, width = 4.5)
+
+
+
+
+cwmdf <- rbind(
+	data.frame(typ = "first", cwm = croche$cwm.lme, week = croche$week),
+	data.frame(typ = "second", cwm = croche$cwm.lme.corr, week = croche$week)
+)
+
+cwmdf$cwm <- (cwmdf$cwm * scl) + cnt
+
+ggplot(cwmdf) +
+	stat_smooth(aes(week, cwm, linetype = typ), se = FALSE, colour = 'black', alpha = 0.5, geom = 'line') + 
+	scale_x_continuous("Jullian day") +
+	scale_y_continuous("Community-weighted mean body length (mm)") + 
+	scale_linetype("Order of correction")
+	geom_point(aes(week, cwm.unscaled), data = as.data.frame(dropdl(croche[,1]))) + 
+ggsave("cwmcorrection.pdf", height = 4.5, width = 5.5)
+
+
