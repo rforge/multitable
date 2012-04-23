@@ -1,0 +1,17 @@
+Package: funphylocom
+Type: Package
+Title: Functional traits, phylogenies, communities,
+    simulations
+Version: 1.0
+Date: 2011-11-14
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Simulates the influence of functional traits
+    and phylogenies on ecological communities.
+License: GPL-2
+LazyLoad: yes
+Depends:
+    maticce,
+    picante
+Collate:
+    'funphylocom.R'
