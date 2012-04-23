@@ -1,0 +1,22 @@
+######################################
+#
+# NAMESPACE FOR omnr.gillnet
+#
+######################################
+
+# functions
+
+export(make.catch, plot.catch)
+
+export(fit.catch, plot.fit.catch, deviance.fit.catch, AIC.fit.catch, print.fit.catch, coef.fit.catch, coefficients.fit.catch)
+
+export(norm.loc, norm, lognorm, gamm, inv.gau)
+
+export(getSelcurve, getTotalSelcurve, modelaverageTotalSelcurve)
+
+export(fit.catch.compare, AIC.fit.catch.compare, deviance.fit.catch.compare, plot.fit.catch.compare, print.fit.catch.compare, summary.fit.catch.compare, print.summary.fit.catch.compare)
+
+
+# import other packages
+
+import(stats)

@@ -1,0 +1,11 @@
+Package: omnr.gillnet
+Type: Package
+Title: Gillnet size selectivity analysis
+Version: 1.1
+Date: 2011-02-02
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Gillnet size selectivity analyses for Ontario Ministry of Natural Resources.
+License: GPL-2
+LazyLoad: yes
+LazyData: yes
