@@ -1,0 +1,13 @@
+######################################
+#
+# NAMESPACE FOR reo
+#
+######################################
+
+# functions
+
+export(AIC.factanal.predictive,biplot.factanal.predictive,deviance.factanal.predictive,factanal.predictive,logLik.factanal.predictive,pairs.factanal.predictive,scores.factanal.predictive,peresneto.simulation,predict.factanal.predictive,screeplot.factanal.predictive,ltm.ecol,ltm.ecol.fit,print.ltm.ecol,screeplot.ltm.ecol,predict.ltm.ecol,scores.ltm.ecol,boxplot.ltm.ecol,biplot.ltm.ecol)
+
+# import other packages
+
+import(MASS,stats)

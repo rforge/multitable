@@ -1,0 +1,12 @@
+Package: reo
+Type: Package
+Title: Random effects ordination
+Version: 1.0
+Date: 2011-01-20
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Functions for fitting ordination models with random effects.
+License: GPL-2
+LazyLoad: yes
+LazyData: yes
+Depends: MASS, stats, vegan, ellipse
