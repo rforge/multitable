@@ -1,3 +1,5 @@
+library(picante)
+
 #' Functional traits, phylogenies, communities, simulations
 #'
 #' Simulates the influence of functional traits and phylogenies on
