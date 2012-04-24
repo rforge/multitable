@@ -250,15 +250,38 @@ tail.list <- function(x,n=6L,...){
 #' @return A distance matrix.
 #' @note This function is not very user friendly yet.  There are
 #'	no doubt many use cases that I've ignored.
-FPD <- function(PD,FD,a,p){
-	FD <- FD[order(row.names(FD)),order(row.names(FD))]
-	PD <- PD[order(row.names(PD)),order(row.names(PD))]
+FPD <- function(PD, FD, a, p, ord = FALSE){
+	if(ord){
+		FD <- FD[order(row.names(FD)),order(row.names(FD))]
+		PD <- PD[order(row.names(PD)),order(row.names(PD))]
+	}
 	((a*(PD^(1/p))) + ((1-a)*(FD^(1/p))))^p
 }
 
-raoFPD <- function(PD, FD, a, p, Y)
-	Y %*% FPD(PD, FD, a, p) %*% t(Y)
+raoFPD <- function(ap, PD, FD, Y){
+	D <- FPD(PD, FD, ap[1], ap[2])
+	apply(Y, 1, function(y) y %*% D %*% y)
+}
 
+
+# x is community (sites by species)
+# y is ecosystem function (a vector)
+FPDglm_ap <- function(ap, x, y, PD, FD, ...){
+	fpd <- raoFPD(ap, PD, FD, x)
+	glm.fit(fpd, y, ...)$deviance
+}
+
+# a and p are vectors
+FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
+	aps <- merge(a, p)
+	devs <- sapply(as.data.frame(t(aps)),
+		FPDglm_ap,
+		x = sm$comm, y = sm$env, 
+		PD = tg$PD, FD = tg$FD,
+		...)
+	surf <- data.frame(a = aps$x, p = aps$y, devs)
+	return(surf)
+}
 
 
 
@@ -284,6 +307,8 @@ raoFPD <- function(PD, FD, a, p, Y)
 #'	\item{FPD}{A distance matrix combining both phylogenetic
 #'	and functional distances (see \code{\link{FPD}})}
 traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
+	# make it work if PD and FD names are factor and character
+	# respectively or vice versa.
 	PD <- cophenetic(phy)/max(cophenetic(phy))
 	PD <- PD[order(row.names(PD)),order(row.names(PD))]
 	FD <- as.matrix(dist(x))/max(as.matrix(dist(x)))
