@@ -268,8 +268,14 @@ raoFPD <- function(ap, PD, FD, X){
 
 # x is community (sites by species)
 # y is ecosystem function (a vector)
+#FPDglm_ap <- function(ap, x, y, PD, FD, ...){
+#	fpd <- raoFPD(ap, PD, FD, x)
+#	glm.fit(fpd, y, ...)$deviance
+#}
+
 FPDglm_ap <- function(ap, x, y, PD, FD, ...){
-	fpd <- raoFPD(ap, PD, FD, x)
+	FPD. <- FPD(PD, FD, ap[1], ap[2])
+	fpd <- mpd(x, FPD.)
 	glm.fit(fpd, y, ...)$deviance
 }
 
