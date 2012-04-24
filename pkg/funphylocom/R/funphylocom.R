@@ -78,7 +78,6 @@ fpcomSims <- function(n, m, p = 0.5,
 	
 	# simulate evolutionary history
 	sim.tree <- rcoal(m,tip.label=spp.names)
-	#sim.tree <- birthdeath.tree(1, 1, 100000000000000000, 5)
 	sim.tree$tip.label <- spp.names
 	#sim.ou.obs <- do.call(ouSim,c(bquote(sim.tree),ouObserved))  #ouSim(sim.tree)
 	#sim.ou.unk <- do.call(ouSim,c(bquote(sim.tree),ouUnknown))  #ouSim(sim.tree)
@@ -86,8 +85,8 @@ fpcomSims <- function(n, m, p = 0.5,
 	# store the resulting traits for the species
 	#sim.traits.obs <- tail(sim.ou.obs$branchList,1)[match(1:m,sim.tree$edge[,2])]
 	#sim.traits.unk <- tail(sim.ou.unk$branchList,1)[match(1:m,sim.tree$edge[,2])]
-	sim.traits.obs <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 1))
-	sim.traits.unk <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 1))
+	sim.traits.obs <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 0.5))
+	sim.traits.unk <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 0.5))
 	names(sim.traits.obs) <- spp.names
 
 	# simulate the contemporary communities
@@ -250,8 +249,17 @@ tail.list <- function(x,n=6L,...){
 #' @note This function is not very user friendly yet.  There are
 #'	no doubt many use cases that I've ignored.
 FPD <- function(PD,FD,a,p){
-	(a*(PD^(1/p))) + ((1-a)*(FD^(1/p)))
+	FD <- FD[order(row.names(FD)),order(row.names(FD))]
+	PD <- PD[order(row.names(PD)),order(row.names(PD))]
+	((a*(PD^(1/p))) + ((1-a)*(FD^(1/p))))^p
 }
+
+raoFPD <- function(PD, FD, a, p, Y)
+	Y %*% FPD(PD, FD, a, p) %*% t(Y)
+
+
+
+
 
 #' Draw Ackerly traitgram and return phylogenetic and functional distances
 #' 
@@ -277,6 +285,7 @@ traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
 	PD <- cophenetic(phy)/max(cophenetic(phy))
 	PD <- PD[order(row.names(PD)),order(row.names(PD))]
 	FD <- as.matrix(dist(x))/max(as.matrix(dist(x)))
+	FD <- FD[order(row.names(FD)),order(row.names(FD))]
 	if(plot) traitgram(x, phy, ...)
 	out <- structure(
 		list(traits = x, tree = phy, PD = PD, FD = FD), 
