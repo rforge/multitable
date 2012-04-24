@@ -276,8 +276,8 @@ FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
 	aps <- merge(a, p)
 	devs <- sapply(as.data.frame(t(aps)),
 		FPDglm_ap,
-		x = sm$comm, y = sm$env, 
-		PD = tg$PD, FD = tg$FD,
+		x = x, y = y, 
+		PD = PD, FD = FD,
 		...)
 	surf <- data.frame(a = aps$x, p = aps$y, devs)
 	return(surf)
