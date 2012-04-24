@@ -1,3 +1,5 @@
+rm(list = ls())
+
 library(picante)
 
 #' Functional traits, phylogenies, communities, simulations
@@ -68,8 +70,8 @@ NULL
 #'	\item{tree}{A phylo object with the phylogenetic tree relating
 #'	the m species}
 fpcomSims <- function(n, m, p = 0.5,
-	ouObserved = list(),
-	ouUnknown = list(),
+	means.obs = rep(0, m),
+	means.unk = rep(0, m),
 	sim.envObserved = as.vector(scale(rnorm(n))),
 	sim.envUnknown = as.vector(scale(rnorm(n))),
 	site.names = numnames(n,"site"), 
@@ -81,14 +83,14 @@ fpcomSims <- function(n, m, p = 0.5,
 	# simulate evolutionary history
 	sim.tree <- rcoal(m,tip.label=spp.names)
 	sim.tree$tip.label <- spp.names
-	#sim.ou.obs <- do.call(ouSim,c(bquote(sim.tree),ouObserved))  #ouSim(sim.tree)
-	#sim.ou.unk <- do.call(ouSim,c(bquote(sim.tree),ouUnknown))  #ouSim(sim.tree)
 	
 	# store the resulting traits for the species
 	#sim.traits.obs <- tail(sim.ou.obs$branchList,1)[match(1:m,sim.tree$edge[,2])]
 	#sim.traits.unk <- tail(sim.ou.unk$branchList,1)[match(1:m,sim.tree$edge[,2])]
-	sim.traits.obs <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 0.5))
-	sim.traits.unk <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 0.5))
+	sim.traits.obs <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 1))
+	sim.traits.unk <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 1))
+	sim.traits.obs <- sim.traits.obs + means.obs
+	sim.traits.unk <- sim.traits.unk + means.unk
 	names(sim.traits.obs) <- spp.names
 
 	# simulate the contemporary communities
@@ -258,9 +260,9 @@ FPD <- function(PD, FD, a, p, ord = FALSE){
 	((a*(PD^(1/p))) + ((1-a)*(FD^(1/p))))^p
 }
 
-raoFPD <- function(ap, PD, FD, Y){
+raoFPD <- function(ap, PD, FD, X){
 	D <- FPD(PD, FD, ap[1], ap[2])
-	apply(Y, 1, function(y) y %*% D %*% y)
+	apply(X, 1, function(x) x %*% D %*% x)
 }
 
 
