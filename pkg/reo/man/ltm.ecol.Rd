@@ -9,7 +9,7 @@
 \alias{biplot.ltm.ecol}
 \title{Ecological latent trait model}
 \description{
-Fits the latent trait model for species presence-absence community data described by Walker and Jackson (in press).
+Fits the latent trait model for species presence-absence community data described by Walker and Jackson (2011).
 }
 \usage{
 ltm.ecol(Y, full = TRUE, cvic = FALSE, g = 10, 
@@ -78,7 +78,7 @@ ltm.ecol.fit(Y, X, q2, Yv = Y, lambda = c(0.1,1.1,2.1,3.1,4.1),
   \item{\dots}{Additional arguments.}
 }
 \details{
-This function uses an EM-algorithm with LASSO (i.e. L1) regularization described by Walker and Jackson (in press).  Our algorithm is based on the ideas of Bock and Aitkin (1981); Woodruff and Hanson (1996); Rizopoulos (2006); Houseman et al. (2007); and Friedman et al. (2010).
+This function uses an EM-algorithm with LASSO (i.e. L1) regularization described by Walker and Jackson (2011).  Our algorithm is based on the ideas of Bock and Aitkin (1981); Woodruff and Hanson (1996); Rizopoulos (2006); Houseman et al. (2007); and Friedman et al. (2010).
 
 There is no guarantee that this algorithm will converge to a global optimum, but it is guaranteed to improve the initial value, \code{B0}, which by default is the correspondence analysis approximation (due to ter Braak 1985) of the maximum likelihood estimates for a fixed-effects version of this model.
 
@@ -128,7 +128,7 @@ Rizopoulos, D. (2006) ltm: An R package for latent variable modeling and item re
 
 ter Braak, C.J.O (1985) Correspondence analysis of incidence and abundance data: properties in terms of a unimodal response model.  Biometrics. 41: 859-873.
 
-Walker, S.C. and Jackson, D.A. (in press) Random-effects ordination: describing and predicting multivariate correlations and co-occurrences.  Ecological Monographs. 
+Walker, S.C. and Jackson, D.A. (2011) Random-effects ordination: describing and predicting multivariate correlations and co-occurrences.  Ecological Monographs. 81: 635-663.
 
 Woodruff, D.J. and Hanson, B.A. (1996) Estimation of item response models using the EM algorithm for finite mixtures.  Technical report, ACT.
 }

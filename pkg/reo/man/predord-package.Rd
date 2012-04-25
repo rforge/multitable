@@ -20,7 +20,7 @@ LazyLoad: \tab yes\cr
 The most important functions are \code{\link{factanal.predictive}} and \code{\link{ltm.ecol}}.
 }
 \references{
-Walker, S.C. and Jackson, D.A. (in press) Random-effects ordination: describing and predicting multivariate correlations and co-occurrences.  Ecological Monographs. 
+Walker, S.C. and Jackson, D.A. (2011) Random-effects ordination: describing and predicting multivariate correlations and co-occurrences.  Ecological Monographs. 81: 635-663.
 }
 \author{
 Steve Walker
