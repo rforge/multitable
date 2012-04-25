@@ -21,15 +21,15 @@ NULL
 #' Simulations are based on the following procedure:
 #' \describe{
 #'
-#'	\item{Phylogeny}{A tree is simulated using \code{\link{rcoal}} with
+#'	\item{Phylogeny}{A tree is simulated using \code{rcoal} with
 #'	default settings.}
 #'
-#'	\item{Trait evolution}{Two traits are simulated under Brownian motion 
-#'	using the \code{\link{ouSim}} function. One trait is called 'observed' 
-#'  and the other 'unknown'. Both traits influence species' probabilies of
-#'	occurrence, but only the 'observed' trait is included in the output. 
-#'	The idea behind this distinction is that information about the 'unknown' 
-#'	trait will possibly be present in the phylogeny, which is assumed known.}
+#'	\item{Trait evolution}{Two traits are simulated under Brownian motion. 
+#'	One trait is called 'observed' and the other 'unknown'. Both traits
+#'  influence species' probabilies of occurrence, but only the 'observed'
+#'	trait is included in the output. The idea behind this distinction is that
+#'	information about the 'unknown' trait will possibly be present in
+#'	the phylogeny, which is assumed known.}
 #'
 #'	\item{Probabilities of occurrence}{For each species at each site, these
 #'	probabilities depend logistically on two gradients; one is observed
@@ -246,6 +246,7 @@ tail.list <- function(x,n=6L,...){
 #' @param a A number between 0 and 1 giving the amount of weight
 #'	to put on \code{PD} relative to \code{FD}.
 #' @param p A number giving the \code{p}-norm.
+#' @param ord Should the ordering of the distance matrices 
 #' @return A distance matrix.
 #' @note This function is not very user friendly yet.  There are
 #'	no doubt many use cases that I've ignored.
@@ -257,26 +258,57 @@ FPD <- function(PD, FD, a, p, ord = FALSE){
 	((a*(PD^(1/p))) + ((1-a)*(FD^(1/p))))^p
 }
 
+#' Rao's quadratic entropy
+#'
+#' Computes Rao's quadratic entropy from phylogenetic and
+#' functional distances.
+#'
+#' @param ap A vector with two numbers (a and p), see \code{\link{FPD}}.
+#' @param PD A phylogenetic distance matrix.
+#' @param FD A functional distance matrix.
+#' @param X A sites by species community matrix.
+#' @return A vector of diversity indices (one for each site).
 raoFPD <- function(ap, PD, FD, X){
 	D <- FPD(PD, FD, ap[1], ap[2])
 	apply(X, 1, function(x) x %*% D %*% x)
 }
 
-
-# x is community (sites by species)
-# y is ecosystem function (a vector)
-#FPDglm_ap <- function(ap, x, y, PD, FD, ...){
-#	fpd <- raoFPD(ap, PD, FD, x)
-#	glm.fit(fpd, y, ...)$deviance
-#}
-
+#' Functional phylogenetic diversity generalised linear model
+#'
+#' Calculate the deviance for a generalised linear model using
+#' functional phylogenetic diversity indices as predictors.
+#'
+#' @param ap A vector with two numbers (a and p), see \code{\link{FPD}}.
+#' @param x A community matrix
+#' @param y An ecosystem function (or other site characteristic being
+#'	used as a response variable)
+#' @param PD A phylogenetic distance matrix.
+#' @param FD A functional distance matrix.
+#' @param ... Additional arguments to pass to \code{\link{glm}}.
+#' @return A deviance value.
 FPDglm_ap <- function(ap, x, y, PD, FD, ...){
 	FPD. <- FPD(PD, FD, ap[1], ap[2])
+	#fpd <- raoFPD(ap, PD, FD, x)
+	#glm.fit(fpd, y, ...)$deviance
 	fpd <- mpd(x, FPD.)
-	glm.fit(fpd, y, ...)$deviance
+	glm(y ~ fpd, ...)$deviance
 }
 
-# a and p are vectors
+#' Grid search functional phylogenetic diversity generalised linear model
+#'
+#' Calculate deviances over a grid for generalised linear models using
+#' functional phylogenetic diversity indices as predictors.
+#'
+#' @param a A vector of numbers between 0 and 1 giving the amount of 
+#'	weight to put on \code{PD} relative to \code{FD}.
+#' @param p A vector of numbers giving the \code{p}-norm.
+#' @param x A community matrix
+#' @param y An ecosystem function (or other site characteristic being
+#'	used as a response variable)
+#' @param PD A phylogenetic distance matrix.
+#' @param FD A functional distance matrix.
+#' @param ... Additional arguments to pass to \code{\link{glm}}.
+#' @return data frame with three columns (a, p, and deviances).
 FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
 	aps <- merge(a, p)
 	devs <- sapply(as.data.frame(t(aps)),

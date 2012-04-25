@@ -13,6 +13,8 @@
   weight to put on \code{PD} relative to \code{FD}.}
 
   \item{p}{A number giving the \code{p}-norm.}
+
+  \item{ord}{Should the ordering of the distance matrices}
 }
 \value{
   A distance matrix.

@@ -53,17 +53,17 @@
   Simulations are based on the following procedure:
   \describe{
 
-  \item{Phylogeny}{A tree is simulated using
-  \code{\link{rcoal}} with default settings.}
+  \item{Phylogeny}{A tree is simulated using \code{rcoal}
+  with default settings.}
 
   \item{Trait evolution}{Two traits are simulated under
-  Brownian motion using the \code{\link{ouSim}} function.
-  One trait is called 'observed' and the other 'unknown'.
-  Both traits influence species' probabilies of occurrence,
-  but only the 'observed' trait is included in the output.
-  The idea behind this distinction is that information
-  about the 'unknown' trait will possibly be present in the
-  phylogeny, which is assumed known.}
+  Brownian motion.  One trait is called 'observed' and the
+  other 'unknown'. Both traits influence species'
+  probabilies of occurrence, but only the 'observed' trait
+  is included in the output. The idea behind this
+  distinction is that information about the 'unknown' trait
+  will possibly be present in the phylogeny, which is
+  assumed known.}
 
   \item{Probabilities of occurrence}{For each species at
   each site, these probabilities depend logistically on two
