@@ -1,5 +1,3 @@
-rm(list = ls())
-
 library(picante)
 
 #' Functional traits, phylogenies, communities, simulations
