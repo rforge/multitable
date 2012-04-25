@@ -341,13 +341,13 @@ FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
 		x = x, y = y, 
 		PD = PD, FD = FD,
 		...)
-	devs <- sapply(glms, deviance)
+	loglikes <- sapply(glms, logLik)
 	slopes <- sapply(glms, function(xx) xx$coefficients[2])
-	likelihood <- exp(-0.5*(devs-min(devs)))
+	likelihood <- exp(loglikes - max(loglikes))
 	posterior <- likelihood/(sum(mean(diff(a))*likelihood))
 	surf <- data.frame(
 		a = aps$x, p = aps$y, 
-		devs, slopes, posterior
+		loglikes, slopes, posterior
 	)
 	return(surf)
 }
