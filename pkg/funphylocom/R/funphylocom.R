@@ -291,8 +291,9 @@ FPDglm_ap <- function(ap, x, y, PD, FD, ...){
 	#fpd <- raoFPD(ap, PD, FD, x)
 	#glm.fit(fpd, y, ...)$deviance
 	fpd <- mpd(x, FPD.)
-	glm(y ~ fpd, ...)$deviance
+	glm(y ~ fpd, ...)
 }
+
 
 #' Grid search functional phylogenetic diversity generalised linear model
 #'
@@ -301,7 +302,8 @@ FPDglm_ap <- function(ap, x, y, PD, FD, ...){
 #'
 #' @param a A vector of numbers between 0 and 1 giving the amount of 
 #'	weight to put on \code{PD} relative to \code{FD}.
-#' @param p A vector of numbers giving the \code{p}-norm.
+#' @param p A vector of numbers giving the \code{p}-norm. (BUT p must
+#'	for now be a single number!)
 #' @param x A community matrix
 #' @param y An ecosystem function (or other site characteristic being
 #'	used as a response variable)
@@ -311,12 +313,19 @@ FPDglm_ap <- function(ap, x, y, PD, FD, ...){
 #' @return data frame with three columns (a, p, and deviances).
 FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
 	aps <- merge(a, p)
-	devs <- sapply(as.data.frame(t(aps)),
+	glms <- lapply(as.data.frame(t(aps)),
 		FPDglm_ap,
 		x = x, y = y, 
 		PD = PD, FD = FD,
 		...)
-	surf <- data.frame(a = aps$x, p = aps$y, devs)
+	devs <- sapply(glms, deviance)
+	slopes <- sapply(glms, function(xx) xx$coefficients[2])
+	likelihood <- exp(-0.5*(devs-min(devs)))
+	posterior <- likelihood/(sum(mean(diff(a))*likelihood))
+	surf <- data.frame(
+		a = aps$x, p = aps$y, 
+		devs, slopes, posterior
+	)
 	return(surf)
 }
 
