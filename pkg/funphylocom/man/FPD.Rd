@@ -2,7 +2,7 @@
 \alias{FPD}
 \title{Functional phylogenetic distance}
 \usage{
-  FPD(PD, FD, a, p)
+  FPD(PD, FD, a, p, ord = FALSE)
 }
 \arguments{
   \item{PD}{A phylogenetic distance matrix.}

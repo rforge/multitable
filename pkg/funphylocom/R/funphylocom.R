@@ -25,12 +25,11 @@ NULL
 #'	default settings.}
 #'
 #'	\item{Trait evolution}{Two traits are simulated under Brownian motion 
-#'	(OU to come soon), using the \code{\link{ouSim}} function. One trait 
-#'	is called 'observed' and the other 'unknown'. Both traits influence 
-#'	species' probabilies of occurrence, but only the 'observed' trait is
-#' 	included in the output. The idea behind this distinction is that information
-#'	about the 'unknown' trait will possibly be present in the phylogeny, which 
-#'	is assumed known.}
+#'	using the \code{\link{ouSim}} function. One trait is called 'observed' 
+#'  and the other 'unknown'. Both traits influence species' probabilies of
+#'	occurrence, but only the 'observed' trait is included in the output. 
+#'	The idea behind this distinction is that information about the 'unknown' 
+#'	trait will possibly be present in the phylogeny, which is assumed known.}
 #'
 #'	\item{Probabilities of occurrence}{For each species at each site, these
 #'	probabilities depend logistically on two gradients; one is observed
@@ -52,10 +51,10 @@ NULL
 #' @param m Number of species to simulate
 #' @param p Number between 0 and 1 giving the relative importance of
 #'	observed versus unknown traits in determining community structure
-#' @param ouObserved Named list of arguments to pass to \code{\link{ouSim}}
-#'	for simulating the observed trait (default to BM)
-#' @param ouUnknown Named list of arguments to pass to \code{\link{ouSim}}
-#'	for simulating the unknown trait (default to BM)
+#' @param diverg.obs a vector with m elements giving the divergence
+#'	effects on the observed trait for each species
+#' @param diverg.unk a vector with m elements giving the divergence
+#'	effects on the unknown trait for each species
 #' @param sim.envObserved Numeric vector of simulated values for the 
 #'	observed environmental variables
 #' @param sim.envUnknown Numeric vector of simulated values for the 
@@ -70,8 +69,8 @@ NULL
 #'	\item{tree}{A phylo object with the phylogenetic tree relating
 #'	the m species}
 fpcomSims <- function(n, m, p = 0.5,
-	means.obs = rep(0, m),
-	means.unk = rep(0, m),
+	diverg.obs = rep(0, m),
+	diverg.unk = rep(0, m),
 	sim.envObserved = as.vector(scale(rnorm(n))),
 	sim.envUnknown = as.vector(scale(rnorm(n))),
 	site.names = numnames(n,"site"), 
@@ -85,12 +84,10 @@ fpcomSims <- function(n, m, p = 0.5,
 	sim.tree$tip.label <- spp.names
 	
 	# store the resulting traits for the species
-	#sim.traits.obs <- tail(sim.ou.obs$branchList,1)[match(1:m,sim.tree$edge[,2])]
-	#sim.traits.unk <- tail(sim.ou.unk$branchList,1)[match(1:m,sim.tree$edge[,2])]
 	sim.traits.obs <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 1))
 	sim.traits.unk <- as.vector(t(chol(vcv(sim.tree))) %*% rnorm(m, sd = 1))
-	sim.traits.obs <- sim.traits.obs + means.obs
-	sim.traits.unk <- sim.traits.unk + means.unk
+	sim.traits.obs <- sim.traits.obs + diverg.obs
+	sim.traits.unk <- sim.traits.unk + diverg.unk
 	names(sim.traits.obs) <- spp.names
 
 	# simulate the contemporary communities

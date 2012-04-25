@@ -2,8 +2,8 @@
 \alias{fpcomSims}
 \title{Functional-phylogenetic community simulations}
 \usage{
-  fpcomSims(n, m, p = 0.5, ouObserved = list(),
-    ouUnknown = list(),
+  fpcomSims(n, m, p = 0.5, diverg.obs = rep(0, m),
+    diverg.unk = rep(0, m),
     sim.envObserved = as.vector(scale(rnorm(n))),
     sim.envUnknown = as.vector(scale(rnorm(n))),
     site.names = numnames(n, "site"),
@@ -18,13 +18,12 @@
   importance of observed versus unknown traits in
   determining community structure}
 
-  \item{ouObserved}{Named list of arguments to pass to
-  \code{\link{ouSim}} for simulating the observed trait
-  (default to BM)}
+  \item{diverg.obs}{a vector with m elements giving the
+  divergence effects on the observed trait for each
+  species}
 
-  \item{ouUnknown}{Named list of arguments to pass to
-  \code{\link{ouSim}} for simulating the unknown trait
-  (default to BM)}
+  \item{diverg.unk}{a vector with m elements giving the
+  divergence effects on the unknown trait for each species}
 
   \item{sim.envObserved}{Numeric vector of simulated values
   for the observed environmental variables}
@@ -58,13 +57,12 @@
   \code{\link{rcoal}} with default settings.}
 
   \item{Trait evolution}{Two traits are simulated under
-  Brownian motion (OU to come soon), using the
-  \code{\link{ouSim}} function. One trait is called
-  'observed' and the other 'unknown'. Both traits influence
-  species' probabilies of occurrence, but only the
-  'observed' trait is included in the output. The idea
-  behind this distinction is that information about the
-  'unknown' trait will possibly be present in the
+  Brownian motion using the \code{\link{ouSim}} function.
+  One trait is called 'observed' and the other 'unknown'.
+  Both traits influence species' probabilies of occurrence,
+  but only the 'observed' trait is included in the output.
+  The idea behind this distinction is that information
+  about the 'unknown' trait will possibly be present in the
   phylogeny, which is assumed known.}
 
   \item{Probabilities of occurrence}{For each species at
