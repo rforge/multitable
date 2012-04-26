@@ -389,6 +389,13 @@ FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
 traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
 	# make it work if PD and FD names are factor and character
 	# respectively or vice versa.
+	if(!is.numeric(x)) stop('the trait, x, must be numeric')
+	x <- as.numeric(x)
+	tl <- phy$tip.label
+	if(is.null(tl)) stop('phylogenetic tips must have labels')
+	if(length(x) != length(tl)) stop('x must be a vector of traits')
+	if(is.null(names(x))) stop('x must have names')
+	
 	PD <- cophenetic(phy)/max(cophenetic(phy))
 	PD <- PD[order(row.names(PD)),order(row.names(PD))]
 	FD <- as.matrix(dist(x))/max(as.matrix(dist(x)))
