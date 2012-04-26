@@ -271,7 +271,7 @@ FPD <- function(PD, FD, a, p, ord = FALSE){
 #' @export
 rao <- function(X, D){
 	X.rel <- sweep(X, 1, apply(X, 1, sum), FUN = '/')
-	apply(X.rel, 1, function(x) x %*% D %*% x)
+	apply(X.rel, 1, function(x) x %*% D %*% x)/2
 }
 
 #' Functional phylogenetic diversity generalised linear model
@@ -421,4 +421,35 @@ traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
 #' @export
 plot.traitgram <- function(x, ...)
 	traitgram(x$traits, x$tree, ...)
+
+#' Highest posterior density region for a
+#'
+#' Find points on a grid within a 100\code{p}\% highest posterior 
+#' density region for the tuning parameter, a
+#'
+#' The 100\code{p}\% highest posterior density region for 'a' is 
+#' the subset of the interval between 0 and 1, which contains 
+#' 100\code{p}\% of the probability.
+#'
+#' @param a_grid A vector of (preferably evenly spaced) 'a' 
+#'	values (between 0 and 1).
+#' @param posterior The values of the posterior density at
+#'	each point in \code{a_grid}.
+#' @param level Size of the highest posterior density region.
+#' @export
+a.hpd <- function(a_grid, posterior, level = 0.95){
+	dscrt.post <- posterior/sum(posterior)
+	post.ord <- order(-posterior)
+	hpd.levels <- rep(0, length(posterior))
+	for(n in 1:length(posterior)){
+		hpd.levels[n] <- sum(dscrt.post[post.ord[1:n]])
+		if(hpd.levels[n] > level) break
+	}
+	n <- n - 1
+	post.ord <- sort(post.ord[1:n])
+	hpd.points <- a_grid[post.ord]
+	out <- data.frame(a = a_grid, posterior = posterior)[post.ord, ]
+	print(hpd.levels[n])
+	return(out)
+}
 

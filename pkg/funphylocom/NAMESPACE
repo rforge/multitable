@@ -1,3 +1,4 @@
+export(a.hpd)
 export(fpcomSims)
 export(FPD)
 export(FPDglm_ap)
