@@ -436,6 +436,9 @@ plot.traitgram <- function(x, ...)
 #' @param posterior The values of the posterior density at
 #'	each point in \code{a_grid}.
 #' @param level Size of the highest posterior density region.
+#' @return A data frame with two columns:  the values of the
+#'	grid within the hpd region and the value of the posterior
+#'	at each point in this grid.
 #' @export
 a.hpd <- function(a_grid, posterior, level = 0.95){
 	dscrt.post <- posterior/sum(posterior)
