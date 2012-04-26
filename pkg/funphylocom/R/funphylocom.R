@@ -258,16 +258,14 @@ FPD <- function(PD, FD, a, p, ord = FALSE){
 
 #' Rao's quadratic entropy
 #'
-#' Computes Rao's quadratic entropy from phylogenetic and
-#' functional distances.
+#' Computes Rao's quadratic entropy from a distance matrix and
+#' community matrix.
 #'
-#' @param ap A vector with two numbers (a and p), see \code{\link{FPD}}.
-#' @param PD A phylogenetic distance matrix.
-#' @param FD A functional distance matrix.
+#' @param D A species by species distance matrix.
 #' @param X A sites by species community matrix.
 #' @return A vector of diversity indices (one for each site).
-raoFPD <- function(ap, PD, FD, X){
-	D <- FPD(PD, FD, ap[1], ap[2])
+rao <- function(X, D){
+	X.rel <- sweep(X, 1, apply(X, 1, sum), FUN = '/')
 	apply(X, 1, function(x) x %*% D %*% x)
 }
 
@@ -282,13 +280,18 @@ raoFPD <- function(ap, PD, FD, X){
 #'	used as a response variable)
 #' @param PD A phylogenetic distance matrix.
 #' @param FD A functional distance matrix.
+#' @param index Character string indicating the diversity index used 
+#'	to combine distances and community data. Currently, either \code{'mpd'}
+#'	or \code{'rao'}.
 #' @param ... Additional arguments to pass to \code{\link{glm}}.
 #' @return A deviance value.
-FPDglm_ap <- function(ap, x, y, PD, FD, ...){
+FPDglm_ap <- function(ap, x, y, PD, FD, index = 'mpd', ...){
+	# TODO: make the 'index' argument more generalizable by
+	# allowing user supplied functions
 	FPD. <- FPD(PD, FD, ap[1], ap[2])
-	#fpd <- raoFPD(ap, PD, FD, x)
-	#glm.fit(fpd, y, ...)$deviance
-	fpd <- mpd.(x, FPD.)
+	if(index == 'rao') fpd <- rao(x, FPD.)
+	else if(index == 'mpd') fpd <- mpd.(x, FPD.)
+	else stop('index not recognised')
 	glm(y ~ fpd, ...)
 }
 
