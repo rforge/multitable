@@ -66,6 +66,7 @@ NULL
 #'	\item{env}{A length-n vector of values for the observed gradient}
 #'	\item{tree}{A phylo object with the phylogenetic tree relating
 #'	the m species}
+#' @export
 fpcomSims <- function(n, m, p = 0.5,
 	diverg.obs = rep(0, m),
 	diverg.unk = rep(0, m),
@@ -159,6 +160,7 @@ fpcomSims <- function(n, m, p = 0.5,
 #' @param ... Additional parameters to be passed to \code{\link{plot}}
 #' @method plot fpcomSims
 #' @return No return value, called for its side-effect of producing a plot.
+#' @export
 plot.fpcomSims <- function(x,y,cex.add=0.8,
 	plottype=c("distance","traitgram","gradient","ordination"),...){
 	
@@ -211,6 +213,7 @@ plot.fpcomSims <- function(x,y,cex.add=0.8,
 #' @param n Number of names
 #' @param prefix Character prefix to go in front of the numbers
 #' @return A character vector of numbered names.
+#' @export
 numnames <- function(n,prefix="name"){
 	n <- as.integer(n)
 	if(n < 1) stop("number of names must be one or more")
@@ -248,6 +251,7 @@ tail.list <- function(x,n=6L,...){
 #' @return A distance matrix.
 #' @note This function is not very user friendly yet.  There are
 #'	no doubt many use cases that I've ignored.
+#' @export
 FPD <- function(PD, FD, a, p, ord = FALSE){
 	if(ord){
 		FD <- FD[order(row.names(FD)),order(row.names(FD))]
@@ -264,9 +268,10 @@ FPD <- function(PD, FD, a, p, ord = FALSE){
 #' @param D A species by species distance matrix.
 #' @param X A sites by species community matrix.
 #' @return A vector of diversity indices (one for each site).
+#' @export
 rao <- function(X, D){
 	X.rel <- sweep(X, 1, apply(X, 1, sum), FUN = '/')
-	apply(X, 1, function(x) x %*% D %*% x)
+	apply(X.rel, 1, function(x) x %*% D %*% x)
 }
 
 #' Functional phylogenetic diversity generalised linear model
@@ -285,6 +290,7 @@ rao <- function(X, D){
 #'	or \code{'rao'}.
 #' @param ... Additional arguments to pass to \code{\link{glm}}.
 #' @return A deviance value.
+#' @export
 FPDglm_ap <- function(ap, x, y, PD, FD, index = 'mpd', ...){
 	# TODO: make the 'index' argument more generalizable by
 	# allowing user supplied functions
@@ -337,6 +343,7 @@ mpd. <- function (samp, dis, abundance.weighted = FALSE)
 #' @param FD A functional distance matrix.
 #' @param ... Additional arguments to pass to \code{\link{glm}}.
 #' @return data frame with three columns (a, p, and deviances).
+#' @export
 FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
 	aps <- merge(a, p)
 	glms <- lapply(as.data.frame(t(aps)),
@@ -378,6 +385,7 @@ FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
 #'  \item{FD}{A functional distance matrix}
 #'	\item{FPD}{A distance matrix combining both phylogenetic
 #'	and functional distances (see \code{\link{FPD}})}
+#' @export
 traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
 	# make it work if PD and FD names are factor and character
 	# respectively or vice versa.
@@ -403,6 +411,7 @@ traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
 #' @param ... Arguments to pass to \code{\link{traitgram}}
 #' @return No return value, plot produced
 #' @method plot traitgram
+#' @export
 plot.traitgram <- function(x, ...)
 	traitgram(x$traits, x$tree, ...)
 
