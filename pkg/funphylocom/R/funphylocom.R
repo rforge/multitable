@@ -390,7 +390,7 @@ traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
 	# make it work if PD and FD names are factor and character
 	# respectively or vice versa.
 	if(!is.numeric(x)) stop('the trait, x, must be numeric')
-	x <- as.numeric(x)
+	attr(x, 'dim') <- NULL
 	tl <- phy$tip.label
 	if(is.null(tl)) stop('phylogenetic tips must have labels')
 	if(length(x) != length(tl)) stop('x must be a vector of traits')
