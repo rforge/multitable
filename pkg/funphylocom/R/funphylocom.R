@@ -441,6 +441,9 @@ plot.traitgram <- function(x, ...)
 #'	at each point in this grid.
 #' @export
 a.hpd <- function(a_grid, posterior, level = 0.95){
+	out <- data.frame(a = a_grid, posterior = posterior)
+	if(level == 1L) return(out)
+	if(level == 0L) return(out[-(1:length(posterior)),])
 	dscrt.post <- posterior/sum(posterior)
 	post.ord <- order(-posterior)
 	hpd.levels <- rep(0, length(posterior))
@@ -451,8 +454,14 @@ a.hpd <- function(a_grid, posterior, level = 0.95){
 	n <- n - 1
 	post.ord <- sort(post.ord[1:n])
 	hpd.points <- a_grid[post.ord]
-	out <- data.frame(a = a_grid, posterior = posterior)[post.ord, ]
+	out <- out[post.ord, ]
 	print(hpd.levels[n])
 	return(out)
+}
+
+
+a.postsim <- function(a_grid, posterior, n = 1){
+	dscrt.post <- posterior/sum(posterior)
+	replicate(n, a_grid[min(which(runif(1) < cumsum(dscrt.post)))])
 }
 
