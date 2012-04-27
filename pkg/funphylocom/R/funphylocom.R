@@ -79,7 +79,7 @@ fpcomSims <- function(n, m, p = 0.5,
 	names(sim.envObserved) <- names(sim.envUnknown) <- site.names
 	
 	# simulate evolutionary history
-	sim.tree <- rcoal(m,tip.label=spp.names)
+	sim.tree <- rcoal(m, tip.label = spp.names)
 	sim.tree$tip.label <- spp.names
 	
 	# store the resulting traits for the species
@@ -90,19 +90,57 @@ fpcomSims <- function(n, m, p = 0.5,
 	names(sim.traits.obs) <- spp.names
 
 	# simulate the contemporary communities
-	sim.eta <- (p*outer(sim.envObserved,sim.traits.obs)) + 
-			   ((1-p)*outer(sim.envUnknown,sim.traits.unk))
+	sim.eta <- (p*outer(sim.envObserved, sim.traits.obs)) + 
+			   ((1-p)*outer(sim.envUnknown, sim.traits.unk))
 	sim.eta <- scale(as.vector(sim.eta))
-	dim(sim.eta) <- c(n,m)
+	dim(sim.eta) <- c(n, m)
 	sim.p <- exp(sim.eta)/(1+exp(sim.eta))
-	sim.comm <- matrix(rbinom(n*m,1,sim.p),n,m)
-	dimnames(sim.comm) <- dimnames(sim.p) <- list(site.names,spp.names)
+	sim.comm <- matrix(rbinom(n*m, 1, sim.p), n, m)
+	dimnames(sim.comm) <- dimnames(sim.p) <- list(site.names, spp.names)
 
 	out <- list(comm = sim.comm, 
 		probs = sim.p,
-		traits = sim.traits.obs,
+		traits = structure(sim.traits.obs, unknown = sim.traits.unk),
 		env = sim.envObserved,
-		tree = sim.tree)
+		tree = sim.tree,
+		tuning = p)
+	class(out) <- "fpcomSims"
+	return(out)
+}
+
+update.fpcomSims <- function(object, nnew = 1, 
+	sim.envObserved = rnorm(nnew),
+	sim.envUnknown = rnorm(nnew),
+	site.names = numnames(length(object$env) + nnew, "site"),
+	spp.names = numnames(length(object$traits),"sp"), ...){
+
+	m <- ncol(object$probs)
+	
+	sim.traits.obs <- structure(object$traits, unknown = NULL)
+	sim.traits.unk <- attr(object$traits, 'unknown')
+	p <- object$tuning
+
+	# simulate the new contemporary communities
+	sim.eta <- (p*outer(sim.envObserved, sim.traits.obs)) + 
+			   ((1-p)*outer(sim.envUnknown, sim.traits.unk))
+	sim.eta <- scale(as.vector(sim.eta))
+	dim(sim.eta) <- c(nnew, m)
+	sim.p <- exp(sim.eta)/(1+exp(sim.eta))
+	sim.comm <- matrix(rbinom(nnew*m, 1, sim.p), nnew, m)
+	
+	sim.p <- rbind(object$probs, sim.p)
+	sim.comm <- rbind(object$comm, sim.comm)
+	sim.envObserved <- c(object$env, sim.envObserved)
+		
+	dimnames(sim.comm) <- dimnames(sim.p) <- list(site.names, spp.names)
+	names(sim.envObserved) <- site.names
+	
+	out <- list(comm = sim.comm, 
+		probs = sim.p,
+		traits = object$traits,
+		env = sim.envObserved,
+		tree = object$tree,
+		tuning = p)
 	class(out) <- "fpcomSims"
 	return(out)
 }
