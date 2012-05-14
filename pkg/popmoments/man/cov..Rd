@@ -1,0 +1,24 @@
+\name{cov.}
+\alias{cov.}
+\title{Population-level covariance}
+\usage{
+  cov.(x, y, p)
+}
+\arguments{
+  \item{x}{A numeric vector giving the first variable of
+  the population.}
+
+  \item{y}{A numeric vector giving the second variable of
+  the population.}
+
+  \item{p}{An optional vector of weights.  If missing,
+  equal weights are used.}
+}
+\value{
+  The covariance of \code{x} and \code{y}.
+}
+\description{
+  Covariance of two vectors giving the elements of a
+  bivariate population.
+}
+

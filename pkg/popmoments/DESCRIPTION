@@ -1,0 +1,12 @@
+Package: popmoments
+Type: Package
+Title: Population-level moments
+Version: 0.1
+Date: 2012-05-13
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Population-level moments
+License: GPL-2
+LazyLoad: yes
+Collate:
+    'popmoments.R'
