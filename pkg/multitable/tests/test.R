@@ -524,3 +524,15 @@ test_that("data.list doesn't fail for mefa-like data structure (i.e. 4th corner 
 	expect_that(dl1, equals(dl3))
 
 })
+
+#test_that("#2008 is fixed",{
+#	library(multitable)
+#	set.seed(1)
+#	x <- runif(10)
+#	y <- runif(11)
+#	em <- try(data.list(x, y), silent = TRUE)[1]
+#	THIS EXPECT_THAT IS NOT WRITTEN CORRECTLY BUT ITS NOT TO BE RUN ANYWAYS
+#	expect_that(em, equals("Error in as.data.list.default(x, dimids, match.dimids, check = check,  : 
+#  at least one variable must be
+#replicated along all dimensions"))
+#})

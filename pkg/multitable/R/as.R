@@ -142,8 +142,11 @@ make.match.dimids <- function(x, dimids){
 	
 	# get a logical vector indicating which elements
 	# in x have non-null dimnames.
-	notnullnames <- !sapply(innames,is.null) # think this line is a bug...
+	#notnullnames <- !sapply(innames,is.null) # think this line is a bug...
 	#notnullnames <- !sapply(ulinnames,is.null) # that this line fixes???
+
+	# above still buggy so new attempt
+	notnullnames <- !(any(sapply(innames,is.null)) || any(sapply(ulinnames,is.null)))
 	
 	#if(all(notnullnames) && !is.null(ulinnames)){
 	# fixed a BUG here:  the !is.null(ulinnames) is not necessary,
@@ -154,7 +157,7 @@ make.match.dimids <- function(x, dimids){
 	# ulinnames) or get.input.names (when creating innames) has 
 	# dropped some elements and this means that some of the innames 
 	# were NULL, which is what we want to avoid in this condition.
-	if(all(notnullnames) && (length(x) == length(ulinnames))){
+	if(notnullnames && (length(x) == length(ulinnames))){ # removed all() around notnullnames...now handled in the defnition of notnullnames
 		# 2a. this condition is evaluated when the dimensions
 		# of the elements in x are 'fully named'
 		# therefore, this is where the algorithm tries

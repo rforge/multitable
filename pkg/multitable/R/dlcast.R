@@ -28,8 +28,10 @@ dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders, ...){
 	# create default dimids
 	xnames <- lapply(x,names)
 	ul.xnames <- unlist(xnames)
-	if(missing(dimids))
+	if(missing(dimids)){
+		message('dimids automatically generated')
 		dimids <- ul.xnames[duplicated(ul.xnames)]
+	}
 	
 	# figure out the names of columns that are dimensions
 	# of replication (dims) and the names of columns that
@@ -53,7 +55,7 @@ dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders, ...){
 		# was due to both levi waldron and i through
 		# discussions during a trip he took to montreal.)
 		dim.namesi <- lapply(dims[[i]], get.dim.names, x)
-		full <- mouter(dim.namesi,FUN=paste,sep=".")
+		full <- mouter(dim.namesi, FUN=paste, sep=".")
 		if(is.null(full))
 			stop("some tables lack identified replication dimensions")
 		dfull <- dim(full)
@@ -65,18 +67,18 @@ dlcast <- function(x, dimids, fill = rep(NA, length(x)), placeholders, ...){
 		# in each row of the data frame. these are the
 		# names of the cells that have observations (obs)
 		# in the data frame.
-		obs <- do.call(paste,c(x[[i]][dims[[i]]],sep="."))
+		obs <- do.call(paste, c(x[[i]][dims[[i]]], sep = "."))
 		
 		# find the indices (in full) that correspond to
 		# actual observed values (in obs)
-		mtchs <- match(obs,full)
+		mtchs <- match(obs, full)
 		
 		# fill one array for each variable (they each
 		# have the same dimensions and same fill indices)
 		out[[i]] <- list()
 		for(j in seq_along(vars[[i]]))
-			out[[i]][[j]] <- make.arrays(vars[[i]][j],x[[i]],
-				mtchs,dfull,dim.namesi,fill[i])
+			out[[i]][[j]] <- make.arrays(vars[[i]][j], x[[i]],
+				mtchs,dfull, dim.namesi, fill[i])
 		names(out[[i]]) <- vars[[i]]
 	}
 	
@@ -110,7 +112,7 @@ remove.placeholders <- function(dl, placeholder){
 # dfull: dimensions of the output array
 # nms: dimnames for the array
 # fill: default value for structural missings in the output array
-make.arrays <- function(vr,xi,mtchs,dfull,nms,fill){
+make.arrays <- function(vr, xi, mtchs, dfull, nms, fill){
 
 	# create an array with the correct dimensions that is filled
 	# with the default value
@@ -123,7 +125,7 @@ make.arrays <- function(vr,xi,mtchs,dfull,nms,fill){
 	# values found in xv
 	a[mtchs] <- if(is.factor(xv)) as.character(xv) else xv
 	
-	if(length(dfull)==1) names(a) <- nms[[1]]
+	if(length(dfull) == 1) names(a) <- nms[[1]]
 	else dimnames(a) <- nms
 	
 	return(a)
