@@ -145,3 +145,35 @@ replicationgraph <- function(
 	}
 
 }
+
+#' Get minimal replication graph
+#' 
+#' Collapse variables that are replicated along the same dimensions in a matrix
+#' representing a replication graph.
+#'
+#' @param replicationmatrix A binary matrix with rows and columns representing
+#'	dimensions of replication and variables respectively.
+#' @param collapse Character for separating names of original variables that have
+#'	been collapsed into a single variable group.
+#' @export
+#' @examples
+#' require(multitable)
+#' data(fake.community)
+#' s <- summary(fake.community)
+#' get.minimal.graph(s, '.')
+#' replicationgraph(get.minimal.graph(s))
+#' replicationgraph(s)
+#' par(mfrow = c(1, 2))
+#' replicationgraph(get.minimal.graph(s), cex = 0.8)
+#' replicationgraph(s, cex = 0.8)
+get.minimal.graph <- function(replicationmatrix, collapse = '\n'){
+	s <- replicationmatrix
+	sr <- t(unique(as.data.frame(t(s))))
+	
+	variable.clusters <- match(as.data.frame(s), as.data.frame(sr))
+	clustered.names <- lapply(1:max(variable.clusters), 
+		function(i) colnames(s)[variable.clusters==i])
+	cluster.names <- sapply(clustered.names, paste, collapse = collapse)
+	colnames(sr) <- cluster.names
+	return(sr)
+}

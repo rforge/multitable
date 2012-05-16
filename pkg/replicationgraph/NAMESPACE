@@ -1,1 +1,2 @@
+export(get.minimal.graph)
 export(replicationgraph)
