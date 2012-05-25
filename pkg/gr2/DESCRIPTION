@@ -1,0 +1,12 @@
+Package: gr2
+Type: Package
+Title: Graphical R$^2$
+Version: 0.1
+Date: 2012-05-25
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Graphical adjustment of R$^2$
+License: GPL-2
+LazyLoad: yes
+Collate:
+    'gr2.R'

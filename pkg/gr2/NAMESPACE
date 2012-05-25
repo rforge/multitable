@@ -1,0 +1,2 @@
+export(graphical.AdjRsqr)
+export(R2.baseline)
