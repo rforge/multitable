@@ -1,5 +1,6 @@
 export(cor.)
 export(cov.)
+export(cov3.)
 export(E.)
 export(reg.)
 export(var.)

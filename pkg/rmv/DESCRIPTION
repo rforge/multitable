@@ -1,0 +1,12 @@
+Package: rmv
+Type: Package
+Title: Multivariate random number generation
+Version: 0.1
+Date: 2012-05-27
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Package for making multivariate random draws.
+License: GPL-2
+LazyLoad: yes
+Collate:
+    'rmv.R'

@@ -98,10 +98,13 @@ fpcomSims <- function(n, m, p = 0.5,
 	sim.comm <- matrix(rbinom(n*m, 1, sim.p), n, m)
 	dimnames(sim.comm) <- dimnames(sim.p) <- list(site.names, spp.names)
 
+	ecosysfunc <- (p*sim.envObserved) + ((1-p)*sim.envUnknown)
+
 	out <- list(comm = sim.comm, 
 		probs = sim.p,
 		traits = structure(sim.traits.obs, unknown = sim.traits.unk),
 		env = sim.envObserved,
+		ecosysfunc = ecosysfunc,
 		tree = sim.tree,
 		tuning = p)
 	class(out) <- "fpcomSims"
@@ -135,10 +138,13 @@ update.fpcomSims <- function(object, nnew = 1,
 	dimnames(sim.comm) <- dimnames(sim.p) <- list(site.names, spp.names)
 	names(sim.envObserved) <- site.names
 	
+	ecosysfunc <- sim.envObserved + sim.envUnknown
+	
 	out <- list(comm = sim.comm, 
 		probs = sim.p,
 		traits = object$traits,
 		env = sim.envObserved,
+		ecosysfunc = ecosysfunc,
 		tree = object$tree,
 		tuning = p)
 	class(out) <- "fpcomSims"

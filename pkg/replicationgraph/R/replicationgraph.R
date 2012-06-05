@@ -41,8 +41,9 @@ replicationgraph <- function(
 	replicationmatrix,
 	dimensionnames,
 	variablenames, 
+	min.interbox = 0.01,
 	edgespace = 0.3, 
-	boxheight = 1/(max(dim(replicationmatrix)) + 1), 
+	boxheight = 1/(max(dim(replicationmatrix)) - (1 - min.interbox)), 
 	cex = 1, lwd = 1){
 
 	s <- replicationmatrix
@@ -60,7 +61,7 @@ replicationgraph <- function(
 	ndims <- nrow(s)
 	nvars <- ncol(s)
 
-	maxboxheight <- 1/(max(nvars, ndims) + 1)
+	maxboxheight <- 1/(max(nvars, ndims)  - (1 - min.interbox))
 	if(boxheight > maxboxheight)
 		boxheight <- maxboxheight
 
@@ -138,9 +139,15 @@ replicationgraph <- function(
 
 	for(i in 1:ndims){
 		for(j in 1:nvars){
-			if(s[i, j])
-				segments(xaxis[1] + dimbox[1]/2, dimspots[i], xaxis[2] - varbox[1]/2, varspots[j],
-					col = grey(0.5), lwd = lwd)
+			if(s[i, j]){
+				segments(
+					xaxis[1] + dimbox[1]/2, 
+					dimspots[i], 
+					xaxis[2] - varbox[1]/2, 
+					varspots[j],
+					col = grey(0.5), lwd = lwd
+				)
+			}
 		}
 	}
 

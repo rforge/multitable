@@ -57,6 +57,26 @@ cov. <- function(x, y, p){
 	return(E.(x*y, p) - (E.(x, p)*E.(y, p)))
 } 
 
+#' Population-level three-variable 'covariance'
+#'
+#' Covariance of three vectors giving the elements of a trivariate
+#' population.
+#' 
+#' @param x A numeric vector giving the first variable of the population.
+#' @param y A numeric vector giving the second variable of the population.
+#' @param z A numeric vector giving the third variable of the population.
+#' @param p An optional vector of weights.  If missing, equal 
+#'  weights are used.
+#' @return The 'covariance' of \code{x} and \code{y} and \code{z}.  This 
+#'	is \code{E.((x - E.(x))*(y - E.(y))*(z - E.(z)))}
+#' @export
+cov3. <- function(x, y, z, p){
+	if(length(x) != length(y)) stop('x must be same length as y')
+	if(length(x) != length(z)) stop('x must be same length as z')
+	if(length(y) != length(z)) stop('y must be same length as z')
+	return(E.((x - E.(x))*(y - E.(y))*(z - E.(z))))
+}
+
 #' Population-level correlation
 #'
 #' Correlation of two vectors giving the elements of a bivariate
