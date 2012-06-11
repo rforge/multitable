@@ -12,14 +12,14 @@ First fits selection curves by log-linear fitting using \code{\link{glm}} and th
 }
 \usage{
 fit.catch(catch, sel.curve = norm.loc, tangle = TRUE,
-	perimeter.factor = 2, tol = 1e-8)
+	perimeter.factor = 2, tol = 1e-8, omega0 = 0.1)
 
 \method{plot}{fit.catch}(x, y, xlab = "Fork length (mm)",
 	ylab = "Relative selection probability", 
 	resolution=500, 
-	plot.type = c("selcurve", "totalselcurve", "residuals"),
+	plot.type = c("selcurve", "totalselcurve", "residuals", "observedvrsexpected"),
 	max.cex=2, min.cex=0.5, leg.pos = "topleft", 
-	data.name=NULL, ...)
+	data.name=NULL, justtangle = TRUE, ...)
 
 \method{deviance}{fit.catch}(object, ...)
 
@@ -47,9 +47,11 @@ fit.catch(catch, sel.curve = norm.loc, tangle = TRUE,
   \item{min.cex}{minimum size of the deviance circles}
   \item{leg.pos}{position of the legend if necessary, see \code{\link{legend}}.}
   \item{data.name}{name of the data set to be plotted}
+  \item{justtangle}{should only the tangle model be plotted?}
   \item{corrected}{if TRUE, the small-sample-size corrected version of AIC is returned (recommended)}
   \item{k}{not used.  only for consistency with default S3 method.}
   \item{tol}{tolerance used to decide on whether fitted values are numerically zero. used to correct AIC values. this correction depends on sample size, and the standard way to calculate sample size is as the number of mesh sizes times the number of fish length categories and then to subtract from this number the number of zero fitted counts}
+  \item{omega0}{initial value for the tangle parameter}
   \item{digits}{number of digits to round to}
   \item{\dots}{additional arguments to be passed}
 }

@@ -39,13 +39,13 @@ function(x,y,mesh.pos="topleft",y.incr=200,...){
 	for(k in 1:n.mesh){
 		plot(range(lens),c(0,max(x$counts)),type="n",xaxt="n",yaxt="n",ylab="")
 		y.scale <- seq(from=0,to=max(x$counts),by=y.incr)
-		axis(2,y.scale,label=y.scale,las=1)
+		axis(2,y.scale, labels = y.scale, las = 1)
 		for(j in 1:n.bins){
 			rect(lens[j]-halfbinsize,0,lens[j]+halfbinsize,x$counts[j,k])
 		}
 		legend(mesh.pos,legend=paste(x$mesh[k],"mm mesh",sep=""),bty="n")
 	}
-	axis(1,at=lens,labels=lens,las=3)
+	axis(1, at = lens, labels = lens, las = 3)
 	plot(c(0,1),c(0,1),type="n",xaxt="n",yaxt="n",bty="n",xlab="",ylab="")
 	text(0.5,0.5,"Fork length (mm)")
 }

@@ -16,6 +16,18 @@ export(getSelcurve, getTotalSelcurve, modelaverageTotalSelcurve)
 
 export(fit.catch.compare, AIC.fit.catch.compare, deviance.fit.catch.compare, plot.fit.catch.compare, print.fit.catch.compare, summary.fit.catch.compare, print.summary.fit.catch.compare)
 
+#S3method(plot, fit.catch}
+#S3method(deviance, fit.catch}
+#S3method(AIC, fit.catch}
+#S3method(print, fit.catch}
+#S3method(coef, fit.catch}
+#S3method(coefficients, fit.catch}
+#S3method(plot, fit.catch.compare}
+#S3method(deviance, fit.catch.compare}
+#S3method(AIC, fit.catch.compare}
+#S3method(print, fit.catch.compare}
+#S3method(summary, fit.catch.compare}
+#S3method(print, summary.fit.catch.compare}
 
 # import other packages
 

@@ -1,4 +1,4 @@
-plot.fit.catch <- function(x,y,xlab="Fork length (mm)", ylab="Relative selection probability", resolution=500, plot.type = c("selcurve","totalselcurve","residuals","observedvrsexpected"), max.cex=2, min.cex=0.5, leg.pos = "topleft", data.name=NULL, justtangle = TRUE,...){
+plot.fit.catch <- function(x, y, xlab = "Fork length (mm)", ylab = "Relative selection probability", resolution = 500, plot.type = c("selcurve", "totalselcurve", "residuals", "observedvrsexpected"), max.cex = 2, min.cex = 0.5, leg.pos = "topleft", data.name = NULL, justtangle = TRUE, ...){
 	
 	if(justtangle && (!x$tangle)){
 		warning("no fitted tangle parameter, changing justtangle = FALSE")

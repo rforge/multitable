@@ -8,7 +8,8 @@ Create dataset of class \code{catch}
 Creates \code{catch} objects out of information on gillnet catches.  These objects are required for use with the software in this package.
 }
 \usage{
-make.catch(mesh, lens, counts, binsize = 20)
+make.catch(mesh, lens, counts, binsize = 20, 
+  data.name = deparse(substitute(lens)))
 
 \method{plot}{catch}(x, y, mesh.pos = "topleft", y.incr = 200,...)
 }
@@ -17,6 +18,7 @@ make.catch(mesh, lens, counts, binsize = 20)
   \item{lens}{a vector of fish lengths (one for each fish).}
   \item{counts}{optional.  not important for now.  I'll explain later.}
   \item{binsize}{positive number giving the size of the histogram bins that fish lengths are categorized into.}
+  \item{data.name}{name of the data set.}
   \item{x}{an object of class \code{catch}.}
   \item{y}{not used...only present for consistency with default S3 method.}
   \item{mesh.pos}{a character string indicating where to print the mesh sizes. see \code{\link{legend}} for more details.}

@@ -1,5 +1,7 @@
 fit.catch.compare <- function(catch, perimeter.factor = 2, tol = 1e-8, omega0 = 0.1){
 	
+	data(sel.curves, package = 'omnr.gillnet')
+	
 	# fit all models in sel.curves
 	fits <- lapply(sel.curves, function(x)
 		fit.catch(catch, x, perimeter.factor = perimeter.factor, omega0 = omega0))
