@@ -301,7 +301,7 @@ FPD <- function(PD, FD, a, p, ord = FALSE){
 		FD <- FD[order(row.names(FD)),order(row.names(FD))]
 		PD <- PD[order(row.names(PD)),order(row.names(PD))]
 	}
-	((a*(PD^(1/p))) + ((1-a)*(FD^(1/p))))^p
+	((a*(PD^p)) + ((1-a)*(FD^p)))^(1/p)
 }
 
 #' Rao's quadratic entropy

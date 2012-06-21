@@ -144,7 +144,7 @@ variable_margins <- function(X, MARGIN){
 
 replication.problem <- function(margini, Xnamesi){
 	if(length(margini) == 0){
-		message(paste("omiting", Xnamesi,"because it is not replicated along MARGIN"))
+		message(paste("omitting", Xnamesi,"because it is not replicated along MARGIN"))
 		return(TRUE)
 	}
 	else
@@ -153,7 +153,7 @@ replication.problem <- function(margini, Xnamesi){
 
 apply.problem <- function(Xi, Xnamesi){
 	if(class(Xi) == "try-error"){
-		message(paste("omiting", Xnamesi,"because of the following error:\n",Xi[1]))
+		message(paste("omitting", Xnamesi,"because of the following error:\n",Xi[1]))
 		return(TRUE)
 	}
 	else
@@ -162,7 +162,7 @@ apply.problem <- function(Xi, Xnamesi){
 
 data.list.problem <- function(Xi, Xnamesi){
 	if(class(Xi) == "try-error"){
-		message("omiting", Xnamesi,"because it can't be added to a data list")
+		message("omitting", Xnamesi,"because it can't be added to a data list")
 		return(TRUE)
 	}
 	else
