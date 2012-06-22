@@ -2,7 +2,7 @@
 \alias{FPD}
 \title{Functional phylogenetic distance}
 \usage{
-  FPD(PD, FD, a, p, ord = FALSE)
+  FPD(PD, FD, a, p, ord = TRUE)
 }
 \arguments{
   \item{PD}{A phylogenetic distance matrix.}
@@ -14,7 +14,8 @@
 
   \item{p}{A number giving the \code{p}-norm.}
 
-  \item{ord}{Should the ordering of the distance matrices}
+  \item{ord}{Order rows and columns of the matrices?
+  (defaults to \code{TRUE}).}
 }
 \value{
   A distance matrix.

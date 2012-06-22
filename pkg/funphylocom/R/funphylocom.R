@@ -318,7 +318,10 @@ FPD <- function(PD, FD, a, p, ord = TRUE){
 		any(rownames(FD) != rownames(PD)) ||
 		any(colnames(FD) != colnames(PD))
 	) stop('FD and PD must have same row and column names')
-
+	
+	FD <- FD/max(FD)
+	PD <- PD/max(PD)
+	
 	((a*(PD^p)) + ((1-a)*(FD^p)))^(1/p)
 }
 
@@ -349,9 +352,18 @@ rao <- function(X, D, ord = TRUE){
 	if(any(colnames(X) != colnames(D)))
 		stop('species names must match')
 	
+	# row sums
 	rs <- apply(X, 1, sum)
+	
+	# get relative abundances by dividing by row sums
 	X.rel <- sweep(X, 1, rs, FUN = '/')
+	
+	# make relative abundances be zero for all species
+	# at sites for which all species have zero abundance.
+	# this is needed b/c of division by zero.
 	X.rel[is.nan(X.rel)] <- 0
+	
+	# combine rao index, (x %*% D %*% x)/2, for each site
 	out <- apply(X.rel, 1, function(x) x %*% D %*% x)/2
 
 	names(out) <- rownames(X)
@@ -385,6 +397,22 @@ FPDglm_ap <- function(ap, x, y, PD, FD, index = 'mpd', ...){
 	glm(y ~ fpd, ...)
 }
 
+#' Mean pairwise distance
+#' 
+#' Calculates mean pairwise distance separating taxa in a community
+#' (slightly modified from the \code{picante} function: 
+#' \code{\link{mpd}})
+#'
+#' Only one slight change to avoid NA values (TODO: better description
+#' here).
+#'
+#' @param samp Community data matrix
+#' @param dis Interspecific distance matrix
+#' @param abundance.weighted Should mean pairwise diatnces be weighted
+#'  by species abundance? (default = FALSE)
+#' @return Vector of MPD values for each community
+#' @author Code modified from original version by Steven Kembel
+#' @export
 mpd. <- function (samp, dis, abundance.weighted = FALSE) 
 {
     N <- dim(samp)[1]
@@ -409,6 +437,496 @@ mpd. <- function (samp, dis, abundance.weighted = FALSE)
     }
     mpd
 }
+
+
+#' Null models for FPD
+#'
+#' Simulate expectations (under a null model) of mean pairwise distance for 
+#' a set of communities with different species richness.
+#'
+#' If \code{plot == TRUE}, then a surface is drawn giving the
+#' null distribution.  Lighter shades of gray give larger intervals 
+#' with categories: 0.005-0.995 = 99\%, 0.025-0.975 = 95\%, 0.05-0.95 = 90\%,
+#' 0.25-0.75 = 50\%.
+#'
+#' @param tab the community by species presence table
+#' @param Dist the distance (functional, phylogenetic, FPD) on which the 
+#'  mean pairwise distance is based
+#' @param Sim the number of permutations of the presence vector used to 
+#'  make the estimations
+#' @param Plot TRUE or FALSE to make the plot of the expected average 
+#'  mean pairwise distance, and the 5-95\% confidence interval
+#' @param ord Order rows and columns of the matrices? (defaults
+#'  to \code{TRUE}).  Note that sites are never ordered.
+#' @param disp99 Display the 99\% interval?
+#' @return TODO
+#' @export
+ConDivSim<-function(tab, Dist, Sim, Plot = TRUE, ord = TRUE, disp99 = FALSE){
+	if(
+		is.null(rownames(Dist)) ||
+		is.null(colnames(Dist))
+	) stop('distance matrix must have row and column names')
+	if(is.null(colnames(tab)))
+		stop('community matrix must have column (i.e. species) names')
+	if(any(rownames(Dist) != colnames(Dist)))
+		stop('row and column names must match for distance matrix')
+	if(ord){
+		tab <- tab[, order(colnames(tab))]
+		Dist <- Dist[order(rownames(Dist)), order(rownames(Dist))]
+	}
+	if(any(colnames(tab) != colnames(Dist)))
+		stop('species names must match')
+
+	## Calculate the observed species richness 
+	SpeRich.obs <- rowSums(tab)
+	Occur.obs <- colSums(tab)
+	
+	## Check that numbers are high enough for randomisation
+	## (e.g. no communities with one species only)
+	if(any(SpeRich.obs < 2)) 
+		stop('all communities must have more than one species present')
+	if(any(Occur.obs < 1)) 
+		stop('all species must be present at more than zero communities')
+
+	## Calculate the range of species richness in the communities
+	if(min(SpeRich.obs)>2){
+		SpRich <- (min(SpeRich.obs)-1):(max(SpeRich.obs)+1)
+	}
+	else {
+		SpRich <- min(SpeRich.obs):(max(SpeRich.obs)+1)
+	}
+
+	## Calculate the regional species richness(gamma)
+	NbSp <- ncol(tab)
+	
+	## Create the matrix in which to store the results
+	Randomiz <- matrix(0, length(SpRich), 11)
+	colnames(Randomiz)<-c("SpRich","ExpMeanMPD","ExpQ0.005MPD","ExpQ0.025MPD","ExpQ0.05MPD","ExpQ0.25MPD","ExpQ0.75MPD","ExpQ0.95MPD","ExpQ0.975MPD","ExpQ0.995MPD","ExpSdMPD")
+	row.names(Randomiz) <- 1:length(SpRich)
+	
+	## calculate the observed mean pairwise distance for the community
+	## (with the unweighted method from mpd in picante, it means only 
+	## the lower triangle!)
+	MPD.obs <- mpd.(tab, Dist, abundance.weighted = FALSE)
+  
+	## Loop on the species richness range to calculate the random 
+	## expectations of mean pairwise distance
+	for (k in 1:length(SpRich)){
+    
+    	# Vector of local richness within the possible range SpRich
+    	locrich <- SpRich[k]
+    
+    	# Create the basic vector of presence
+	    Vec.Pres <- c(rep(1, locrich), rep(0, NbSp-locrich))
+    
+		# Estimate the random expectations of mean pairwise distances 
+		# for the random community with locrich as the species richness
+		Sim.Div <- NULL
+
+		for (i in 1:Sim) {
+        	Vec.Pres.Sim <- sample(Vec.Pres)
+	        sample.dis <- Dist[
+	        	as.logical(Vec.Pres.Sim), 
+	        	as.logical(Vec.Pres.Sim)
+	        ]
+	        
+	        # line in mpd from picante with abundance.weighted = FALSE
+        	Sim.Div[i] <- mean(sample.dis[lower.tri(sample.dis)])
+      	}
+
+		# Store the results in Randomiz
+	    Randomiz[k,1]<-locrich
+	    Randomiz[k,2]<-mean(Sim.Div)
+	    Randomiz[k, 3:10] <- quantile(Sim.Div, 
+	    	c(0.005, 0.025, 0.05, 0.25, 0.75, 0.95, 0.975, 0.995))
+    	Randomiz[k,11]<-sd(Sim.Div)
+	}
+	
+	## Make the graph if required
+	if(Plot == TRUE){
+    
+   		plot(Randomiz[,1:2],
+    		ylim = c(min(Randomiz[, 3], MPD.obs), max(Randomiz[, 10], MPD.obs)),
+			type="n", xlab="Species richness",ylab="Mean pairwise distance")
+		
+		## Surface for each of the quantile pair:
+		if(disp99){
+			polygon( ## 0.005-0.995 = 99%
+				c(Randomiz[,1], Randomiz[length(SpRich):1, 1]), 
+				c(Randomiz[,3], Randomiz[length(SpRich):1, 10]),
+				col=grey(0.9), border=NA)
+    	}
+    	
+		polygon( ## 0.025-0.975 = 95%
+			c(Randomiz[,1], Randomiz[length(SpRich):1,1]),
+			c(Randomiz[,4], Randomiz[length(SpRich):1,9]),
+			col=grey(0.8),border=NA)
+    	
+		polygon( ## 0.05-0.95 = 90%
+			c(Randomiz[,1], Randomiz[length(SpRich):1,1]),
+			c(Randomiz[,5], Randomiz[length(SpRich):1,8]),
+			col=grey(0.7),border=NA)
+    
+		polygon( ## 0.25-0.75 = 50%
+			c(Randomiz[,1], Randomiz[length(SpRich):1,1]),
+			c(Randomiz[,6], Randomiz[length(SpRich):1,7]),
+			col=grey(0.6),border=NA)
+    	
+		## Average of the expected mean pairwise distance
+		lines(Randomiz[,1:2], col = "black", lwd = 2)
+    
+		## Labelling the communities
+		if(is.null(row.names(tab))){
+			points(SpeRich.obs, MPD.obs)
+		}
+		else{
+			text(SpeRich.obs, MPD.obs, labels = row.names(tab))
+		}
+    
+    }
+	
+	return(Randomiz)
+}
+
+
+
+
+#' Null models for (TODO:  better title)
+#'
+#' Check for a given community how the mean pairwise distance changes with 
+#' the parameter a in FPD
+#'
+#' If \code{plot == TRUE}, then a surface is drawn giving the
+#' null distribution.  Lighter shades of gray give larger intervals 
+#' with categories: 0.005-0.995 = 99\%, 0.025-0.975 = 95\%, 0.05-0.95 = 90\%,
+#' 0.25-0.75 = 50\%.
+#'
+#' @param comm a vector over the species in the regional pool, giving the
+#'  presence or absence of the species occurring in the community
+#'  (1 for present species, 0 for absent species)
+#' @param pd phylogenetic distance matrix over the species in the regional 
+#'  pool
+#' @param fd functional distance matrix over the species in the regional 
+#'  pool
+#' @param Sim the number of permutations of the presence vector used to 
+#'  make the estimations
+#' @param p parameter passed to \code{\link{FPD}} function
+#' @param Plot TRUE or FALSE to make the plot of the expected average 
+#'  mean pairwise distance over a range of a-values (\code{a} is a parameter
+#'  in the \code{\link{FPD}} function), and the 5-95\% confidence interval
+#' @param ord Order rows and columns of the matrices? (defaults
+#'  to \code{TRUE}).  Note that sites are never ordered.
+#' @param disp99 Display the 99\% interval?
+#' @param num.a Number of a-values to compute
+#' @return TODO
+#' @export
+ConDivSimComm<-function(comm, pd, fd, Sim, p = 2,
+	Plot = TRUE, ord = TRUE, disp99 = FALSE, num.a = 20){
+	
+	if(!is.data.frame(comm)) stop('comm must be a one-row data frame')
+	if(nrow(comm) != 1) stop('comm must be a one-row data frame')
+	if(is.null(names(comm)))
+		stop('community vector must have names')
+	if(
+		(ncol(comm) != nrow(pd)) ||
+		(ncol(comm) != ncol(pd)) ||
+		(ncol(comm) != nrow(fd)) ||
+		(ncol(comm) != ncol(fd))
+	) stop('number of species must match between comm, pd, and fd')
+	if(
+		is.null(rownames(pd)) ||
+		is.null(colnames(pd)) ||
+		is.null(rownames(fd)) ||
+		is.null(colnames(fd))
+	) stop('distance matrices must have row and column names')
+	if(
+		any(rownames(pd) != colnames(pd)) ||
+		any(rownames(fd) != colnames(fd))
+	) stop('row and column names must match for distance matrices')
+	if(ord){
+		comm <- comm[, order(colnames(comm))]
+		pd <- pd[order(rownames(pd)), order(rownames(pd))]
+		fd <- fd[order(rownames(fd)), order(rownames(fd))]
+	}
+	if(
+		any(colnames(comm) != colnames(pd)) ||
+		any(colnames(comm) != colnames(fd))
+	) stop('species names must match between comm, pd, and fd')
+	
+	
+	## Create the vector of a values
+	a <- seq(0, 1, length.out = num.a)
+  
+  	## Calculate the regional species richness (gamma)
+	NbSp<-length(comm)
+  
+	## Calculate the local species richness (alpha)
+	locrich<-sum(comm)
+	
+	## Create the basic vector of presence
+	Vec.Pres<-c(rep(1,locrich),rep(0,NbSp-locrich))
+	
+	## Create the matrix in which to store the results
+	Randomiz<-matrix(0,length(a),12)
+	colnames(Randomiz)<-c("SpRich","ExpMeanMPD","ExpQ0.01MPD","ExpQ0.05MPD","ExpQ0.1MPD","ExpQ0.25MPD","ExpQ0.75MPD","ExpQ0.9MPD","ExpQ0.95MPD","ExpQ0.99MPD","ExpSdMPD","Obs,MPD")
+	row.names(Randomiz)<-1:length(a)
+  
+  
+	## Loop on the a values: for each one calculate the random 
+	## expectations and observed values of mean pairwise distance
+	for(k in 1:length(a)){
+
+		# Calculate the FPDistance based on the current a value
+		FPD.temp <- FPD(pd, fd, a[k], p = p)
+      
+		# Calculate the observed mean pairwise distance for the 
+		# community (with the unweighted method from mpd in picante)
+		obs.dis <- FPD.temp[as.logical(comm), as.logical(comm)]
+		
+		# line in mpd from picante with abundance.weighted = FALSE
+		Randomiz[k,12] <- mean(obs.dis[lower.tri(obs.dis)])
+
+		# declare Sim.Div to be filled in the loop below
+		Sim.Div<-NULL
+
+		# Estimate the random expectations of mean pairwise distances 
+		# for the community		
+		for (i in 1:Sim) {
+			Vec.Pres.Sim<-sample(Vec.Pres)
+			sample.dis <- FPD.temp[
+				as.logical(Vec.Pres.Sim), 
+				as.logical(Vec.Pres.Sim)
+			]
+			# line in mpd from picante with abundance.weighted = FALSE
+			Sim.Div[i]<-mean(sample.dis[lower.tri(sample.dis)])
+		}
+      
+		# Store the results in Randomiz
+	    Randomiz[k,1] <- a[k]
+	    Randomiz[k,2]<-mean(Sim.Div)
+	    Randomiz[k, 3:10] <- quantile(Sim.Div, 
+	    	c(0.005, 0.025, 0.05, 0.25, 0.75, 0.95, 0.975, 0.995))
+    	Randomiz[k,11]<-sd(Sim.Div)    	
+	}
+
+
+	if(Plot == TRUE){
+    	plot(
+    		Randomiz[,1:2], 
+    		ylim = c(min(Randomiz[,c(3,12)]), max(Randomiz[,c(10,12)])), 
+    		type="l", 
+    		main = paste(
+    			"Community= ",row.names(comm)," - Sp Richness =",locrich
+    		), 
+    		xlab = "a", ylab = "Mean pairwise distance ")
+    		
+    	## Surface for each of the quantile pair:
+		if(disp99) {
+			polygon( ## 0.005-0.995 = 99%
+				c(Randomiz[,1], Randomiz[length(a):1, 1]), 
+				c(Randomiz[,3], Randomiz[length(a):1, 10]),
+				col=grey(0.9), border=NA)
+		}
+    	
+		polygon( ## 0.025-0.975 = 95%
+			c(Randomiz[,1], Randomiz[length(a):1,1]),
+			c(Randomiz[,4], Randomiz[length(a):1,9]),
+			col=grey(0.8),border=NA)
+    	
+		polygon( ## 0.05-0.95 = 90%
+			c(Randomiz[,1], Randomiz[length(a):1,1]),
+			c(Randomiz[,5], Randomiz[length(a):1,8]),
+			col=grey(0.7),border=NA)
+    
+		polygon( ## 0.25-0.75 = 50%
+			c(Randomiz[,1], Randomiz[length(a):1,1]),
+			c(Randomiz[,6], Randomiz[length(a):1,7]),
+			col=grey(0.6),border=NA)
+
+ 
+		lines(Randomiz[,1:2])
+		
+		lines(Randomiz[,c(1,12)], lty = 2)
+	}
+	
+	out <- list(CommName=row.names(comm),CommSpRich=locrich,Simul=Randomiz)
+	return(out)
+}
+
+
+#' Community traitgram
+#' 
+#' Displays a subset of species from a species pool within an Ackerly
+#' traitgram (\code{\link{traitgram}}).
+#'
+#' This function is a modification of the \code{\link{traitgram}} function
+#' in the \code{picante} package.
+#' 
+#' @param x See \code{\link{traitgram}}
+#' @param phy See \code{\link{traitgram}}
+#' @param xaxt See \code{\link{traitgram}}
+#' @param underscore See \code{\link{traitgram}}
+#' @param show.names See \code{\link{traitgram}}
+#' @param show.xaxis.values See \code{\link{traitgram}}
+#' @param method See \code{\link{traitgram}}
+#' @param edge.color A single color or a vector of two colors
+#' @param edge.lwd.in A single width value for species in the subset
+#' @param edge.lwd.out A single width value for species out of the subset 
+#'  (ignored if \code{is.null(Group)})
+#' @param tip.color A single color or a vector of two colors
+#' @param tip.cex A single size value
+#' @param Group Either a subset of the tip labels in \code{phy} or
+#'  the indices associated with the species in the community
+#' @param ... Additional arguments to \code{\link{traitgram}}
+#' @return No return value, but a traitgram is plotted.
+#' @author David Ackerly, modified by Cecile Albert
+#' @export
+comm.traitgram <- function (x, phy, xaxt = "s", underscore = FALSE, 
+	show.names = TRUE, show.xaxis.values = TRUE, 
+	method = c("ace", "pic"), edge.color = c('black', 'light grey'), 
+	edge.lwd.in = 2, edge.lwd.out = 1, 
+	tip.color = c('black', 'light grey'), 
+	tip.cex = par("cex"), Group = NULL, ...)
+{
+	
+	# comments indicate modifications to original traitgram function
+	
+	## edge.color and tip.color must be either of length 1 or 2
+	if(is.null(Group) && !((length(edge.color) %in% 1:2)))
+		stop('edge.color must be either of length 1 or 2')
+	if(is.null(Group) && !((length(tip.color) %in% 1:2)))
+		stop('tip.color must be either of length 1 or 2')
+	if(!is.null(Group) && (length(edge.color) != 2))
+		stop('with non-null Group, edge.color must be of length 2')
+	if(!is.null(Group) && (length(tip.color) != 2))
+		stop('with non-null Group, tip.color must be of length 2')	
+	
+	
+	## I added that to be sure that both trait and tree tip labels 
+	## are in the same order
+	x <- x[phy$tip.label]
+    
+    ## Identify species present in the community
+    if(is.character(Group)) Group <- which(phy$tip.label %in% Group)
+
+    Ntaxa = length(phy$tip.label)
+    Ntot = Ntaxa + phy$Nnode
+    phy = node.age(phy)
+    ages = phy$ages[match(1:Ntot, phy$edge[, 2])]
+    ages[Ntaxa + 1] = 0
+    if (class(x) %in% c("matrix", "array")) {
+        xx = as.numeric(x)
+        names(xx) = row.names(x)
+    }
+    else xx = x
+    if (!is.null(names(xx))) {
+        umar = 0.1
+        if (!all(names(xx) %in% phy$tip.label)) {
+            print("trait and phy names do not match")
+            return()
+        }
+        xx = xx[match(phy$tip.label, names(xx))]
+    }
+    else umar = 0.1
+    lmar = 0.2
+    if (xaxt == "s")
+        if (show.xaxis.values)
+            lmar = 1
+        else lmar = 0.5
+    if (method[1] == "ace")
+        xanc = ace(xx, phy)$ace
+    else xanc = pic3(xx, phy)[, 3]
+    xall = c(xx, xanc)
+    a0 = ages[phy$edge[, 1]]
+    a1 = ages[phy$edge[, 2]]
+    x0 = xall[phy$edge[, 1]]
+    x1 = xall[phy$edge[, 2]]
+    
+	## Create color and width vectors for the edges
+    #edge.lwd <- rep(edge.lwd, length.out = nrow(phy$edge))
+    #tip.cex <- rep(tip.cex, length.out = Ntaxa)
+    
+    #if(is.null(Group)){
+	#	edge.color <- rep(edge.color[1], length.out = nrow(phy$edge))
+	#	tip.color <- rep(tip.color[1], length.out = Ntaxa)
+   	#}
+   	#else{
+   		
+   	#}
+    #edge.color<-rep("light grey",nrow(phy$edge))
+    #edge.color[edge.Group]<-"black"
+    #tip.color<-rep("light grey",Ntaxa)
+    #tip.color[Group]<-"black"
+   #}
+####
+    tg = par(bty = "n", mai = c(lmar, 0.1, umar, 0.1))
+    if (show.names) {
+        maxNameLength = max(nchar(names(xx)))
+        ylim = c(min(ages), max(ages) * (1 + maxNameLength/50))
+        if (!underscore)
+            names(xx) = gsub("_", " ", names(xx))
+    }
+    else ylim = range(ages)
+    plot(range(c(x0, x1)), range(c(a0, a1)), type = "n", xaxt = "n",
+        yaxt = "n", xlab = "", ylab = "", bty = "n", ylim = ylim,
+        cex.axis = 0.8)
+    if (xaxt == "s")
+        if (show.xaxis.values)
+            axis(1, labels = TRUE)
+        else axis(1, labels = FALSE)
+    
+    ## if no grouping, plot normal traitgram but with edge color or width
+    ## as specified in the arguments
+    if(is.null(Group)){
+		segments(x0, a0, x1, a1,col = edge.color[1], lwd = edge.lwd.in)
+    }
+    ## else if grouping, plot traitgram with different colors for edges
+    ## corresponding to tips belonging or not to the community
+    else{
+		edge.Group <- which.edge(phy,Group)
+		segments(
+			x0[-edge.Group], 
+			a0[-edge.Group], 
+			x1[-edge.Group], 
+			a1[-edge.Group],
+			col=edge.color[2], lwd = edge.lwd.out)
+		segments(
+			x0[edge.Group],
+			a0[edge.Group],
+			x1[edge.Group],
+			a1[edge.Group],
+			col=edge.color[1], lwd = edge.lwd.in)
+    }
+    if (show.names) {
+    
+    	## if no grouping, display normal tip labels
+    	if(is.null(Group)){
+        	text(
+        		sort(xx), max(ages), labels = names(xx)[order(xx)],
+            	adj = -0, srt = 90, cex = tip.cex, col = tip.color[1])
+		}
+		## else if grouping, display tips with different colors 
+		## corresponding to tips belonging or not to the community
+		else{
+			tip.Group <- numeric(Ntaxa)
+			tip.Group[Group] <- 1
+			tip.Group <- as.logical(tip.Group)
+			text(
+				sort(xx)[!tip.Group[order(xx)]],
+				max(ages), 
+				labels = names(xx)[order(xx)][!tip.Group[order(xx)]], 
+				adj = -0, srt = 90,cex = tip.cex, col = tip.color[2])
+			text(
+				sort(xx)[tip.Group[order(xx)]],
+				max(ages),
+				labels = names(xx)[order(xx)][tip.Group[order(xx)]],
+				adj = -0, srt = 90, cex = tip.cex, col = tip.color[1])                            
+    	}
+    }
+    on.exit(par(tg))
+}
+
+
 
 
 #' Grid search functional phylogenetic diversity generalised linear model
