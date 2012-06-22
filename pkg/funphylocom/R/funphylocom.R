@@ -291,16 +291,34 @@ tail.list <- function(x,n=6L,...){
 #' @param a A number between 0 and 1 giving the amount of weight
 #'	to put on \code{PD} relative to \code{FD}.
 #' @param p A number giving the \code{p}-norm.
-#' @param ord Should the ordering of the distance matrices 
+#' @param ord Order rows and columns of the matrices?  (defaults
+#'  to \code{TRUE}).
 #' @return A distance matrix.
 #' @note This function is not very user friendly yet.  There are
 #'	no doubt many use cases that I've ignored.
 #' @export
-FPD <- function(PD, FD, a, p, ord = FALSE){
+FPD <- function(PD, FD, a, p, ord = TRUE){
+	PD <- as.matrix(PD)
+	FD <- as.matrix(FD)
+	if(
+		is.null(rownames(FD)) ||
+		is.null(colnames(FD)) ||
+		is.null(rownames(PD)) ||
+		is.null(colnames(PD))
+	) stop('distance matrices must have row and column names')
+	if(
+		any(rownames(FD) != colnames(FD)) ||
+		any(rownames(PD) != colnames(PD))
+	) stop('row and column names must match for distance matrices')
 	if(ord){
-		FD <- FD[order(row.names(FD)),order(row.names(FD))]
-		PD <- PD[order(row.names(PD)),order(row.names(PD))]
+		FD <- FD[order(rownames(FD)), order(rownames(FD))]
+		PD <- PD[order(rownames(PD)), order(rownames(PD))]
 	}
+	if(
+		any(rownames(FD) != rownames(PD)) ||
+		any(colnames(FD) != colnames(PD))
+	) stop('FD and PD must have same row and column names')
+
 	((a*(PD^p)) + ((1-a)*(FD^p)))^(1/p)
 }
 
@@ -311,11 +329,33 @@ FPD <- function(PD, FD, a, p, ord = FALSE){
 #'
 #' @param D A species by species distance matrix.
 #' @param X A sites by species community matrix.
+#' @param ord Order rows and columns of the matrices? (defaults
+#'  to \code{TRUE}).  Note that sites are never ordered.
 #' @return A vector of diversity indices (one for each site).
 #' @export
-rao <- function(X, D){
-	X.rel <- sweep(X, 1, apply(X, 1, sum), FUN = '/')
-	apply(X.rel, 1, function(x) x %*% D %*% x)/2
+rao <- function(X, D, ord = TRUE){
+	if(
+		is.null(rownames(D)) ||
+		is.null(colnames(D))
+	) stop('distance matrix must have row and column names')
+	if(is.null(colnames(X)))
+		stop('community matrix must have column (i.e. species) names')
+	if(any(rownames(D) != colnames(D)))
+		stop('row and column names must match for distance matrix')
+	if(ord){
+		X <- X[, order(colnames(X))]
+		D <- D[order(rownames(D)), order(rownames(D))]
+	}
+	if(any(colnames(X) != colnames(D)))
+		stop('species names must match')
+	
+	rs <- apply(X, 1, sum)
+	X.rel <- sweep(X, 1, rs, FUN = '/')
+	X.rel[is.nan(X.rel)] <- 0
+	out <- apply(X.rel, 1, function(x) x %*% D %*% x)/2
+
+	names(out) <- rownames(X)
+	return(out)
 }
 
 #' Functional phylogenetic diversity generalised linear model
