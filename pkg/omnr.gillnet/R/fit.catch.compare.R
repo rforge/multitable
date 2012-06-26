@@ -4,7 +4,10 @@ fit.catch.compare <- function(catch, perimeter.factor = 2, tol = 1e-8, omega0 = 
 	
 	# fit all models in sel.curves
 	fits <- lapply(sel.curves, function(x)
-		fit.catch(catch, x, perimeter.factor = perimeter.factor, omega0 = omega0))
+		fit.catch(catch, eval(x),
+			perimeter.factor = perimeter.factor, omega0 = omega0
+		)
+	)
 
 	class(fits) = "fit.catch.compare"
 	attr(fits, "comparisonresults") <- comparemodels(fits)

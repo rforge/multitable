@@ -25,7 +25,7 @@ For \code{norm.loc}, \code{norm}, \code{lognorm}, \code{gamm}, and \code{inv.gau
 \item{curv}{calculates a matrix of values from the selection curve from two matrices of the same size giving the fish lengths and mesh sizes}
 \item{peak}{calculates the peak of the selection curve for different mesh sizes}
 
-\code{sel.curves} is a vector of the five other functions.
+\code{sel.curves} is a vector with the names of the five selection curve functions.
 }
 \author{
 Steve Walker
@@ -36,5 +36,5 @@ Steve Walker
 \examples{
 data(north.pike)
 np <- make.catch(north.pike$MESH, north.pike$FLEN)
-lapply(sel.curves, function(x) fit.catch(np, x))
+lapply(sel.curves, function(x) fit.catch(np, eval(x)))
 }
