@@ -45,20 +45,20 @@ NULL
 #'
 #' }
 #'
-#' @param n Number of sites to simulate
-#' @param m Number of species to simulate
+#' @param n Number of sites to simulate.
+#' @param m Number of species to simulate.
 #' @param p Number between 0 and 1 giving the relative importance of
-#'	observed versus unknown traits in determining community structure
-#' @param diverg.obs a vector with m elements giving the divergence
-#'	effects on the observed trait for each species
-#' @param diverg.unk a vector with m elements giving the divergence
-#'	effects on the unknown trait for each species
-#' @param sim.envObserved Numeric vector of simulated values for the 
-#'	observed environmental variables
-#' @param sim.envUnknown Numeric vector of simulated values for the 
-#'	unknown environmental variables
-#' @param site.names Character vector of site names
-#' @param spp.names Character vector of species names
+#'	observed versus unknown traits in determining community structure.
+#' @param diverg.obs A vector with m elements giving the divergence
+#'	effects on the observed trait for each species.
+#' @param diverg.unk A vector with m elements giving the divergence
+#'	effects on the unknown trait for each species.
+#' @param sim.envObserved A numeric vector of simulated values for the 
+#'	observed environmental variables.
+#' @param sim.envUnknown A numeric vector of simulated values for the 
+#'	unknown environmental variables.
+#' @param site.names Character vector of site names.
+#' @param spp.names Character vector of species names.
 #' @return An object of class \code{fpcomSims} with components:
 #'	\item{comm}{An n-by-m matrix of presences and absences}
 #'	\item{probs}{An n-by-m matrix of probabilities of occurrence}
@@ -196,12 +196,12 @@ update.fpcomSims <- function(object, nnew = 1,
 #'	the first two axes.}
 #' }
 #'
-#' @param x An \code{fpcomSims} object
-#' @param y Not used at the moment
-#' @param cex.add The cex graphics parameter for additional graphical 
-#'	elements not produced by the \code{\link{plot}} command
-#' @param plottype The type of plot to produce -- see details
-#' @param ... Additional parameters to be passed to \code{\link{plot}}
+#' @param x An \code{fpcomSims} object.
+#' @param y Not used at the moment.
+#' @param cex.add The cex graphics parameter for additional graphical. 
+#'	elements not produced by the \code{\link{plot}} command.
+#' @param plottype The type of plot to produce -- see details.
+#' @param ... Additional parameters to be passed to \code{\link{plot}}.
 #' @method plot fpcomSims
 #' @return No return value, called for its side-effect of producing a plot.
 #' @export
@@ -209,15 +209,15 @@ plot.fpcomSims <- function(x,y,cex.add=0.8,
 	plottype=c("distance","traitgram","gradient","ordination"),...){
 	
 	if(plottype[1]=="distance"){
-		PD <- cophenetic(x$tree)/max(cophenetic(x$tree))
-		PD <- PD[order(row.names(PD)),order(row.names(PD))]
-		FD <- as.matrix(dist(x$traits))/max(as.matrix(dist(x$traits)))
-		plot(PD,FD,type="n",
+		PDist <- cophenetic(x$tree)/max(cophenetic(x$tree))
+		PDist <- PDist[order(row.names(PDist)),order(row.names(PDist))]
+		FDist <- as.matrix(dist(x$traits))/max(as.matrix(dist(x$traits)))
+		plot(PDist,FDist,type="n",
 			xlab="phylogenetic distance",
 			ylab="functional distance",
 			...)
-		text(as.dist(PD),as.dist(FD),
-			paste(as.dist(col(PD)),as.dist(row(FD)),sep=","),
+		text(as.dist(PDist),as.dist(FDist),
+			paste(as.dist(col(PDist)),as.dist(row(FDist)),sep=","),
 			cex=cex.add)
 	}
 	
@@ -254,8 +254,8 @@ plot.fpcomSims <- function(x,y,cex.add=0.8,
 #' Generates numbered names based on a character prefix that will
 #' be alphanumerically sorted as expected.
 #'
-#' @param n Number of names
-#' @param prefix Character prefix to go in front of the numbers
+#' @param n Number of names.
+#' @param prefix Character prefix to go in front of the numbers.
 #' @return A character vector of numbered names.
 #' @export
 numnames <- function(n,prefix="name"){
@@ -271,9 +271,9 @@ numnames <- function(n,prefix="name"){
 #' utility function to make extractions of the 
 #' trait values at the tips easier
 #'
-#' @param x A list
-#' @param n Number of lines
-#' @param ... Not used
+#' @param x A list.
+#' @param n Number of lines.
+#' @param ... Not used.
 #' @return The first \code{n} elements of each list element.
 #' @method tail list
 tail.list <- function(x,n=6L,...){
@@ -286,10 +286,10 @@ tail.list <- function(x,n=6L,...){
 #' phylogenetic and functional distance matrices and two
 #' weighting parameters.
 #'
-#' @param PD A phylogenetic distance matrix.
-#' @param FD A functional distance matrix.
-#' @param a A number between 0 and 1 giving the amount of weight
-#'	to put on \code{PD} relative to \code{FD}.
+#' @param PDist A phylogenetic distance matrix.
+#' @param FDist A functional distance matrix.
+#' @param a A number between 0 and 1 giving the amount of weight.
+#'	to put on \code{PDist} relative to \code{FDist}.
 #' @param p A number giving the \code{p}-norm.
 #' @param ord Order rows and columns of the matrices?  (defaults
 #'  to \code{TRUE}).
@@ -297,32 +297,32 @@ tail.list <- function(x,n=6L,...){
 #' @note This function is not very user friendly yet.  There are
 #'	no doubt many use cases that I've ignored.
 #' @export
-FPD <- function(PD, FD, a, p, ord = TRUE){
-	PD <- as.matrix(PD)
-	FD <- as.matrix(FD)
+FPDist <- function(PDist, FDist, a, p, ord = TRUE){
+	PDist <- as.matrix(PDist)
+	FDist <- as.matrix(FDist)
 	if(
-		is.null(rownames(FD)) ||
-		is.null(colnames(FD)) ||
-		is.null(rownames(PD)) ||
-		is.null(colnames(PD))
+		is.null(rownames(FDist)) ||
+		is.null(colnames(FDist)) ||
+		is.null(rownames(PDist)) ||
+		is.null(colnames(PDist))
 	) stop('distance matrices must have row and column names')
 	if(
-		any(rownames(FD) != colnames(FD)) ||
-		any(rownames(PD) != colnames(PD))
+		any(rownames(FDist) != colnames(FDist)) ||
+		any(rownames(PDist) != colnames(PDist))
 	) stop('row and column names must match for distance matrices')
 	if(ord){
-		FD <- FD[order(rownames(FD)), order(rownames(FD))]
-		PD <- PD[order(rownames(PD)), order(rownames(PD))]
+		FDist <- FDist[order(rownames(FDist)), order(rownames(FDist))]
+		PDist <- PDist[order(rownames(PDist)), order(rownames(PDist))]
 	}
 	if(
-		any(rownames(FD) != rownames(PD)) ||
-		any(colnames(FD) != colnames(PD))
-	) stop('FD and PD must have same row and column names')
+		any(rownames(FDist) != rownames(PDist)) ||
+		any(colnames(FDist) != colnames(PDist))
+	) stop('FDist and PDist must have same row and column names')
 	
-	FD <- FD/max(FD)
-	PD <- PD/max(PD)
+	FDist <- FDist/max(FDist)
+	PDist <- PDist/max(PDist)
 	
-	((a*(PD^p)) + ((1-a)*(FD^p)))^(1/p)
+	((a*(PDist^p)) + ((1-a)*(FDist^p)))^(1/p)
 }
 
 #' Rao's quadratic entropy
@@ -370,32 +370,6 @@ rao <- function(X, D, ord = TRUE){
 	return(out)
 }
 
-#' Functional phylogenetic diversity generalised linear model
-#'
-#' Calculate the deviance for a generalised linear model using
-#' functional phylogenetic diversity indices as predictors.
-#'
-#' @param ap A vector with two numbers (a and p), see \code{\link{FPD}}.
-#' @param x A community matrix
-#' @param y An ecosystem function (or other site characteristic being
-#'	used as a response variable)
-#' @param PD A phylogenetic distance matrix.
-#' @param FD A functional distance matrix.
-#' @param index Character string indicating the diversity index used 
-#'	to combine distances and community data. Currently, either \code{'mpd'}
-#'	or \code{'rao'}.
-#' @param ... Additional arguments to pass to \code{\link{glm}}.
-#' @return A deviance value.
-#' @export
-FPDglm_ap <- function(ap, x, y, PD, FD, index = 'mpd', ...){
-	# TODO: make the 'index' argument more generalizable by
-	# allowing user supplied functions
-	FPD. <- FPD(PD, FD, ap[1], ap[2])
-	if(index == 'rao') fpd <- rao(x, FPD.)
-	else if(index == 'mpd') fpd <- mpd.(x, FPD.)
-	else stop('index not recognised')
-	glm(y ~ fpd, ...)
-}
 
 #' Mean pairwise distance
 #' 
@@ -403,18 +377,41 @@ FPDglm_ap <- function(ap, x, y, PD, FD, index = 'mpd', ...){
 #' (slightly modified from the \code{picante} function: 
 #' \code{\link{mpd}})
 #'
-#' Only one slight change to avoid NA values (TODO: better description
-#' here).
+#' Two changes from original \code{\link{mpd}} function:  
+#' (1) avoid NA values (TODO: better description here).
+#' (2) give useful error messages for poorly named \code{samp} and \code{dis}.
+#' Also please be aware that if \code{abundance.weighted = FALSE}, then
+#' \code{samp} should be explicitly a presence-absence matrix (i.e. with
+#' zeros and ones only).
 #'
-#' @param samp Community data matrix
-#' @param dis Interspecific distance matrix
+#' @param samp Community data matrix.
+#' @param dis Interspecific distance matrix.
 #' @param abundance.weighted Should mean pairwise diatnces be weighted
-#'  by species abundance? (default = FALSE)
-#' @return Vector of MPD values for each community
-#' @author Code modified from original version by Steven Kembel
+#'  by species abundance? (default = FALSE).
+#' @param ord Order rows and columns of the matrices? (defaults
+#'  to \code{TRUE}).  Note that sites are never ordered.
+#' @return Vector of MPD values for each community.
+#' @author Code modified from original version by Steven Kembel.
 #' @export
-mpd. <- function (samp, dis, abundance.weighted = FALSE) 
+mpd. <- function (samp, dis, abundance.weighted = FALSE, ord = TRUE) 
 {
+
+	if(
+		is.null(rownames(dis)) ||
+		is.null(colnames(dis))
+	) stop('distance matrix must have row and column names')
+	if(is.null(colnames(samp)))
+		stop('community matrix must have column (i.e. species) names')
+	if(any(rownames(dis) != colnames(dis)))
+		stop('row and column names must match for distance matrix')
+	if(ord){
+		samp <- samp[, order(colnames(samp))]
+		dis <- dis[order(rownames(dis)), order(rownames(dis))]
+	}
+	if(any(colnames(samp) != colnames(dis)))
+		stop('species names must match')
+
+	
     N <- dim(samp)[1]
     mpd <- numeric(N)
     for (i in 1:N) {
@@ -439,7 +436,7 @@ mpd. <- function (samp, dis, abundance.weighted = FALSE)
 }
 
 
-#' Null models for FPD
+#' Null models for functional-phylogenetic diversity
 #'
 #' Simulate expectations (under a null model) of mean pairwise distance for 
 #' a set of communities with different species richness.
@@ -449,13 +446,13 @@ mpd. <- function (samp, dis, abundance.weighted = FALSE)
 #' with categories: 0.005-0.995 = 99\%, 0.025-0.975 = 95\%, 0.05-0.95 = 90\%,
 #' 0.25-0.75 = 50\%.
 #'
-#' @param tab the community by species presence table
-#' @param Dist the distance (functional, phylogenetic, FPD) on which the 
-#'  mean pairwise distance is based
-#' @param Sim the number of permutations of the presence vector used to 
-#'  make the estimations
+#' @param tab The community by species presence table.
+#' @param Dist The distance (functional, phylogenetic, FPDist) on which the 
+#'  mean pairwise distance is based.
+#' @param Sim The number of permutations of the presence vector used to 
+#'  make the estimations.
 #' @param Plot TRUE or FALSE to make the plot of the expected average 
-#'  mean pairwise distance, and the 5-95\% confidence interval
+#'  mean pairwise distance, and the 5-95\% confidence interval.
 #' @param ord Order rows and columns of the matrices? (defaults
 #'  to \code{TRUE}).  Note that sites are never ordered.
 #' @param disp99 Display the 99\% interval?
@@ -594,33 +591,33 @@ ConDivSim<-function(tab, Dist, Sim, Plot = TRUE, ord = TRUE, disp99 = FALSE){
 #' Null models for (TODO:  better title)
 #'
 #' Check for a given community how the mean pairwise distance changes with 
-#' the parameter a in FPD
+#' the parameter a in FPDist
 #'
 #' If \code{plot == TRUE}, then a surface is drawn giving the
 #' null distribution.  Lighter shades of gray give larger intervals 
 #' with categories: 0.005-0.995 = 99\%, 0.025-0.975 = 95\%, 0.05-0.95 = 90\%,
 #' 0.25-0.75 = 50\%.
 #'
-#' @param comm a vector over the species in the regional pool, giving the
+#' @param comm A vector over the species in the regional pool, giving the
 #'  presence or absence of the species occurring in the community
-#'  (1 for present species, 0 for absent species)
-#' @param pd phylogenetic distance matrix over the species in the regional 
-#'  pool
-#' @param fd functional distance matrix over the species in the regional 
-#'  pool
-#' @param Sim the number of permutations of the presence vector used to 
-#'  make the estimations
-#' @param p parameter passed to \code{\link{FPD}} function
+#'  (1 for present species, 0 for absent species).
+#' @param PDist Phylogenetic distance matrix over the species in the regional 
+#'  pool.
+#' @param FDist Functional distance matrix over the species in the regional 
+#'  pool.
+#' @param Sim The number of permutations of the presence vector used to 
+#'  make the estimations.
+#' @param p Parameter passed to \code{\link{FPDist}} function.
 #' @param Plot TRUE or FALSE to make the plot of the expected average 
 #'  mean pairwise distance over a range of a-values (\code{a} is a parameter
-#'  in the \code{\link{FPD}} function), and the 5-95\% confidence interval
+#'  in the \code{\link{FPDist}} function), and the 5-95\% confidence interval.
 #' @param ord Order rows and columns of the matrices? (defaults
 #'  to \code{TRUE}).  Note that sites are never ordered.
 #' @param disp99 Display the 99\% interval?
-#' @param num.a Number of a-values to compute
+#' @param num.a Number of a-values to compute.
 #' @return TODO
 #' @export
-ConDivSimComm<-function(comm, pd, fd, Sim, p = 2,
+ConDivSimComm<-function(comm, PDist, FDist, Sim, p = 2,
 	Plot = TRUE, ord = TRUE, disp99 = FALSE, num.a = 20){
 	
 	if(!is.data.frame(comm)) stop('comm must be a one-row data frame')
@@ -628,30 +625,30 @@ ConDivSimComm<-function(comm, pd, fd, Sim, p = 2,
 	if(is.null(names(comm)))
 		stop('community vector must have names')
 	if(
-		(ncol(comm) != nrow(pd)) ||
-		(ncol(comm) != ncol(pd)) ||
-		(ncol(comm) != nrow(fd)) ||
-		(ncol(comm) != ncol(fd))
-	) stop('number of species must match between comm, pd, and fd')
+		(ncol(comm) != nrow(PDist)) ||
+		(ncol(comm) != ncol(PDist)) ||
+		(ncol(comm) != nrow(FDist)) ||
+		(ncol(comm) != ncol(FDist))
+	) stop('number of species must match between comm, PDist, and FDist')
 	if(
-		is.null(rownames(pd)) ||
-		is.null(colnames(pd)) ||
-		is.null(rownames(fd)) ||
-		is.null(colnames(fd))
+		is.null(rownames(PDist)) ||
+		is.null(colnames(PDist)) ||
+		is.null(rownames(FDist)) ||
+		is.null(colnames(FDist))
 	) stop('distance matrices must have row and column names')
 	if(
-		any(rownames(pd) != colnames(pd)) ||
-		any(rownames(fd) != colnames(fd))
+		any(rownames(PDist) != colnames(PDist)) ||
+		any(rownames(FDist) != colnames(FDist))
 	) stop('row and column names must match for distance matrices')
 	if(ord){
 		comm <- comm[, order(colnames(comm))]
-		pd <- pd[order(rownames(pd)), order(rownames(pd))]
-		fd <- fd[order(rownames(fd)), order(rownames(fd))]
+		PDist <- PDist[order(rownames(PDist)), order(rownames(PDist))]
+		FDist <- FDist[order(rownames(FDist)), order(rownames(FDist))]
 	}
 	if(
-		any(colnames(comm) != colnames(pd)) ||
-		any(colnames(comm) != colnames(fd))
-	) stop('species names must match between comm, pd, and fd')
+		any(colnames(comm) != colnames(PDist)) ||
+		any(colnames(comm) != colnames(FDist))
+	) stop('species names must match between comm, PDist, and FDist')
 	
 	
 	## Create the vector of a values
@@ -677,11 +674,11 @@ ConDivSimComm<-function(comm, pd, fd, Sim, p = 2,
 	for(k in 1:length(a)){
 
 		# Calculate the FPDistance based on the current a value
-		FPD.temp <- FPD(pd, fd, a[k], p = p)
+		FPDist.temp <- FPDist(PDist, FDist, a[k], p = p)
       
 		# Calculate the observed mean pairwise distance for the 
 		# community (with the unweighted method from mpd in picante)
-		obs.dis <- FPD.temp[as.logical(comm), as.logical(comm)]
+		obs.dis <- FPDist.temp[as.logical(comm), as.logical(comm)]
 		
 		# line in mpd from picante with abundance.weighted = FALSE
 		Randomiz[k,12] <- mean(obs.dis[lower.tri(obs.dis)])
@@ -693,7 +690,7 @@ ConDivSimComm<-function(comm, pd, fd, Sim, p = 2,
 		# for the community		
 		for (i in 1:Sim) {
 			Vec.Pres.Sim<-sample(Vec.Pres)
-			sample.dis <- FPD.temp[
+			sample.dis <- FPDist.temp[
 				as.logical(Vec.Pres.Sim), 
 				as.logical(Vec.Pres.Sim)
 			]
@@ -762,24 +759,24 @@ ConDivSimComm<-function(comm, pd, fd, Sim, p = 2,
 #' This function is a modification of the \code{\link{traitgram}} function
 #' in the \code{picante} package.
 #' 
-#' @param x See \code{\link{traitgram}}
-#' @param phy See \code{\link{traitgram}}
-#' @param xaxt See \code{\link{traitgram}}
-#' @param underscore See \code{\link{traitgram}}
-#' @param show.names See \code{\link{traitgram}}
-#' @param show.xaxis.values See \code{\link{traitgram}}
-#' @param method See \code{\link{traitgram}}
-#' @param edge.color A single color or a vector of two colors
-#' @param edge.lwd.in A single width value for species in the subset
+#' @param x See \code{\link{traitgram}}.
+#' @param phy See \code{\link{traitgram}}.
+#' @param xaxt See \code{\link{traitgram}}.
+#' @param underscore See \code{\link{traitgram}}.
+#' @param show.names See \code{\link{traitgram}}.
+#' @param show.xaxis.values See \code{\link{traitgram}}.
+#' @param method See \code{\link{traitgram}}.
+#' @param edge.color A single color or a vector of two colors.
+#' @param edge.lwd.in A single width value for species in the subset.
 #' @param edge.lwd.out A single width value for species out of the subset 
-#'  (ignored if \code{is.null(Group)})
-#' @param tip.color A single color or a vector of two colors
-#' @param tip.cex A single size value
+#'  (ignored if \code{is.null(Group)}).
+#' @param tip.color A single color or a vector of two colors.
+#' @param tip.cex A single size value.
 #' @param Group Either a subset of the tip labels in \code{phy} or
-#'  the indices associated with the species in the community
-#' @param ... Additional arguments to \code{\link{traitgram}}
+#'  the indices associated with the species in the community.
+#' @param ... Additional arguments to \code{\link{traitgram}}.
 #' @return No return value, but a traitgram is plotted.
-#' @author David Ackerly, modified by Cecile Albert
+#' @author David Ackerly, modified by Cecile Albert.
 #' @export
 comm.traitgram <- function (x, phy, xaxt = "s", underscore = FALSE, 
 	show.names = TRUE, show.xaxis.values = TRUE, 
@@ -927,102 +924,110 @@ comm.traitgram <- function (x, phy, xaxt = "s", underscore = FALSE,
 }
 
 
-
-
-#' Grid search functional phylogenetic diversity generalised linear model
+#' Functional phylogenetic diversity generalised linear model
 #'
-#' Calculate deviances over a grid for generalised linear models using
-#' functional phylogenetic diversity indices as predictors.
+#' Calculate a generalised linear model using functional-phylogenetic 
+#' diversity indices as predictors, given a value for the phylogenetic 
+#' weighting parameter, \code{a}.
 #'
-#' @param a A vector of numbers between 0 and 1 giving the amount of 
-#'	weight to put on \code{PD} relative to \code{FD}.
-#' @param p A vector of numbers giving the \code{p}-norm. (BUT p must
-#'	for now be a single number!)
-#' @param x A community matrix
+#' @param tab The community by species presence table.
 #' @param y An ecosystem function (or other site characteristic being
-#'	used as a response variable)
-#' @param PD A phylogenetic distance matrix.
-#' @param FD A functional distance matrix.
+#'	used as a response variable).
+#' @param PDist A phylogenetic distance matrix.
+#' @param FDist A functional distance matrix.
+#' @param a A number between 0 and 1 giving the amount of weight
+#'	to put on \code{PDist} relative to \code{FDist}.
+#' @param p A number giving the \code{p}-norm.
+#' @param index Character string indicating the diversity index used 
+#'	to combine distances and community data. Currently, either \code{'mpd'}
+#'	or \code{'rao'}.
+#' @param abundance.weighted Should mean pairwise distances be weighted
+#'  by species abundance? (default = FALSE).  Only relevant if 
+#'  \code{index = 'mpd'} and \code{tab} is an abundance matrix.
 #' @param ... Additional arguments to pass to \code{\link{glm}}.
-#' @return data frame with three columns (a, p, and deviances).
+#' @return A \code{\link{glm}} object.
 #' @export
-FPDglm_grid <- function(a, p, x, y, PD, FD, ...){
+FPDglm <- function(tab, y, PDist, FDist, a, p = 2, index = 'mpd', 
+	abundance.weighted = FALSE, ...){
+	# TODO: make the 'index' argument more generalizable by
+	# allowing user supplied functions
+	FPDist.temp <- FPDist(PDist, FDist, a, p)
+	if(index == 'rao') fpd <- rao(tab, FPDist.temp)
+	else if(index == 'mpd') fpd <- mpd.(tab, FPDist.temp, abundance.weighted = abundance.weighted)
+	else stop('index not recognised')
+	glm(y ~ fpd, ...)
+}
+
+FPDglm_ap <- function(ap, abundance.weighted = FALSE, ...){
+	FPDglm(a = ap[1], p = ap[2], abundance.weighted = abundance.weighted, ...)
+}
+
+
+#' Calculate  Grid search functional phylogenetic diversity generalised linear model
+#'
+#' Calculate deviances over a grid of the phylogenetic weighting parameter, a,
+#' for generalised linear models using functional-phylogenetic diversity 
+#' indices as predictors.
+#'
+#' @param tab The community by species presence table.
+#' @param y An ecosystem function (or other site characteristic being
+#'	used as a response variable).
+#' @param PDist A phylogenetic distance matrix.
+#' @param FDist A functional distance matrix.
+#' @param a A vector of numbers between 0 and 1 giving the amount of weight
+#'	to put on \code{PDist} relative to \code{FDist}.  It is best if a is an
+#'  evenly-spaced grid.
+#' @param p A number giving the \code{p}-norm.
+#' @param index Character string indicating the diversity index used 
+#'	to combine distances and community data. Currently, either \code{'mpd'}
+#'	or \code{'rao'}.
+#' @param abundance.weighted Should mean pairwise distances be weighted
+#'  by species abundance? (default = FALSE).  Only relevant if 
+#'  \code{index = 'mpd'} and \code{tab} is an abundance matrix.
+#' @param ... Additional arguments to pass to \code{\link{FPDglm}}.
+#' @return TODO.
+#' @export
+FPDglm_grid <- function(tab, y, PDist, FDist, a = seq(0, 1, 0.01), 
+	p = 2, index = 'mpd', abundance.weighted = FALSE, ...){
+	
 	aps <- merge(a, p)
 	glms <- lapply(as.data.frame(t(aps)),
 		FPDglm_ap,
-		x = x, y = y, 
-		PD = PD, FD = FD,
-		...)
+		tab = tab, y = y, 
+		PDist = PDist, FDist = FDist,
+		index = index, 
+		abundance.weighted = abundance.weighted, ...)
 	loglikes <- sapply(glms, logLik)
 	slopes <- sapply(glms, function(xx) xx$coefficients[2])
 	likelihood <- exp(loglikes - max(loglikes))
-	posterior <- likelihood/(sum(mean(diff(a))*likelihood))
+	delta <- mean(diff(a))
+	posterior <- likelihood/(sum(delta*likelihood))
+	mean.a <- delta * sum(posterior * a)
+	mode.a <- a[which.max(posterior)]
+	var.a <- delta * sum(posterior * ((a - mean.a)^2))
 	surf <- data.frame(
-		a = aps$x, p = aps$y, 
+		a = aps$x, p = aps$y, # sorry for the x and y -- artifact of default merge behaviour
 		loglikes, slopes, posterior
 	)
-	return(surf)
-}
-
-
-
-
-#' Draw Ackerly traitgram and return phylogenetic and functional distances
-#' 
-#' Draws Ackerly's \code{\link{traitgram}}, but also returns
-#' information about the distance relationships implied by the traitgram.
-#' 
-#' @param x See \code{\link{traitgram}}
-#' @param phy See \code{\link{traitgram}}
-#' @param ... Additional arguments to \code{\link{traitgram}}
-#' @param plot Should the traitgram be plotted?
-#' @param a Optional, see \code{\link{FPD}}
-#' @param p Optional, see \code{\link{FPD}}
-#' @return A plot (if \code{plot = TRUE}) and an object of 
-#'	class \code{traitgram} with elements:
-#'	\item{traits}{The trait values}
-#'	\item{tree}{The phylogenetic tree}
-#'	\item{PD}{A phylogenetic distance matrix (computed with
-#'	\code{\link{cophenetic}})}
-#'  \item{FD}{A functional distance matrix}
-#'	\item{FPD}{A distance matrix combining both phylogenetic
-#'	and functional distances (see \code{\link{FPD}})}
-#' @export
-traitgram2 <- function(x, phy, ..., plot = TRUE, a, p){
-	# make it work if PD and FD names are factor and character
-	# respectively or vice versa.
-	if(!is.numeric(x)) stop('the trait, x, must be numeric')
-	attr(x, 'dim') <- NULL
-	tl <- phy$tip.label
-	if(is.null(tl)) stop('phylogenetic tips must have labels')
-	if(length(x) != length(tl)) stop('x must be a vector of traits')
-	if(is.null(names(x))) stop('x must have names')
+	out <- list(surf = surf, delta = delta,
+		mean.a = mean.a, mode.a = mode.a, var.a = var.a)
 	
-	PD <- cophenetic(phy)/max(cophenetic(phy))
-	PD <- PD[order(row.names(PD)),order(row.names(PD))]
-	FD <- as.matrix(dist(x))/max(as.matrix(dist(x)))
-	FD <- FD[order(row.names(FD)),order(row.names(FD))]
-	if(plot) traitgram(x, phy, ...)
-	out <- structure(
-		list(traits = x, tree = phy, PD = PD, FD = FD), 
-		class = 'traitgram'
-	)
-	if(!missing(a) && !missing(p))
-		out$FPD <- FPD(PD, FD, a, p)
+	class(out) <- 'FPDglm_grid'
 	return(out)
 }
 
-#' Plot traitgram objects
-#'
-#' Method for plotting objects of class traitgram 
-#'
-#' @param x A traitgram object
-#' @param ... Arguments to pass to \code{\link{traitgram}}
-#' @return No return value, plot produced
-#' @method plot traitgram
-#' @export
-plot.traitgram <- function(x, ...)
-	traitgram(x$traits, x$tree, ...)
+# TODO:  document this method!
+plot.FPDglm_grid <- function(x, y, ...){
+	xx <- x$surf$a
+	yy <- x$surf$posterior
+
+	plot(xx, yy, type = 'l', las = 1,
+		ylab = 'Posterior density',
+		xlab = 'Phylogenetic weighting parameter, a',
+		...)
+	rug(xx)
+}
+
 
 #' Highest posterior density region for a
 #'

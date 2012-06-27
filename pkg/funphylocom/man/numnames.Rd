@@ -5,10 +5,10 @@
   numnames(n, prefix = "name")
 }
 \arguments{
-  \item{n}{Number of names}
+  \item{n}{Number of names.}
 
   \item{prefix}{Character prefix to go in front of the
-  numbers}
+  numbers.}
 }
 \value{
   A character vector of numbered names.

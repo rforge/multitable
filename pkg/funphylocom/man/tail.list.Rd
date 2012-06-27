@@ -5,11 +5,11 @@
   \method{tail}{list} (x, n = 6L, ...)
 }
 \arguments{
-  \item{x}{A list}
+  \item{x}{A list.}
 
-  \item{n}{Number of lines}
+  \item{n}{Number of lines.}
 
-  \item{...}{Not used}
+  \item{...}{Not used.}
 }
 \value{
   The first \code{n} elements of each list element.

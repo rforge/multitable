@@ -7,19 +7,19 @@
     ...)
 }
 \arguments{
-  \item{x}{An \code{fpcomSims} object}
+  \item{x}{An \code{fpcomSims} object.}
 
-  \item{y}{Not used at the moment}
+  \item{y}{Not used at the moment.}
 
   \item{cex.add}{The cex graphics parameter for additional
-  graphical elements not produced by the \code{\link{plot}}
-  command}
+  graphical.  elements not produced by the
+  \code{\link{plot}} command.}
 
   \item{plottype}{The type of plot to produce -- see
-  details}
+  details.}
 
   \item{...}{Additional parameters to be passed to
-  \code{\link{plot}}}
+  \code{\link{plot}}.}
 }
 \value{
   No return value, called for its side-effect of producing

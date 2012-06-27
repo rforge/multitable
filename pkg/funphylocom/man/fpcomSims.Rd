@@ -10,30 +10,31 @@
     spp.names = numnames(m, "sp"))
 }
 \arguments{
-  \item{n}{Number of sites to simulate}
+  \item{n}{Number of sites to simulate.}
 
-  \item{m}{Number of species to simulate}
+  \item{m}{Number of species to simulate.}
 
   \item{p}{Number between 0 and 1 giving the relative
   importance of observed versus unknown traits in
-  determining community structure}
+  determining community structure.}
 
-  \item{diverg.obs}{a vector with m elements giving the
+  \item{diverg.obs}{A vector with m elements giving the
   divergence effects on the observed trait for each
-  species}
+  species.}
 
-  \item{diverg.unk}{a vector with m elements giving the
-  divergence effects on the unknown trait for each species}
+  \item{diverg.unk}{A vector with m elements giving the
+  divergence effects on the unknown trait for each
+  species.}
 
-  \item{sim.envObserved}{Numeric vector of simulated values
-  for the observed environmental variables}
+  \item{sim.envObserved}{A numeric vector of simulated
+  values for the observed environmental variables.}
 
-  \item{sim.envUnknown}{Numeric vector of simulated values
-  for the unknown environmental variables}
+  \item{sim.envUnknown}{A numeric vector of simulated
+  values for the unknown environmental variables.}
 
-  \item{site.names}{Character vector of site names}
+  \item{site.names}{Character vector of site names.}
 
-  \item{spp.names}{Character vector of species names}
+  \item{spp.names}{Character vector of species names.}
 }
 \value{
   An object of class \code{fpcomSims} with components:
