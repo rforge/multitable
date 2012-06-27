@@ -1,16 +1,17 @@
-\name{FPD}
-\alias{FPD}
+\name{FPDist}
+\alias{FPDist}
 \title{Functional phylogenetic distance}
 \usage{
-  FPD(PD, FD, a, p, ord = TRUE)
+  FPDist(PDist, FDist, a, p, ord = TRUE)
 }
 \arguments{
-  \item{PD}{A phylogenetic distance matrix.}
+  \item{PDist}{A phylogenetic distance matrix.}
 
-  \item{FD}{A functional distance matrix.}
+  \item{FDist}{A functional distance matrix.}
 
   \item{a}{A number between 0 and 1 giving the amount of
-  weight to put on \code{PD} relative to \code{FD}.}
+  weight.  to put on \code{PDist} relative to
+  \code{FDist}.}
 
   \item{p}{A number giving the \code{p}-norm.}
 
