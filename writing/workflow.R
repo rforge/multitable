@@ -1,10 +1,11 @@
 rm(list = ls())
 
+install.packages(c('multitable', 'nlme', 'ggplot2', 'scales'))
+
 library(multitable)
 library(nlme)
 library(ggplot2)
 library(scales)
-library(tensor)
 
 #########################
 # LOAD DATA:
@@ -62,21 +63,24 @@ croche[["taxonlength", shape = "taxon"]] <-
 croche[["taxonlengthprotect", shape = "taxon"]] <- 
 	paste("(", croche$Predator.protection. ,") ", "(",sprintf("%.2f",croche$Length),") ", croche$taxon,sep="")
 
+# NOT USED ANYMORE
 croche[["rotarm", shape = "taxon"]] <- as.factor(dimnames(croche)[[2]] == "Rotif.Armoured")
 
+# relative abundance
 croche[["rel.abundance", shape = "abundance"]] <- 
 	sweep(croche$abundance, 1 , apply(croche$abundance, 1, sum), "/")
 
-# commuinity-weioghted scaled length
+# commuinity-weighted scaled length
 croche[["cwm", match.dimids = "time"]] <- 
 	as.vector(croche$rel.abundance %*% croche$scaled.Length)
 
+# squareroot transformation
 croche[["sqrt.abundance", shape="abundance"]] <- sqrt(croche$abundance)
 
 
 #########################
 # SPECIAL FUNCTIONS:
-# 
+# for processing model results
 # 
 #########################
 
@@ -101,7 +105,7 @@ fm.df <- function(...) as.data.frame(fm.dl(...))
 
 #########################
 # RANDOM EFFECTS MODELS:
-# 
+# this is the real meat
 # 
 #########################
 
@@ -151,6 +155,9 @@ croche.lme2 <- update(croche.lme, fixed. = . ~ . + scaled.Length:scaled.week)
 
 croche.lme3 <- update(croche.lme, fixed. = . ~ . + Predator.protection.:scaled.Length:scaled.week)
 
+
+
+# add fitted values to the croche data
 croche[["fitted.lme", shape = "abundance"]] <- 
 	structure(croche.lme$fitted[,2], dim = c(10,12), names = NULL, label = NULL)
 croche[["fitted.lme.fix", shape = "abundance"]] <- 
@@ -177,7 +184,12 @@ croche[["fitted.lme3.ML", shape = "abundance"]] <-
 croche[["fitted.lme3.fix.ML", shape = "abundance"]] <- 
 	structure(croche.lme3.ML$fitted[,1], dim = c(10,12), names = NULL, label = NULL)
 
+#################
+# RANDOM EFFECTS MODEL PLOTS
+#
+#################
 
+# organise fitted values for plotting
 cdf <- as.data.frame(croche)
 refdf <- rbind(
 	data.frame(mdl = 1, typ = "cond", 
@@ -197,7 +209,7 @@ refdf <- rbind(
 		fit = cdf$fitted.lme2.fix,
 		taxonlength = cdf$taxonlength)
 )
-
+# plot them
 ggplot(as.data.frame(croche)) + 
 	facet_wrap( ~ taxonlength, ncol = 3) + 
 	geom_point(aes(week, I(sqrt.abundance^2), group = taxon)) + 
@@ -205,7 +217,7 @@ ggplot(as.data.frame(croche)) +
 		linetype = typ, colour = as.factor(mdl)), 
 		stat = 'smooth', data = refdf, se = FALSE) + 
 	scale_y_continuous("Density", trans = 'sqrt', breaks = c(0.00, 0.01, 0.04)) + 
-	scale_x_continuous("Julian day", breaks = c(200, 240, 280)) + 
+	scale_x_continuous("Day-of-year", breaks = c(200, 240, 280)) + 
 	scale_linetype('Prediction type', breaks = c('cond','marg'),
 		guide = guide_legend(nrow = 2),
 		labels = c(
@@ -220,6 +232,7 @@ ggplot(as.data.frame(croche)) +
 ggsave("randomeffectsfit.pdf", height = 8, width = 5.5)
 
 
+# organise fitted values for plotting
 cdf <- as.data.frame(croche)
 refdf <- rbind(
 	data.frame(mdl = 1, typ = "cond", 
@@ -239,7 +252,7 @@ refdf <- rbind(
 		fit = cdf$fitted.lme3.fix,
 		taxonlengthprotect = cdf$taxonlengthprotect)
 )
-
+# plot them
 ggplot(as.data.frame(croche)) + 
 	facet_wrap( ~ taxonlengthprotect, ncol = 4) + 
 	geom_point(aes(week, I(sqrt.abundance^2), group = taxonlengthprotect)) + 
@@ -247,7 +260,7 @@ ggplot(as.data.frame(croche)) +
 		linetype = typ, colour = as.factor(mdl)), 
 		stat = 'smooth', data = refdf, se = FALSE) + 
 	scale_y_continuous("Density", trans = 'sqrt', breaks = c(0.00, 0.01, 0.04)) + 
-	scale_x_continuous("Julian day", breaks = c(200, 240, 280)) + 
+	scale_x_continuous("Day-of-year", breaks = c(200, 240, 280)) + 
 	scale_linetype('Prediction type', breaks = c('cond','marg'),
 		guide = guide_legend(nrow = 2),
 		labels = c(
@@ -261,7 +274,7 @@ ggplot(as.data.frame(croche)) +
 	opts(legend.position = 'top', legend.direction = 'vertical', legend.box = 'horizontal')
 ggsave("randomeffectsfitwithpredatorprotection.pdf", height = 8, width = 7.5)
 
-
+# residual plot
 clme <- fm.df(croche.lme, "lme")
 ggplot(clme) +
 	facet_wrap( ~ tax, ncol = 3) +
@@ -284,6 +297,7 @@ lmXbyZ2 <- lm(sqrt.abundance ~ scaled.week * (scaled.Length + I(scaled.Length^2)
 lmZ2 <- lm(sqrt.abundance ~ scaled.Length + I(scaled.Length^2), croche)
 lmX2byT <- lm(sqrt.abundance ~ -1 + taxon + (scaled.week + I(scaled.week^2)):taxon, croche)
 
+# organise fitted values and residuals for plotting
 fms.df <- rbind(
 	fm.df(lmX,"den ~ day"),
 	fm.df(lmZ,"den ~ size"),
@@ -292,7 +306,7 @@ fms.df <- rbind(
 	fm.df(lmT,"den ~ taxon"),
 	fm.df(lmX2byT,"den ~ taxon * (day + day^2)")
 )
-
+# plot them
 ggplot(fms.df) +
 	facet_wrap( ~ mod, ncol = 2) + 
 	geom_abline(slope = 0, intercept = 0, alpha = 0.5) +
@@ -304,7 +318,7 @@ ggplot(fms.df) +
 	opts(legend.position = 'top', legend.direction = 'vertical', legend.box = 'horizontal') + 
 	guides(col = guide_legend(nrow = 4), shape = guide_legend(nrow = 4))
 ggsave("fixedeffectsresidualsBYtaxa.pdf", height = 7, width = 5.2)
-
+# plot them in a different way
 ggplot(fms.df) + 
 	facet_wrap( ~ tax, ncol = 3) + 
 	geom_abline(slope = 0, intercept = 0, alpha = 0.5) + 
@@ -319,46 +333,52 @@ ggsave("fixedeffectsresidualsBYmodel.pdf", height = 7, width = 6)
 
 #########################
 # CWM MODEL FITS:
-#
+# community-weighted means
 # 
 #########################
 
+# store fitted values from full-data-models
 croche[["cwm.lme",shape = "cwm"]] <- as.vector(
 sweep(croche$fitted.lme^2,1,apply(croche$fitted.lme^2,1,sum),"/") %*% croche$scaled.Length)
 croche[["cwm.lme2",shape = "cwm"]] <- as.vector(
 sweep(croche$fitted.lme2^2,1,apply(croche$fitted.lme2^2,1,sum),"/") %*% croche$scaled.Length)
 
+# adjust them using error propagation theory
 partfirstderivs <- -(croche$fitted.lme %*% outer(croche$scaled.Length,croche$scaled.Length,"-")) / matrix(rowSums(croche$fitted.lme)^2,10,12)
 partsecondderivs <- -(2  * partfirstderivs)  / matrix(rowSums(croche$fitted.lme),10,12)
 residvars <- sapply(getVarCov(croche.lme, type = "conditional", 1:12),function(x)x[1])
 croche[["cwm.lme.corr", shape = "cwm.lme"]] <- croche$cwm.lme + as.vector(0.5 * partsecondderivs %*% residvars)
 croche[["cwm.lme.sd", shape = "cwm.lme"]] <- as.vector(sqrt((partfirstderivs^2) %*% residvars))
-
+# adjust the next model using error propagation theory
 partfirstderivs <- -(croche$fitted.lme2 %*% outer(croche$scaled.Length,croche$scaled.Length,"-")) / matrix(rowSums(croche$fitted.lme2)^2,10,12)
 partsecondderivs <- -(2  * partfirstderivs)  / matrix(rowSums(croche$fitted.lme2),10,12)
 residvars <- sapply(getVarCov(croche.lme2, type = "conditional", 1:12),function(x)x[1])
 croche[["cwm.lme2.corr", shape = "cwm.lme2"]] <- croche$cwm.lme2 + as.vector(0.5 * partsecondderivs %*% residvars)
 croche[["cwm.lme2.sd", shape = "cwm.lme2"]] <- as.vector(sqrt((partfirstderivs^2) %*% residvars))
 
+# store fitted values from summarised-data-model
 croche.cwm.lm <- lm(cwm ~ week, dropdl(croche[,1]))
 
+# organise data for plotting
 cwmdf <- rbind(
 	data.frame(typ = "lin", cwm = croche.cwm.lm$fitted, week = croche$week),
 	data.frame(typ = "lme", cwm = croche$cwm.lme.corr, week = croche$week),
 	data.frame(typ = "lme2", cwm = croche$cwm.lme2.corr, week = croche$week)
 )
 
+# test summarised data model (significant)
 anova(croche.cwm.lm)
 
+# back-transform response data to a meaningful scale
 cnt <- attr(scale(croche$Length), 'scaled:center')
 scl <- attr(scale(croche$Length), 'scaled:scale')
-
 cwmdf$cwm <- (cwmdf$cwm * scl) + cnt
 croche[['cwm.unscaled', shape = 'cwm']] <- (croche$cwm * scl) + cnt
 
+# graph data
 ggplot(cwmdf) +
 	stat_smooth(aes(week, cwm, linetype = typ), se = FALSE, colour = 'black', alpha = 0.5, geom = 'line') + 
-	scale_x_continuous("Jullian day") +
+	scale_x_continuous("Day-of-year") +
 	scale_y_continuous("Community-weighted mean body length (mm)") + 
 	scale_linetype("Predictive model", 
 		labels = c(
@@ -373,20 +393,25 @@ ggsave("cwmfits.pdf", height = 5, width = 4.5)
 
 
 
-
+# organise data again to evaluate error propagation correction
 cwmdf <- rbind(
 	data.frame(typ = "first", cwm = croche$cwm.lme, week = croche$week),
 	data.frame(typ = "second", cwm = croche$cwm.lme.corr, week = croche$week)
 )
-
 cwmdf$cwm <- (cwmdf$cwm * scl) + cnt
 
+# graph them
 ggplot(cwmdf) +
 	stat_smooth(aes(week, cwm, linetype = typ), se = FALSE, colour = 'black', alpha = 0.5, geom = 'line') + 
-	scale_x_continuous("Jullian day") +
+	scale_x_continuous("Day-of-year") +
 	scale_y_continuous("Community-weighted mean body length (mm)") + 
-	scale_linetype("Order of correction")
+	scale_linetype("Estimate",
+		labels = c("plug-in","bias-corrected"),
+		breaks = c("first","second")
+	) +
 	geom_point(aes(week, cwm.unscaled), data = as.data.frame(dropdl(croche[,1]))) + 
-ggsave("cwmcorrection.pdf", height = 4.5, width = 5.5)
+	opts(legend.position = 'top', legend.direction = 'vertical')
+ggsave("cwmcorrection.pdf", height = 5, width = 4.5)
 
-
+# summarised data themselves
+croche.sum <- data.frame(day = croche$week, cwm = croche$cwm.unscaled)

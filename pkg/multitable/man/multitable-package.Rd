@@ -9,8 +9,8 @@ Many data sets do not easily fit into a single data frame.  Storing such data in
 \tabular{ll}{
 Package: \tab multitable\cr
 Type: \tab Package\cr
-Version: \tab 1.3\cr
-Date: \tab 2012-03-06\cr
+Version: \tab 1.5\cr
+Date: \tab 2012-07-10\cr
 Suggests: \tab MASS, lattice, testthat\cr
 License: \tab GPL-2\cr
 URL: \tab http://multitable.r-forge.r-project.org/\cr

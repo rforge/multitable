@@ -3,6 +3,17 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 
 *************************************
 **				   **
+**	multitable version 1.5	   **
+**				   **
+*************************************
+
+BUG FIXES
+
+	fixed bug #2008: 'incompatible dimensions
+	in y' error message called inappropriately
+
+*************************************
+**				   **
 **	multitable version 1.4	   **
 **				   **
 *************************************

@@ -958,6 +958,7 @@ FPDglm <- function(tab, y, PDist, FDist, a, p = 2, index = 'mpd',
 	glm(y ~ fpd, ...)
 }
 
+
 FPDglm_ap <- function(ap, abundance.weighted = FALSE, ...){
 	FPDglm(a = ap[1], p = ap[2], abundance.weighted = abundance.weighted, ...)
 }

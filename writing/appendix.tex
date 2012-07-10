@@ -1,4 +1,4 @@
- \documentclass[12pt]{ecologyFORAPPENDIX}
+\documentclass[12pt]{ecologyFORAPPENDIX}
 
 \usepackage{tikz}
 \usepackage{textpos}
@@ -25,6 +25,10 @@
 	\endgroup
 }
 
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\thetable}{A\arabic{table}}
+\renewcommand{\theequation}{A.\arabic{equation}}
+\renewcommand{\thesection}{\arabic{section}}
 
 \begin{document}
 \maketitle
@@ -37,27 +41,29 @@
 
 %One of the most challenging aspects of simultaneously analysing data on community composition, environmental variables, and traits is that all of the data do not easily fit into a single data table with rows representing replication and columns representing variables.  
 
+\tableofcontents
+
 \section{Data structures}
 
-We organise the full data into an \texttt{R} data frame with 120 rows called \texttt{croche},
+We organise the full data into an \texttt{R} data frame called \texttt{croche} with 120 rows,
 \vspace{-18pt}
 \singlespace
 \begin{verbatim}
-        den day size pp        taxon
-0.043572985 178 0.18  Y armoured rot
-0.046999720 188 0.18  Y armoured rot
-0.055094990 205 0.18  Y armoured rot
-0.034424544 219 0.18  Y armoured rot
-0.046606746 233 0.18  Y armoured rot
-0.036939579 247 0.18  Y armoured rot
-0.052501360 261 0.18  Y armoured rot
-0.061854147 275 0.18  Y armoured rot
-0.082367403 289 0.18  Y armoured rot
-0.086218550 303 0.18  Y armoured rot
-0.002758679 178 0.33  N      Bosmina
-0.001100328 188 0.33  N      Bosmina
+        den day size pp           taxon
+0.043572985 178 0.18  Y    armoured rot
+0.046999720 188 0.18  Y    armoured rot
+0.055094990 205 0.18  Y    armoured rot
+0.034424544 219 0.18  Y    armoured rot
+0.046606746 233 0.18  Y    armoured rot
+0.036939579 247 0.18  Y    armoured rot
+0.052501360 261 0.18  Y    armoured rot
+0.061854147 275 0.18  Y    armoured rot
+0.082367403 289 0.18  Y    armoured rot
+0.086218550 303 0.18  Y    armoured rot
+0.002758679 178 0.33  N         Bosmina
+0.001100328 188 0.33  N         Bosmina
 \end{verbatim}
-\vspace{-13pt}
+\vspace{-11pt}
 \hspace{35pt}
 \vdots
 \hspace{38pt}
@@ -68,35 +74,36 @@ We organise the full data into an \texttt{R} data frame with 120 rows called \te
 \vdots
 \hspace{40pt}
 \vdots
-\vspace{-10pt}
+\vspace{-9pt}
 \begin{verbatim}
 0.005737424 289 0.18  N unprotected rot
 0.007387916 303 0.18  N unprotected rot
 \end{verbatim}
 \doublespace
 
-\noindent The five columns are density, Julian day, body size, predator protection, and taxon.  Community ecology data with taxon-level traits often have this form, in which observations are repeated for some variables.  For example, \texttt{size}, \texttt{pp}, and \texttt{taxon} are not replicated in time, and therefore are repeated across rows associated with different \texttt{day}s.  However, \texttt{den} is replicated both taxonomically and in time, and so is not repeated.  We used the \texttt{multitable} package in \texttt{R}, which was designed to manipulate data of this form.  The summarised version of the data, \texttt{croche.sum}, is much reduced,
+\noindent The five columns are density, day-of-year, body size, predator protection, and taxon.  Community ecology data with taxon-level traits often have this form, in which observations are repeated for some variables.  For example, \texttt{size}, \texttt{pp}, and \texttt{taxon} are not replicated in time, and therefore are repeated across rows associated with different \texttt{day}s.  However, \texttt{den} is replicated both taxonomically and in time, and so is not repeated.  We used the \texttt{multitable} package in \texttt{R} \citep{Walker2012}, which was designed to manipulate data of this form.  The summarised version of the data, \texttt{croche.sum}, is much reduced,
 
 \vspace{-18pt}
 \singlespace
 \begin{verbatim}
- day        cwm
- 178 -0.6990721
- 188 -0.7211258
- 205 -0.8397823
- 219 -0.7441729
- 233 -0.8008270
- 247 -0.7302490
- 261 -0.8693237
- 275 -0.8711310
- 289 -0.9327495
- 303 -0.9144807
+day       cwm
+178 0.3424708
+188 0.3335578
+205 0.2856029
+219 0.3242433
+233 0.3013466
+247 0.3298706
+261 0.2736638
+275 0.2729333
+289 0.2480303
+303 0.2554136
 \end{verbatim}
 \doublespace
+where \texttt{cwm} is the community-weighted mean size.
 
-\section{Justifying models used in the main text}
+\section{Justifying the three models used in the main text}
 
-\subsection{Summarised-data-model justifications}
+\subsection{Summarised data model justifications}
 
 Because the relationship between \texttt{day} and \texttt{cwm} is roughly linear, we modelled it using,
 \vspace{-18pt}
@@ -106,9 +113,9 @@ Because the relationship between \texttt{day} and \texttt{cwm} is roughly linear
 \end{verbatim}
 \doublespace
 
-\subsection{Full-data-model justifications}
+\subsection{Full data model justifications}
 
-Our approach to choosing full-data-models used visual assessment of residuals to identify features of the data that should be explicitly modelled.  We use raw residuals, $y_{ij} - \hat{y}_{ij}$, for fixed effects models and normalised residuals for mixed-effects models, which have the benefit of being approximately normally distributed with mean zero and standard deviation one for each taxon if model assumptions are met \citep{PinheiroAndBates2000}.  For all model fits, \texttt{den} is square-root transformed and \texttt{size} and \texttt{day} are z-scored (subtract the mean and divide by the standard deviation).
+Our approach to choosing full data models used visual assessment of residuals to identify features of the data that should be explicitly modelled.  We use raw residuals, $y_{ij} - \hat{y}_{ij}$, for fixed effects models and normalised residuals for mixed-effects models, which have the benefit of being approximately normally distributed with mean zero and standard deviation one for each taxon if model assumptions are met \citep{PinheiroAndBates2000}.  For all model fits, \texttt{den} is square-root transformed and \texttt{size} and \texttt{day} are z-scored (subtract the mean and divide by the standard deviation).
 
 We begin by fitting six simple fixed effects models using the \texttt{R} \texttt{lm} function,
 \vspace{-18pt}
@@ -126,7 +133,7 @@ Julian \texttt{day} alone explains very little variation in \texttt{den} (Figure
 
 \begin{figure}
 \includegraphics{fixedeffectsresidualsBYtaxa.pdf}
-\caption{}
+\caption{Residuals from six fixed effects models.  Point colour and shape identifies taxa with each model given in a different panel.}
 \label{fig:fixedeffectsresidualsBYtaxa}
 \end{figure}
 \processfloatnow
@@ -139,18 +146,18 @@ These first four fixed-effects models all show patterns that are diagnostic of t
 
 \begin{figure}
 \includegraphics{fixedeffectsresidualsBYmodel.pdf}
-\caption{}
+\caption{Residuals from six fixed effects models.  The same information is in Figure \ref{fig:fixedeffectsresidualsBYtaxa}, but with point colour and shape identifying models with each taxon in a different panel.}
 \label{fig:fixedeffectsresidualsBYmodel}
 \end{figure}
 \processfloatnow
 
-In summation, Figures ??,?? suggest several effects that should be considered in our formal models: (1) a quadratic effect of \texttt{size}; (2) a \texttt{taxon}-specific effect of \texttt{day} (and possibly its square); (3) possibly a (weak) interaction between \texttt{day} and \texttt{size}; and (4) taxon-specific residual variances.  We fit a linear mixed effects model that includes effects 1, 2, and 4 using the \texttt{lme} function in the \texttt{R nlme} package,
+In summation, Figures \ref{fig:fixedeffectsresidualsBYtaxa} and \ref{fig:fixedeffectsresidualsBYmodel} suggest several effects that should be considered in our formal models: (1) a quadratic effect of \texttt{size}; (2) a \texttt{taxon}-specific effect of \texttt{day} (and possibly its square); (3) possibly a (weak) interaction between \texttt{day} and \texttt{size}; and (4) taxon-specific residual variances.  We fit a linear mixed effects model that includes effects 1, 2, and 4 using the \texttt{lme} function in the \texttt{R nlme} package,
 \vspace{-12pt}
 \singlespace 
 \begin{verbatim}
-  croche.lme <- lme(den ~ -1 + size + I(size 2),
+  croche.lme <- lme(den ~ -1 + size + I(size^2),
     data = as.data.frame(croche),
-    random = ~ day + I(day 2) | taxon,
+    random = ~ day + I(day^2) | taxon,
     weights = varIdent(form = ~ 1 | taxon),
     method = "ML")
 \end{verbatim}
@@ -159,7 +166,7 @@ Given this \texttt{croche.lme} object, we can efficiently fit another model that
 \begin{verbatim}
   croche.lme2 <- update(croche.lme, fixed. = . ~ . + size:day)
 \end{verbatim}
-Note that we have set \texttt{method = "ML"}, specifying maximum likelihood estimation.  We use maximum likelihood fitted models for likelihood ratio tests, which we describe below, but refit the models using restricted maximum likelihood (i.e. \texttt{method = "REML"}) for all other purposes because it is less biased \citep{PinheiroAndBates2000}.  Because our fixed-effect specifications are different between models, likelihood ratio tests based on restricted maximum likelihood estimates are not valid \citep{PinheiroAndBates2000}.
+Note that we have set \texttt{method = "ML"}, specifying maximum likelihood estimation.  We use maximum likelihood fitted models for likelihood ratio tests, which we describe below, but refit the models using restricted maximum likelihood (i.e. \texttt{method = "REML"}) for all other purposes because it is less biased \citep{PinheiroAndBates2000}.  Because our fixed-effect specifications are different between models, likelihood ratio tests based on restricted maximum likelihood estimates are not valid \citep{PinheiroAndBates2000}.  \emph{Importantly, these random effects models fit the data much better than any of the fixed effects models (Figure \ref{fig:randomeffectsresiduals}).}
 
 %To decide which of the first three effects should be fixed and which should be random, we treat the one involving \texttt{taxon} (i.e. effect 2) as random and all others as fixed (i.e. effects 1 and 3).  The for this decision is that in trait-based ecology, we are primarily interested in effects involving functional trait information (e.g. \texttt{size}) rather than those involving taxonomic information (e.g. \texttt{taxon}).  Therefore, taxon-effects are not the sources of variation that are of primary interest.  We treat taxon-effects as random 
 
@@ -175,7 +182,7 @@ Note that we have set \texttt{method = "ML"}, specifying maximum likelihood esti
 
 \begin{figure}
 \includegraphics{randomeffectsresiduals.pdf}
-\caption{}
+\caption{Normalised residuals from the random effects model in Eq. 8.  Each taxon is in a separate panel ordered by body length (numbers in parentheses in mm).  The normalised residuals appear homogeneous and symmetric, indicating a good fit to the data.}
 \label{fig:randomeffectsresiduals}
 \end{figure}
 \processfloatnow
@@ -184,7 +191,7 @@ Note that we have set \texttt{method = "ML"}, specifying maximum likelihood esti
 
 \subsection{Statistical significance of the \texttt{day} gradient}
 
-Each of the three models used in the main text (Eqs. ??) involve the \texttt{day} gradient to some extent.  If this were not the case, then some models would predict a flat relationship between \texttt{day} and \texttt{cwm}, instead of the negative relationship actually observed.  To test the significance of \texttt{day} in the summarised data model (Eq.??) we conducted the standard F-test for linear models,
+Each of the three models used in the main text (Eqs. 7-9) involve the \texttt{day} gradient to some extent.  If this were not the case, then some models would predict a flat relationship between \texttt{day} and \texttt{cwm}, instead of the negative relationship actually observed.  To test the significance of \texttt{day} in the summarised data model (Eq. 7) we used the standard F-test for linear models,
 \vspace{-16pt}
 \singlespace 
 \begin{verbatim}
@@ -201,7 +208,7 @@ which returns,
 \end{verbatim}
 \doublespace
 
-To test the significance of \texttt{day} in the full data models (Eqs. ??) we used likelihood ratio tests.  The null model for these tests was a model with identical structure to the models actually used except that all of the model elements that involve \texttt{day} were removed,
+To test the significance of \texttt{day} in the full data models (Eqs. 8-9) we used likelihood ratio tests.  The null model for these tests was a model with identical structure to the models actually used except that all of the model elements that involve \texttt{day} were removed,
 \singlespace 
 \begin{verbatim}
   croche.lme0 <- lme(den ~ -1 + size + I(size 2),
@@ -233,177 +240,95 @@ croche.lme2        2 21 -589.9082 -531.3708 315.9541 1 vs 2 39.98647  <.0001
 \end{verbatim}
 \doublespace
 
-\subsection{Confidence intervals}
+\subsection{Mixed model confidence intervals for fixed effects}
 
-To calculate confidence intervals for model parameters, we used 1.96 times the standard errors returned by the \texttt{summary} method for \texttt{lme} model objects,
+To calculate confidence intervals for fixed effects, we used 1.96 times the standard errors returned by the \texttt{summary} method for \texttt{lme} model objects.  This method returns a lot of information but the relevant tables for the two full data models are,
 \vspace{-16pt}
 \singlespace 
 \begin{verbatim}
-summary(croche.lme)
-Linear mixed-effects model fit by REML
- Data: croche 
-        AIC       BIC   logLik
-  -575.5983 -520.1846 307.7992
-
-Random effects:
- Formula: ~day + I(day^2) | taxon
- Structure: General positive-definite, Log-Cholesky parametrization
-                 StdDev      Corr         
-(Intercept)      0.044143352 (Intr)   day
-day              0.012156500 0.286        
-I(day^2)         0.009068011 0.142  0.232 
-Residual         0.018749557              
-
-Variance function:
- Structure: Different standard deviations per stratum
- Formula: ~1 | taxon 
- Parameter estimates:
-   armoured rot         Bosmina      Cal adults        Cal cope    colonial rot 
-      1.0000000       0.2213323       0.4448553       0.3179021       1.8399211 
-    Cycl adults       Cycl cope     Daphnia cat     Daphnia l&d      Holopedium 
-      0.8448272       0.4979797       0.5889436       0.2323527       0.5678671 
-        nauplii unprotected rot 
-      0.9290073       1.1161388 
 Fixed effects: den ~ -1 + size + I(size^2) 
                 Value  Std.Error DF   t-value p-value
 size      -0.04712006 0.01366072 10 -3.449310  0.0062
 I(size^2)  0.05285596 0.01042480 10  5.070214  0.0005
- Correlation: 
-            size
-I(size^2) -0.313
-
-Standardized Within-Group Residuals:
-        Min          Q1         Med          Q3         Max 
--2.16261609 -0.53025751 -0.05447561  0.67505672  1.85595280 
-
-Number of Observations: 120
-Number of Groups: 12 
-
-
-summary(croche.lme2)
-Linear mixed-effects model fit by REML
- Data: croche
-        AIC       BIC   logLik
-  -566.0385 -508.0329 304.0193
-
-Random effects:
- Formula: ~day + I(day^2) | taxon
- Structure: General positive-definite, Log-Cholesky parametrization
-                 StdDev      Corr         
-(Intercept)      0.044065463 (Intr)   day
-day              0.011063178 0.292        
-I(day^2)         0.009073553 0.133  0.218 
-Residual         0.018713669              
-
-Variance function:
- Structure: Different standard deviations per stratum
- Formula: ~1 | taxon 
- Parameter estimates:
-   armoured rot         Bosmina      Cal adults        Cal cope    colonial rot 
-      1.0000000       0.2218467       0.4440647       0.3183614       1.8255520 
-    Cycl adults       Cycl cope     Daphnia cat     Daphnia l&d      Holopedium 
-      0.8437985       0.4991434       0.5887427       0.2328328       0.5684159 
-        nauplii unprotected rot 
-      0.9211510       1.2321081 
+ 
+ 
 Fixed effects: den ~ size + I(size^2) + size:day -1 
                    Value   Std.Error  DF   t-value p-value
 size         -0.05145452 0.014061772  10 -3.659177  0.0044
 I(size^2)     0.05256191 0.010413627  10  5.047416  0.0005
 size:day     -0.00513419 0.003553148 108 -1.444969  0.1514
- Correlation: 
-           size I(size^2)
-I(size^2)          -0.301       
-size:day  0.241     0.022
-
-Standardized Within-Group Residuals:
-        Min          Q1         Med          Q3         Max 
--2.17134860 -0.51791924 -0.06856532  0.67461091  1.92405232 
-
-Number of Observations: 120
-Number of Groups: 12 
 \end{verbatim}
 \doublespace
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \subsection{Predicting with and without taxon effects}
 
-Mixed effects models are capable of making two different types of predictions---called conditional and marginal predictions---depending on whether the random effects are used.  Ecologically, the difference between these two types is that conditional predictions make use of taxon effects whereas marginal predictions do not.  Mathematically, the reason for the difference arises because random effects are considered random realisation of a population of effects and so we may choose to make predictions using the average of the random effects across taxa (i.e. the marginal approach) or our estimates of the effects for each individual taxon (i.e. the conditional approach).  For models fitted using \texttt{lme}, the \texttt{fitted} function can return both types of fitted values by adjusting the \texttt{level} argument.  See the help file for more details (\texttt{?fitted.lme}).
+Mixed effects models are capable of making two different types of predictions---called conditional and marginal predictions---depending on whether the random effects are used.  Ecologically, the difference between these two types is that conditional predictions make use of taxon effects whereas marginal predictions do not.  Mathematically, the reason for the difference arises because random effects are considered random realisations of a population of effects and so we may choose to make predictions using the average of the random effects across taxa (i.e. the marginal approach) or our estimates of the effects for each individual taxon (i.e. the conditional approach).  For models fitted using \texttt{lme}, the \texttt{fitted} function can return both types of fitted values by adjusting the \texttt{level} argument.  For two-level models such as ours, \texttt{level = 1} refers to conditional predictions whereas \texttt{level = 2} refers to marginal.  See the help file for more details (\texttt{?fitted.lme}).
 
 \subsection{Predicting community-weighted means with full-data-models}
 
-Predicting the summarised data with a full data model is the most technically nuanced aspect of our methodology.  The full data models (Eq.??) predict a distribution for each $y_{ij}$, which in turn induce a distribution for $z_i$ because $\bar{z}_i$ depends on $y_{ij}$ $(j = 1,...,m)$ (Eq.??).  The fitted value, $\hat{\bar{z}}$, for $\bar{z}_i$ is the expected value, E, (i.e. average) of this distribution,
+Predicting the summarised data with a full data model is the most technically nuanced aspect of our methodology.  The full data models (Eq. 6) predict a distribution for each $y_{ij}$, which in turn induce a distribution for $z_i$ because $\bar{z}_i$ depends on $y_{ij}$ $(j = 1,...,m)$ (Eq. 1).  The fitted value, $\hat{\bar{z}}$, for $\bar{z}_i$ is the expected value, E, (i.e. average) of this distribution,
 \begin{equation}
 \hat{\bar{z}}_i = \mathrm{E}(\bar{z}_i) = \mathrm{E}\left(\frac{\sum_{j=1}^m y_{ij} z_j}{\sum_{j=1}^m y_{ij}} \right)
 \end{equation}
 Unfortunately, there is no closed-form expression for this expected value, which is why these predictions are technically challenging.  However, there are several efficient ways to approximate $\hat{\bar{z}}$.
 
-We begin with the most intuitive approach.  The fitted value for each $y_{ij}$ is given by $\hat{y}_{ij}$ (Eq.??), which is the expected value of $y_{ij}$ under the fitted model.  Therefore, one simple approximation for $\hat{\bar{z}}_i$ is to substitute $\hat{y}_{ij}$ for $y_{ij}$ into the definition of the community-weighted mean (Eq.??),
+We begin with the most intuitive approximation, which we call the plug-in estimate.  The fitted value for each $y_{ij}$ is given by $\hat{y}_{ij}$ (Eq. 6), which is the expected value of $y_{ij}$ under the fitted model.  Therefore, one approximation for $\hat{\bar{z}}_i$ is to substitute $\hat{y}_{ij}$ for $y_{ij}$ in the definition of the community-weighted mean (Eq. 1),
 \begin{equation}
 \hat{\bar{z}}_i \approx \frac{\sum_{j=1}^m \hat{y}_{ij} z_j}{\sum_{j=1}^m \hat{y}_{ij}}
+\label{eq:plugin}
 \end{equation}
-However, this prediction will usually be biased because $\bar{z}_i$ is a non-linear function of $y_{ij}$ $(j = 1,...,m)$, and a non-linear function at the average value of its argument does not usually equal the mean  of the function.  Nevertheless, in practice we have found that this approximation is very accurate.
+However, this plug-in estimate will usually be biased because $\bar{z}_i$ is a non-linear function of $y_{ij}$ $(j = 1,...,m)$, and a non-linear function at the average value of its argument does not usually equal the mean  of the function.  Nevertheless, in practice we have found that this approximation is very accurate, as we illustrate next.
 
-To improve approximation ??, we use ideas from error propagation theory (refs??).  In particular, we add a bias correction term to Eq.??,
+To improve approximation \ref{eq:plugin}, we use ideas from error propagation theory (e.g. \citenp{AngAndTang2007}, pp. 186-7) to develop a bias-corrected estimate,
 \begin{equation}
 \hat{\bar{z}}_i \approx \frac{\sum_{j=1}^m \hat{y}_{ij} z_j}{\sum_{j=1}^m \hat{y}_{ij}} + \frac{1}{2} \sum_{i, j} \hat{\sigma}_j^2 \bar{z}''_{ij}
+\label{eq:corrected}
 \end{equation}
-where $\hat{\sigma}_j^2$ is the estimated conditional variance of $y_{ij}$ around $\hat{y}_{ij}$ and $\bar{z}''_{ij}$ is the second partial derivative of $\bar{z}_i$ with respect to $y_{ij}$.  With \texttt{lme} models, these conditional variances can be obtained using the \texttt{getVarCov} function and setting the \texttt{type} argument to \texttt{conditional}.  The second partial derivatives can be computed using,
+where $\hat{\sigma}_j^2$ is the estimated conditional variance of $y_{ij}$ around $\hat{y}_{ij}$ and $\bar{z}''_{ij}$ is the second partial derivative of $\bar{z}_i$ with respect to $y_{ij}$.  With \texttt{lme} models, these conditional variances can be obtained using the \texttt{getVarCov} function and setting the \texttt{type} argument to \texttt{conditional}.  The second partial derivatives are,
 \begin{equation}
-\bar{z}''_{ij} = -2 \frac{\bar{z}'_{ij}}{\sum_k y_{ik}}
+\bar{z}''_{ij} = -2 \frac{\bar{z}'_{ij}}{\sum_k \hat{y}_{ik}}
 \end{equation}
 where $\bar{z}'_{ij}$ is the first partial derivative,
 \begin{equation}
-\bar{z}'_{ij} = \frac{\sum_k y_{ik} z_j - \sum_k y_{ik} z_k}{\left( \sum_k y_{ik} \right)^2}
+\bar{z}'_{ij} = \frac{\sum_k \hat{y}_{ik} (z_j - z_k)}{\left( \sum_k \hat{y}_{ik} \right)^2}
 \end{equation}
 
-In this paper we used Eq.?? to compute fitted community-weighted means.  However, there was very little difference between Eq.?? and Eq.?? (Figure ??), suggesting that the simpler method may often be good enough.  If better approximations are required, it is always possible to simulate from the conditional model, calculate the resulting community-weighted means, and average these over a number of replicate simulations.
+In this paper we used Eq. \ref{eq:corrected} to compute fitted community-weighted means.  However, there was very little difference between Eq. \ref{eq:plugin} and Eq. \ref{eq:corrected} (Figure \ref{fig:cwmcorrection}), suggesting that the simpler method may often be good enough.  If better approximations are required, it is always possible to simulate from the conditional model, calculate the resulting community-weighted means, and average these over a number of replicate simulations.
 
 \begin{figure}
 \includegraphics{cwmcorrection.pdf}
-\caption{}
+\caption{Comparison of bias-corrected and plug-in estimates of expected community-weighted means under the random effects model in Eq. 8.}
 \label{fig:cwmcorrection}
 \end{figure}
 \processfloatnow
 
-\section{Gape-limitation hypothesis}
+\section{An additional model (gape-limitation hypothesis)}
 
-We further explore the gape-limitation hypothesis discussed briefly in the second-last paragraph of the Discussion.  To visualise the information in the data that relates to the hypothesis, we reproduce Figure ?? in the main text with re-ordered panels (Figure ??).  In this figure, all unprotected taxa (marked `N') are in the top two rows and all protected taxa (marked `Y') are in the bottom row.  Within these two groups, taxa are ordered by body size (numbers in parentheses).  Consider the protected taxa first; clearly the smaller taxa (i.e. armoured and colonial rotifers) are more positively related to \texttt{day} than the larger ones (i.e. \emph{Holopedium} and the protected \emph{Daphnia} species).  This pattern implies a negative \texttt{size}-\texttt{day} interaction among protected taxa.  In contrast, this \texttt{size}-\texttt{day} interaction is much less pronounced among the unprotected taxa.
+We further explore the gape-limitation hypothesis discussed briefly in the second-last paragraph of the Discussion.  To visualise the information in the data that relates to the hypothesis, we reproduce Figure 3 in the main text with re-ordered panels (Figure \ref{fig:randomeffectsfitwithpredatorprotection}).  In this figure, all unprotected taxa (marked `N') are in the top two rows and all protected taxa (marked `Y') are in the bottom row.  Within these two groups, taxa are ordered by body size (numbers in parentheses).  Consider the protected taxa first; clearly the smaller taxa (i.e. armoured and colonial rotifers) are more positively related to \texttt{day} than the larger ones (i.e. \emph{Holopedium} and the protected \emph{Daphnia} species).  This pattern implies a negative \texttt{size}-\texttt{day} interaction among protected taxa.  In contrast, this \texttt{size}-\texttt{day} interaction is much less pronounced among the unprotected taxa.
 
-To formally model these ideas, we fit the following modification of the model in main-text Eq. ?? to the data,
+To formally model these ideas, we fit the following modification of the model in main-text Eq. 9 to the data,
 \begin{equation}
-\mathtt{den} \sim \mathtt{size} + \mathtt{pp}:\mathtt{size}:\mathtt{day} + (\mathtt{day} + \mathtt{day}^2 | \mathtt{taxon})
+\mathtt{den} \sim \mathtt{size} + \mathtt{size}^2 + \mathtt{pp}:\mathtt{size}:\mathtt{day} + (\mathtt{day} + \mathtt{day}^2 | \mathtt{taxon})
 \label{eq:fdminteraction}
 \end{equation}
 where \texttt{pp} is a categorical predator protection variable with two levels, \texttt{Y} and \texttt{N}.  We fitted this model as,
 \begin{verbatim} 
   croche.lme3 <- update(croche.lme, fixed. = . ~ . + pp:size:day) 
 \end{verbatim} 
-In this model, protected and unprotected taxa have different \texttt{size}-\texttt{day} interactions, which was a significant addition to the model as determined with a likelihood ratio test (LR = 5.7, p = 0.017).  The \texttt{size}-\texttt{day} interaction was only significant for protected taxa (Table ??).  Table ?? gives the results for the simpler model in the main text (Eq.??) that does not consider predator protection.
+In this model, protected and unprotected taxa have different \texttt{size}-\texttt{day} interactions, which was a significant addition to the model as determined by a likelihood ratio test (LR = 5.7, p = 0.017).  The \texttt{size}-\texttt{day} interaction was only significant for protected taxa (Table \ref{tab:ppanova}).  Table \ref{tab:noppanova} gives the results for the simpler model in the main text (Eq. 9) that does not consider predator protection.
 
 \begin{figure}
+\vspace{-0.5cm}
 \includegraphics{randomeffectsfitwithpredatorprotection.pdf}
-\caption{}
+\caption{Density (square-root-y-axis) as a function of day-of-year (x-axis) for each taxon (different panels).  Taxa are grouped by predator protection (Y or N) and ordered within groups by body length (given in mm in parentheses).  Lines are fitted values from two fitted models with (Eq. \ref{eq:fdminteraction}) and without (Eq. 8) interactions.  Line colour indicates the model and line type indicates whether or not taxon effects are used to compute the fitted values.  Compare with Figure 3 in the main text.}
 \label{fig:randomeffectsfitwithpredatorprotection}
 \end{figure}
 \processfloatnow
 
 \singlespace
 \begin{table}
-\caption{ANOVA table}
+\caption{ANOVA table for the model in Eq. \ref{eq:fdminteraction}.}
+\label{tab:ppanova}
 \begin{tabular}{lrrrrrr}
 \hline
                               & Value  & Std.Error & DF  & t-value & p-value \\
@@ -421,7 +346,8 @@ $\mathtt{size:pp.Y:day}$ & -0.023 & 0.006 & 107 & -3.7 & 0.0003 \\
 
 \singlespace
 \begin{table}
-\caption{Another ANOVA table}
+\caption{ANOVA table for the model in Eq. 9.}
+\label{tab:noppanova}
 \begin{tabular}{lrrrrrr}
 \hline
                               & Value  & Std.Error & DF  & t-value & p-value \\

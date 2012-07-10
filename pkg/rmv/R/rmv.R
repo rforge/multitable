@@ -62,3 +62,38 @@ msr <- function(sqrmat, method = c('chol', 'eigen')){
 	}
 	return(msr)
 }
+
+
+#' Correlated random number generation from factor analysis models
+#'
+#' Simulate correlated random variables by supplying the parameters of 
+#' a linear factor analysis model.
+#'
+#' The population covariance matrix for the multivariate observations is 
+#' given by:  \code{Lambda %*% t(Lambda) + diag(psi)}.  The idea here is
+#' that Lambda are coefficients relating a set of 
+#' An alternative
+#' interpretation of this function is that Lambda is a matrix square-root 
+#' of a singular covariance matrix TODO
+#' 
+#' be understood similarly to \code{\link{rmv}}
+#'
+#' @param n Number of random multivariate draws.
+#' @param Lambda Variables-by-factors matrix of loadings for the
+#'  factor analysis model.
+#' @param psi Vector of uniquenesses (i.e. residual variances).  One
+#'  variance for each variable.
+#' @return A matrix with rows giving observations and columns giving 
+#'	correlated variables.
+#' @export
+rfa <- function(n, Lambda, psi){
+	m <- nrow(Lambda) # number of variables
+	d <- ncol(Lambda) # number of factors
+	if(m != length(psi)) stop('Lambda and psi are incompatible')
+	X <- matrix(rnorm(n*d), n, d)
+	E <- replicate(n, rnorm(m, sd = sqrt(psi)))
+	if(is.null(dim(E))) E <- matrix(E, n, m)
+	else E <- t(E)
+	Y <- (X %*% t(Lambda)) + E
+	return(Y)
+}
