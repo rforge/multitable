@@ -206,7 +206,18 @@ segment.divide <- function(l = 0, r = 1, s, n, by = 0.1){
 	return(out)
 }
 
-seg.div <- segment.divide(0, 1, 0.1, 
+seg.div <- segment.divide(0, 1, 0.02, 11)
+plot(c(0, 1), c(0, 1), type = 'n')
+with(seg.div, segments(L, 0.5, R, 0.5))
+with(seg.div, segments(L, L, R, L))
+with(seg.div, segments(L, R, R, R))
+with(seg.div, segments(L, R, L, R))
+with(seg.div, segments(L, R, L, R))
+
+data(fake.community)
+s <- summary(dropdl(fake.community[,1,]))
+replicationgraph(s)
+
 
 
 #####
