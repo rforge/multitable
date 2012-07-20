@@ -298,8 +298,8 @@ tail.list <- function(x,n=6L,...){
 #'	no doubt many use cases that I've ignored.
 #' @export
 FPDist <- function(PDist, FDist, a, p, ord = TRUE){
-	PDist <- as.matrix(PDist)
-	FDist <- as.matrix(FDist)
+	PDist <- as.matrix(PDist, rownames.force = TRUE)
+	FDist <- as.matrix(FDist, rownames.force = TRUE)
 	if(
 		is.null(rownames(FDist)) ||
 		is.null(colnames(FDist)) ||
@@ -1072,4 +1072,132 @@ a.postsim <- function(a_grid, posterior, n = 1){
 	dscrt.post <- posterior/sum(posterior)
 	replicate(n, a_grid[min(which(runif(1) < cumsum(dscrt.post)))])
 }
+
+#' Simulate phylogenetically correlated trait data
+#' 
+#' @param m Number of species.
+#' @param q Number of relevant traits.
+#' @param brown.sd Standard deviation of Brownian motion.
+#' @param diverge.sd Standard deviation of noise due to divergence from 
+#'  Brownian motion.
+#' @export
+#' @return A list with the following components:
+#'  \item{tree}{phylogenetic tree}
+#'  \item{traits}{species-by-traits matrix}
+#'  \item{FDist}{functional distance matrix}
+#'  \item{PDist}{phylogenetic distance matrix}
+fd.pd.sim <- function(m, q, brown.sd, diverge.sd){
+
+	# simulate tree
+	tr <- rcoal(m)
+	
+	# simulate traits 
+	# (1st step = brownian motion)
+	sim.traits <- t(chol(vcv(tr))) %*% matrix(rnorm(q*m, sd = brown.sd), m, q)
+	# (2nd step = noise due to divergence)
+	sim.traits <- sim.traits + matrix(rnorm(m*q, sd = diverge.sd), m, q)
+	
+	# calculate distance matrices
+	FDist <- as.matrix(dist(sim.traits))
+	PDist <- as.matrix(as.dist(cophenetic(tr)))
+	
+	# standardize distance matrices
+	FDist <- FDist / max(FDist)
+	PDist <- PDist / max(PDist)
+	
+	out <- list(
+		tree = tr,
+		traits = sim.traits,
+		FDist = FDist,
+		PDist = PDist
+	)
+	return(out)
+}
+
+
+#' Performance of FPDist in simulations
+#'
+#' @param a Phylogenetic weighting parameter.
+#' @param q.obs Number of observed traits.
+#' @param object Output from \code{fd.pd.sim}.
+#' @param plot Should plot results?
+#' @param ... Additional objects to pass to \code{\link{cor}}.
+#' @export
+#' @return correlation between true and estimated functional distances.
+fd.est.sim <- function(a, q.obs, object, plot = FALSE,...){
+	
+	# calculate FDist matrix for a reduced set of 'observed' traits
+	FDist.obs <- as.matrix(dist(object$traits[, 1:q.obs]))
+	
+	# standardize
+	FDist.obs <- FDist.obs/max(FDist.obs)
+
+	# calculate FPDist matrix
+	# (ord = FALSE is important!  otherwise row and col names don't
+	# match between distance matrices, thereby throwing off the 
+	# correlation computed below.)
+	FDist.est <- FPDist(object$PDist, FDist.obs, a, 2, ord = FALSE)
+	
+	# get one triangle of the distance matrices as a numeric vector,
+	# so that true distances (object$FDist) can be correlated with
+	# the estimated distances (FDist.est)
+	y <- as.numeric(as.dist(object$FDist))
+	x <- as.numeric(as.dist(FDist.est))
+	
+	if(plot) plot(x, y, xlab = '', ylab = '', las = 1, tck = 0.02, bty = 'n', mgp = c(3, 0.5, 0))
+	
+	# return the correlation
+	return(cor(x, y, ...))
+}
+
+
+#' Performance of FPDist over a range of simulations
+#'
+#' @param m Number of species.
+#' @param q Number of traits.
+#' @param q.step.size Coarseness of the number of observed traits grid.
+#' @param a.grid.size Coarseness of the a-value grid.
+#' @export
+#' @return A 3d array with the following dimensions:  
+#'  (grid of a-values)-by-(num obs traits)-by-(trait divergence)
+fd.est.sim.cor <- function(m, q, q.step.size = 2, a.grid.size = 101){
+	
+	# create a grid of a-values
+	a.grid <- seq(0, 1, 1/(a.grid.size-1))
+
+	# proportion of variance attributable to divergence, relative to
+	# brownian motion.  create a grid of such proportions.
+	varprop <- seq(0, 1, 0.1)
+
+	# create a grid of the number of observed traits.
+	q.obs <- seq(1, q-1, 2)
+
+	# create a data frame of all possible crosses of a.grid and q.obs.
+	df <- merge(a.grid, q.obs)
+	names(df) <- c('a', 'q.obs')
+
+	# allocate a list to store correlations
+	cors <- list()
+	
+	# loop over each varprop
+	for(i in seq_along(varprop)){
+		
+		# assign variances to brownian motion and divergence
+		brown.sd <- sqrt(1-varprop[i])
+		diverge.sd <- sqrt(varprop[i])
+		
+		# simulate data
+		sims <- fd.pd.sim(m, q, brown.sd, diverge.sd)
+		
+		# calculate the correlations by applying fd.est.sim
+		cors[[i]] <- mapply(fd.est.sim, df$a, df$q.obs,
+			MoreArgs = list(object = sims))
+		
+		# correct the dimensions of the cors object
+		dim(cors[[i]]) <- c(a.grid.size, length(q.obs))
+	}
+	
+	return(simplify2array(cors))
+}
+
 
