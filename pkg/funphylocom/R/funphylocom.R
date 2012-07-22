@@ -1018,6 +1018,7 @@ FPDglm_grid <- function(tab, y, PDist, FDist, a = seq(0, 1, 0.01),
 }
 
 # TODO:  document this method!
+#'@export
 plot.FPDglm_grid <- function(x, y, ...){
 	xx <- x$surf$a
 	yy <- x$surf$posterior
