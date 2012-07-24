@@ -536,3 +536,20 @@ test_that("data.list doesn't fail for mefa-like data structure (i.e. 4th corner 
 #  at least one variable must be
 #replicated along all dimensions"))
 #})
+
+
+test_that("dlapply works for simple fourth-corner data",{
+
+	library(multitable)
+
+	set.seed(1)
+
+	Y <- matrix(runif(10), 5, 2)
+	X <- runif(5)
+	Z <- runif(2)
+
+	dl <- data.list(Y, X, Z)
+
+	dl1 <- dlapply(dl, 1, sum)
+	dl2 <- dlapply(dl, 2, sum)
+})

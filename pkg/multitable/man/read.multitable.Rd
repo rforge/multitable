@@ -4,6 +4,7 @@
 \alias{read.multidelim}
 \alias{read.fourthcorner}
 \alias{multifile.choose}
+\alias{read.matrix}
 \title{Multiple table data input}
 \description{
 These functions are used to read several text files and create a data list from them.
@@ -19,6 +20,8 @@ read.fourthcorner(community, environment, traits, dimids=c("sites", "species"),
 community.name = "abundance", ...)
 
 multifile.choose(n)
+
+read.matrix(...)
 }
 \arguments{
   \item{files}{A character vector with the names of the files containing the tables (possibly created with \code{multifile.choose}).}
@@ -39,6 +42,8 @@ The \code{read.multicsv} and \code{read.multidelim} simply wrap \code{read.multi
 The \code{read.fourthcorner} function reads in three files (with names passed to \code{community}, \code{environment}, and \code{traits}), and creates a data list out of the resulting files.  The \code{community} table is coerced to a \code{matrix} so that the rows and columns are treated as two different dimensions of replication, whereas the other two tables are left as data frames.  This function is useful because many community ecologists will store their data in this way.
 
 The \code{multifile.choose} function allows the interactive selection of the names of \code{n} files.  Compare with \code{\link{file.choose}}.
+
+The \code{read.matrix} function is identical to \code{\link{read.table}} but returns a matrix instead of a data frame.  The definition of this function is simply a call to \code{\link{read.table}} wrapped in a call to \code{\link{as.matrix}}.
 }
 \value{
 A \code{\link{data.list}} object.

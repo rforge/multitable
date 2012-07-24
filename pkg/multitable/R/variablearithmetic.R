@@ -5,6 +5,11 @@ Ops.data.list <- function(e1, e2){
 	
 	if(FUN == "+"){
 		
+		# check for NULL e1 or e2
+		if(is.null(e1) & !is.null(e2)) return(e2)
+		if(!is.null(e1) & is.null(e2)) return(e1)
+		if(is.null(e1) & is.null(e2)) stop('both summands are null') 
+		
 		# make sure e1 is the larger data list
 		if(length(dim(e1)) < length(dim(e2))){
 			e3 <- e1

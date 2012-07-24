@@ -32,3 +32,5 @@ read.fourthcorner <- function(community, environment, traits, dimids=c("sites","
 multifile.choose <- function(n){
 	sapply(rep(FALSE,n),file.choose)
 }
+
+read.matrix <- function(...) as.matrix(read.table(...))

@@ -7,10 +7,24 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 **				   **
 *************************************
 
+NEW FEATURES
+
+	added a read.matrix function for loading
+	in data as a matrix (instead of as a
+	data frame).  useful to keep track of
+	whether a table of data should be added
+	to a data list as a 2-dimensional
+	variable or as a set of 1-dimensional 
+	variables.
+	
+
 BUG FIXES
 
 	fixed bug #2008: 'incompatible dimensions
 	in y' error message called inappropriately
+
+	fixed bug #2159: 'dlapply failing where it
+	shouldn't'.  test added.
 
 *************************************
 **				   **
