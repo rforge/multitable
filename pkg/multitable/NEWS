@@ -9,6 +9,9 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 
 NEW FEATURES
 
+	new vignette, which matches the journal
+	of statistical software paper.
+
 	added a read.matrix function for loading
 	in data as a matrix (instead of as a
 	data frame).  useful to keep track of
