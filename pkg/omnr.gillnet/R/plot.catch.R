@@ -1,28 +1,8 @@
 plot.catch <-
-function(x,y,mesh.pos="topleft",y.incr=200,...){
-	
-	#######################################################################
-	#
-	# plot.catch(): creates a plot of the data in "catch" objects.
-	#	**note that this function was designed for data with roughly 8
-	#    mesh sizes.  this is a plot() method for objects of class
-	#    "catch".
-	#
-	# REQUIRES: make.catch()
-	# REQUIRED BY: na
-	#
-	# x: an object of class "catch"
-	# mesh.pos: where to put the mesh sizes
-	# y.incr: increment of the y-axis scales
-	#
-	# lens: vector of midpoints of fish length classes
-	# n.mesh: number of mesh sizes
-	# n.bins: number of fish length classes
-	# halfbinsize: half the size of a fish-length bin
-	# xname: string containing the name of the "catch" object
-	# y.scale: vector of numbers to be plotted on the y-axes
-	# 
-	#######################################################################
+function(x, y, mesh.pos = "topleft", y.incr = 200, 
+	cex.mesh = 1, cex.fork = 1, cex.main = 1.5, cex.xaxis = 1, cex.yaxis = 1,
+	mar = c(1, 4, 0, 1), oma = c(4, 0, 4, 0), 
+	line.fork = 2, line.main = 2, ...){
 
 	lens <- x$lens
 	n.mesh <- length(x$mesh)
@@ -31,22 +11,30 @@ function(x,y,mesh.pos="topleft",y.incr=200,...){
 	
 	#xname <- paste(deparse(substitute(x), 500), collapse = "\n")
 
-	par(mfrow=c(n.mesh+2,1),mar=c(1,4,0.5,1))
+	mesh.leg <- round.char(x$mesh, 1)
 
-	plot(c(0,1),c(0,1),type="n",xaxt="n",yaxt="n",bty="n",xlab="",ylab="")
-	text(0.5,0.5,paste("Histograms for",x$data.name,"catch data"),cex=2)
+	par(mfrow = c(n.mesh, 1), mar = mar, oma = oma, ...)
 
 	for(k in 1:n.mesh){
 		plot(range(lens),c(0,max(x$counts)),type="n",xaxt="n",yaxt="n",ylab="")
 		y.scale <- seq(from=0,to=max(x$counts),by=y.incr)
-		axis(2,y.scale, labels = y.scale, las = 1)
+		axis(2,y.scale, labels = y.scale, las = 1, cex.axis = cex.yaxis)
 		for(j in 1:n.bins){
 			rect(lens[j]-halfbinsize,0,lens[j]+halfbinsize,x$counts[j,k])
 		}
-		legend(mesh.pos,legend=paste(x$mesh[k],"mm mesh",sep=""),bty="n")
+		legend(mesh.pos,legend=paste(mesh.leg[k],"mm mesh",sep=""),bty="n", cex = cex.mesh)
 	}
-	axis(1, at = lens, labels = lens, las = 3)
-	plot(c(0,1),c(0,1),type="n",xaxt="n",yaxt="n",bty="n",xlab="",ylab="")
-	text(0.5,0.5,"Fork length (mm)")
+	axis(1, at = lens, labels = lens, las = 3, cex.axis = cex.xaxis)
+
+	mtext('Fork length (mm)', cex = cex.fork, side = 1, outer = TRUE, line = line.fork)
+	mtext(paste("Histograms for",x$data.name,"catch data"), 
+		cex = cex.main, side = 3, outer = TRUE, line = line.main)
 }
 
+round.char <- function(x, digits = 0){
+	if(digits < 0) digits <- 0
+	rd <- round(digits)
+	nc <- max(nchar(trunc(x))) + rd + 1
+	fmt <- paste('%0', nc, '.', rd, 'f', sep = '')
+	sprintf(fmt, x)
+}

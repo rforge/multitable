@@ -8,6 +8,7 @@ fit.catch.compare <- function(catch, perimeter.factor = 2, tol = 1e-8, omega0 = 
 			perimeter.factor = perimeter.factor, omega0 = omega0
 		)
 	)
+	names(fits) <- sapply(sel.curves, deparse)
 
 	class(fits) = "fit.catch.compare"
 	attr(fits, "comparisonresults") <- comparemodels(fits)

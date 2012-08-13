@@ -7,9 +7,9 @@
 \alias{print.fit.catch.compare}
 \alias{summary.fit.catch.compare}
 \alias{print.summary.fit.catch.compare}
-\title{Fit catch data to size-selectivity models}
+\title{Fit catch data to several size-selectivity models}
 \description{
-First fits selection curves by log-linear fitting using \code{\link{glm}} and then (if tangle is TRUE) uses the SELECT method (of Millar 1992) to fit a slightly modified model with a tangle parameter (see Bromaghin 2005 for the concept of tangle parameters).
+Compare the fit of catch data to several size-selectivity models fitted by \code{\link{fit.catch}}.
 }
 \usage{
 fit.catch.compare(catch, perimeter.factor = 2, tol = 1e-8, omega0 = 0.1)
