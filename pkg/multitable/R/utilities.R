@@ -2,9 +2,9 @@
 #
 # used in: dlcast, data.list.mold
 #
-mouter <- function(x,...){
-	spouter <- function(x,y) outer(x,y,...)
-	Reduce("spouter",x)
+mouter <- function(x, ...){
+	spouter <- function(x, y) outer(x, y, ...)
+	Reduce("spouter", x)
 }
 
 # recursive version of the kronecker product (base)

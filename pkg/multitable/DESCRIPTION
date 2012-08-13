@@ -10,3 +10,4 @@ Suggests: MASS, lattice, testthat, arm, ggplot2, rbenchmark, scales, vegan
 License: GPL-2
 URL: http://multitable.r-forge.r-project.org/
 LazyLoad: yes
+BuildVignettes: false
