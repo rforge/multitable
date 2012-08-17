@@ -10,6 +10,7 @@
 #' @param variablenames Optional character vector giving names for the
 #'	variables.  If \code{\link{missing}}, the \code{\link{colnames}} of
 #'	\code{replicationmatrix} are used.
+#' @param min.interbox Minimum inter-box distance.
 #' @param edgespace Number between 0 and 1 giving the width of the space for
 #'	the edges of the graph.
 #' @param boxheight Number greater than zero giving the height of the boxes 
@@ -162,6 +163,7 @@ replicationgraph <- function(
 #' @param r Right coordinate of the segment.
 #' @param s Space between pieces.
 #' @param n Number of pieces.
+#' @param by TODO
 #' @return A list with five components:
 #'  \item{L}{Vector of the left coordinates of the segments.}
 #'  \item{R}{Vector of the right coordinates of the segments.}
@@ -205,171 +207,6 @@ segment.divide <- function(l = 0, r = 1, s, n, by = 0.1){
 	out <- list(L = L, R = R, C = C, lambda = lambda, pts = pts)
 	return(out)
 }
-
-seg.div <- segment.divide(0, 1, 0.02, 11)
-plot(c(0, 1), c(0, 1), type = 'n')
-with(seg.div, segments(L, 0.5, R, 0.5))
-with(seg.div, segments(L, L, R, L))
-with(seg.div, segments(L, R, R, R))
-with(seg.div, segments(L, R, L, R))
-with(seg.div, segments(L, R, L, R))
-
-data(fake.community)
-s <- summary(dropdl(fake.community[,1,]))
-replicationgraph(s)
-
-
-
-#####
-
-	s <- replicationmatrix
-	s.any <- apply(s, 2, any)
-	s <- s[ , s.any, drop = FALSE]
-	s.min <- get.minimal.graph(s)
-	
-	
-	vars <- lapply(1:ncol(s.min), function(i){
-		colnames(s)[apply(apply(s, 2, '==', s.min[, i]), 2, all)]
-	})
-	
-	dims <- apply(s.min, 2, function(xx) rownames(s.min)[xx])
-	
-	dimsvars <- mapply(c, dims, vars)
-	
-	
-	par(new = TRUE, mar = rep(1, 4))
-	plot(c(0, 1), c(0, 1), 
-		type = 'n', xaxt = 'n', yaxt = 'n', 
-		xlab = '', ylab = '', bty = 'n')
-	
-	rect(0, 0, 1, 1, col = grey(0.9), border = NA)
-	for(i in 1:4){
-		text(i/5, 0.5, labels = dimsvars[[3]][i], srt = 90)
-	}
-	
-
-
-
-#' Replication blocks
-#' 
-#' Visualise multiple-table replication structure as dimensionally related blocks.
-#' 
-#' NOT DONE!!!
-replicationblocks <- function(
-	replicationmatrix,
-	dimensionnames,
-	variablenames,
-	margin.space = 0.05, interblock.space = 0.01){	
-
-	s <- replicationmatrix
-	
-	if(round(nrow(s)) != 2) 
-		stop('Replication blocks can only be used to visualise 2d structure')
-	
-	if(!missing(dimensionnames)) rownames(s) <- dimensionnames
-	if(!missing(variablenames)) colnames(s) <- variablenames
-	
-	s.any <- apply(s, 2, any)
-	s <- s[ , s.any, drop = FALSE]
-	
-	s.all <- apply(s, 2, all)
-	
-	if(sum(s.all) > 1)
-		stop('Replication blocks can only be used to visualise structure with one single fully replicated variable')
-	
-	s.dim1 <- apply(apply(s, 2, '==', c(TRUE, FALSE)), 2, all)
-	s.dim2 <- apply(apply(s, 2, '==', c(FALSE, TRUE)), 2, all)
-	
-	n.var.dim1 <- sum(s.dim1)
-	n.var.dim2 <- sum(s.dim2)
-	
-	if(any(s.dim1) && any(s.dim2)){
-	
-		
-	
-	}
-	
-	
-	
-	s.min <- get.minimal.graph(s)
-	
-	apply(s, 2, any)
-	apply(s, 2, all)
-	
-	
-	if(round(nrow(s)) == 1L){
-	
-		n.blocks <- ncol(s)
-		
-		
-	
-	}
-	
-	if(round(nrow(s)) == 2L){
-	
-		if(round(ncol(s.min)) == 2){
-		
-			
-		
-		}
-	
-		if(round(ncol(s.min)) == 3){
-		
-			
-		
-		}
-	
-	}
-	
-	whichvar.dim3 <- apply(apply(s.min, 2, '==', c(TRUE, FALSE)), 2, all)
-	if(sum(whichvar.dim3) != 1) stop('something is wrong')
-	whichvar.dim4 <- apply(apply(s.min, 2, '==', c(FALSE, TRUE)), 2, all)
-	if(sum(whichvar.dim4) != 1) stop('something is wrong')
-	
-	par(mar = rep(1, 4))
-	plot(c(0, 1), c(0, 1), 
-		type = 'n', xaxt = 'n', yaxt = 'n', 
-		xlab = '', ylab = '', bty = 'n')
-	
-	
-	xys <- c(0.1, 0.45, 0.55, 0.9)
-	
-	xleft <- xys[1]; ybottom <- xys[3]; xright <- xys[2]; ytop <- xys[4]
-	rect(xleft, ybottom, xright, ytop,
-		col = grey(0.9), border = NA)
-
-	xleft <- xys[3]; ybottom <- xys[3]; xright <- xys[4]; ytop <- xys[4]
-	rect(xleft, ybottom, xright, ytop,
-		col = grey(0.9), border = NA)
-
-	xleft <- xys[1]; ybottom <- xys[1]; xright <- xys[2]; ytop <- xys[2]
-	rect(xleft, ybottom, xright, ytop,
-		col = grey(0.9), border = NA)
-
-	
-
-	xys <- c(0.05, 0.95, 0.1 + 0.35/2, 0.55 + 0.35/2)
-
-	
-
-	dim1 <- rownames(s.min)[1]
-	dim2 <- rownames(s.min)[2]
-	dim3 <- colnames(s.min)[whichvar.dim3]
-	dim4 <- colnames(s.min)[whichvar.dim4]
-
-	text(xys[1], xys[4], dim1, srt = 90)
-	text(xys[1], xys[3], dim4, srt = 90)
-	text(xys[3], xys[2], dim2)
-	text(xys[4], xys[2], dim3)
-	
-}
-
-library(replicationgraph)
-data(fake.community)
-s <- summary(fake.community)[c(1, 3), ]
-s.min <- get.minimal.graph(s)
-
-
 
 
 #' Get minimal replication graph

@@ -3,8 +3,8 @@
 \title{Replication graph}
 \usage{
   replicationgraph(replicationmatrix, dimensionnames,
-    variablenames, edgespace = 0.3,
-    boxheight = 1/(max(dim(replicationmatrix)) + 1),
+    variablenames, min.interbox = 0.01, edgespace = 0.3,
+    boxheight = 1/(max(dim(replicationmatrix)) - (1 - min.interbox)),
     cex = 1, lwd = 1)
 }
 \arguments{
@@ -22,6 +22,8 @@
   \code{\link{colnames}} of \code{replicationmatrix} are
   used.}
 
+  \item{min.interbox}{Minimum inter-box distance.}
+
   \item{edgespace}{Number between 0 and 1 giving the width
   of the space for the edges of the graph.}
 
@@ -35,7 +37,7 @@
   \item{lwd}{Edge width.}
 }
 \description{
-  Visualise multiple table replication structure as a
+  Visualise multiple-table replication structure as a
   bipartite graph.
 }
 \examples{

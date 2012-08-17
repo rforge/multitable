@@ -7,7 +7,8 @@ Maintainer: Steve Walker <steve.walker@utoronto.ca>
 Description: For visualising multiple table replication structure as a
     bipartite graph.  Meant to be used with the multitable package.
 Depends:
-    MASS, multitable
+    MASS,
+    multitable
 License: GPL (>= 2)
 URL: http://r-forge.r-project.org/projects/multitable/
 Collate:
