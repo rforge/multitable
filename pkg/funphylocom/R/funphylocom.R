@@ -258,12 +258,12 @@ plot.fpcomSims <- function(x,y,cex.add=0.8,
 #' @param prefix Character prefix to go in front of the numbers.
 #' @return A character vector of numbered names.
 #' @export
-numnames <- function(n,prefix="name"){
+numnames <- function(n, prefix = "name"){
 	n <- as.integer(n)
 	if(n < 1) stop("number of names must be one or more")
-	zeropad.code <- paste("%0",nchar(n),".0f",sep="")
-	numpart <- sprintf(zeropad.code,1:n)
-	paste(prefix,numpart,sep="")
+	zeropad.code <- paste("%0", nchar(n), ".0f", sep = "")
+	numpart <- sprintf(zeropad.code, 1:n)
+	paste(prefix, numpart, sep = "")
 }
 
 #' Tail of a list
