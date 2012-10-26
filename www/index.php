@@ -52,5 +52,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <p> Check out the <strong>new</strong> package vignette <a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/www/multitableIntro.pdf?root=multitable"><strong>here</strong></a>. </p>
 
+<p> <a href = "staticdocs/index.html"><strong>mip</strong></a>. </p>
+
 </body>
 </html>
