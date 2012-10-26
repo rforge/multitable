@@ -1,0 +1,13 @@
+Package: mip
+Type: Package
+Title: Install packages 'my way'
+Version: 0.1
+Date: 2012-10-26
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Custom downloading and installing of packages the way I (steve
+    walker) like it.
+License: GPL-2
+LazyLoad: yes
+Collate:
+    'my.install.packages.R'
