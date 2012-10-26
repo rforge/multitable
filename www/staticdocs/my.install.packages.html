@@ -92,15 +92,10 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="comment"># create new library and repository</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/getwd'>setwd</a></span><span class="keyword">(</span><span class="string">'/users/stevenwalker/'</span><span class="keyword">)</span>
 <span class="symbol">cdir</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/getwd'>getwd</a></span><span class="keyword">(</span><span class="keyword">)</span>
-<span class="keyword">(</span><span class="symbol">MyRlib</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="symbol">cdir</span><span class="keyword">,</span> <span class="string">'/TMP_MyRlib/'</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">''</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<div class='output'>[1] "/Users/stevenwalker/TMP_MyRlib/"
-</div>
-<div class='input'><span class="keyword">(</span><span class="symbol">MyRrepo</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="symbol">cdir</span><span class="keyword">,</span> <span class="string">'/TMP_MyRrepo/'</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">''</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<div class='output'>[1] "/Users/stevenwalker/TMP_MyRrepo/"
-</div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/files2'>dir.create</a></span><span class="keyword">(</span><span class="symbol">MyRlib</span><span class="keyword">)</span>
+<span class="symbol">MyRlib</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="symbol">cdir</span><span class="keyword">,</span> <span class="string">'/TMP_MyRlib/'</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">''</span><span class="keyword">)</span>
+<span class="symbol">MyRrepo</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="symbol">cdir</span><span class="keyword">,</span> <span class="string">'/TMP_MyRrepo/'</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">''</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/files2'>dir.create</a></span><span class="keyword">(</span><span class="symbol">MyRlib</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/files2'>dir.create</a></span><span class="keyword">(</span><span class="symbol">MyRrepo</span><span class="keyword">)</span>
 
 <span class="comment"># download (into MyRrepo) and install (into MyRlib) previous</span>

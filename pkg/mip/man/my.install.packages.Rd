@@ -44,10 +44,9 @@
 }
 \examples{
 # create new library and repository
-setwd('/users/stevenwalker/')
 cdir <- getwd()
-(MyRlib <- paste(cdir, '/TMP_MyRlib/', sep = ''))
-(MyRrepo <- paste(cdir, '/TMP_MyRrepo/', sep = ''))
+MyRlib <- paste(cdir, '/TMP_MyRlib/', sep = '')
+MyRrepo <- paste(cdir, '/TMP_MyRrepo/', sep = '')
 dir.create(MyRlib)
 dir.create(MyRrepo)
 
