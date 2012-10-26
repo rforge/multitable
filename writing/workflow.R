@@ -1,6 +1,6 @@
 rm(list = ls())
 
-install.packages(c('multitable', 'nlme', 'ggplot2', 'scales'))
+#install.packages(c('multitable', 'nlme', 'ggplot2', 'scales'))
 
 library(multitable)
 library(nlme)
@@ -156,6 +156,9 @@ croche.lme2 <- update(croche.lme, fixed. = . ~ . + scaled.Length:scaled.week)
 croche.lme3 <- update(croche.lme, fixed. = . ~ . + Predator.protection.:scaled.Length:scaled.week)
 
 
+########COVARIANCE MATRIX INTERLUDE###########
+diag(with(croche, cbind(1, scaled.week, scaled.week^2)) %*% getVarCov(croche.lme) %*% with(croche, rbind(1, scaled.week, scaled.week^2)))
+##############################################
 
 # add fitted values to the croche data
 croche[["fitted.lme", shape = "abundance"]] <- 
@@ -212,24 +215,31 @@ refdf <- rbind(
 # plot them
 ggplot(as.data.frame(croche)) + 
 	facet_wrap( ~ taxonlength, ncol = 3) + 
-	geom_point(aes(week, I(sqrt.abundance^2), group = taxon)) + 
+	geom_point(aes(week, I(sqrt.abundance^2), group = taxon, size = Length),
+		alpha = 0.4) + 
 	geom_line(aes(week, I(fit^2), group = interaction(mdl, typ), 
 		linetype = typ, colour = as.factor(mdl)), 
 		stat = 'smooth', data = refdf, se = FALSE) + 
-	scale_y_continuous("Density", trans = 'sqrt', breaks = c(0.00, 0.01, 0.04)) + 
+	scale_y_continuous("Density", trans = 'sqrt', 
+		breaks = c(0.00, 0.01, 0.04)) + 
 	scale_x_continuous("Day-of-year", breaks = c(200, 240, 280)) + 
+	scale_size('Size (mm)', range = c(2, 5), 
+		breaks = c(0.2, 0.7, 1.2)) + 
 	scale_linetype('Prediction type', breaks = c('cond','marg'),
 		guide = guide_legend(nrow = 2),
 		labels = c(
 			'with taxon effects (i.e. conditional)', 
 			'without taxon effects (i.e. marginal))')) +
-	scale_colour_manual('Predictive model', breaks = as.factor(c(0.5, 1)), values = c('red','black'),
+	scale_colour_manual('Predictive model', 
+		breaks = as.factor(c(0.5, 1)), 
+		values = c('red','black'),
 		guide = guide_legend(nrow = 2),
 		labels = c(
 			'with size-day interaction', 
 			'without size-day interaction')) + 
-	opts(legend.position = 'top', legend.direction = 'vertical', legend.box = 'horizontal')
-ggsave("randomeffectsfit.pdf", height = 8, width = 5.5)
+	opts(legend.position = 'top', legend.direction = 'vertical', 
+		legend.box = 'horizontal')
+ggsave("randomeffectsfit.pdf", height = 8, width = 6.5)
 
 
 # organise fitted values for plotting

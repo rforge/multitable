@@ -97,3 +97,21 @@ rfa <- function(n, Lambda, psi){
 	Y <- (X %*% t(Lambda)) + E
 	return(Y)
 }
+
+
+#' Random covariance matrices
+#' 
+#' Simulate random covariance matrices by samping an \code{n}
+#' by \code{m} matrix of iid variates from \code{rfunc} and then
+#' passing that matrix to \code{\link{cov}}.
+#' 
+#' @param n Number of multivariate samples.
+#' @param m Number of variables.
+#' @param rfunc Function that returns a vector of random draws from a 
+#'	particular distribution.  The first argument of \code{rfunc} must
+#'	give the number of random draws to make.
+#' @param ... Additional arguments to \code{rfunc}.
+#' @return A covariance matrix.
+#' @export
+rcov <- function(n, m, rfunc = rnorm, ...)
+	cov(matrix(rfunc(n * m, ...), n, m))

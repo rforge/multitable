@@ -1,3 +1,4 @@
 export(msr)
+export(rcov)
 export(rfa)
 export(rmv)
