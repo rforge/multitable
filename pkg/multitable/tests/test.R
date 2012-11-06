@@ -553,3 +553,21 @@ test_that("dlapply works for simple fourth-corner data",{
 	dl1 <- dlapply(dl, 1, sum)
 	dl2 <- dlapply(dl, 2, sum)
 })
+
+
+test_that("make.dimnames.consistent is in the right places",{
+
+	library(multitable)
+
+	set.seed(1)
+	Y <- matrix(rnorm(9), 3, 3)
+	x <- rnorm(3)
+	
+	dl <- data.list(Y, x, match.dimids = list(c('D1','D2'),'D1'))
+	
+	names(dl$x) <- letters[1:3]
+	dimnames(dl$Y) <- list(NULL, letters[1:3])
+	
+	df <- as.data.frame(dl)
+	dl11 <- dl[1,1]
+})

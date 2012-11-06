@@ -2,6 +2,8 @@
 function(x, ..., drop=TRUE, vextract=TRUE){
 	
 	mc <- match.call()
+	
+	x <- make.dimnames.consistent(x, attr(x, 'bm'))
 
 	# obtain the correct number, nd, of dimension indices passed to ...
 	# this involves not counting drop and vextract arguments if they

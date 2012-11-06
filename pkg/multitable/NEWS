@@ -9,6 +9,11 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 
 NEW FEATURES
 
+	new function, simple.scale, that provides
+	a version of the scale function that treats
+	matrices as whole variables rather than
+	as collections of variables.
+
 	new vignette, which matches the journal
 	of statistical software paper.
 
@@ -22,6 +27,11 @@ NEW FEATURES
 	
 
 BUG FIXES
+
+	fixed bug that led to dimnames being
+	inconsistent amongst variables in a data
+	list.  now make.dimnames.consistent 
+	is in the right places.  test added.
 
 	fixed bug #2008: 'incompatible dimensions
 	in y' error message called inappropriately

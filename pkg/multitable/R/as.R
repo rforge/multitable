@@ -445,9 +445,12 @@ function(x, bm, repdim){
 }
 
 make.dimnames.consistent <-
-function(x,bm){
+function(x, bm){
 	dimnames(x) <- dimnames(bm(x))
-	if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x), function(di) seq_len(di))
+	if(any(sapply(dimnames(x), is.null)) ||  is.null(dimnames(x))){
+		dimnames(x) <- lapply(dim(x), function(di) seq_len(di))
+	}
+	# if(is.null(dimnames(x))) dimnames(x) <- lapply(dim(x), function(di) seq_len(di))
 	return(x)
 }
 
@@ -468,6 +471,7 @@ function(x, drop.attr=TRUE, factorsTOstrings=FALSE, ...){
 
 as.data.frame.data.list <-
 function(x, row.names = NULL, optional = FALSE, scheme = "repeat", mold, ...){
+	x <- make.dimnames.consistent(x, attr(x, 'bm'))
 	if(missing(mold)) mold <- data.list.mold(x)
 	#out <- lapply(seq_along(x), function(i) as.vector(x[[i]][mold[[i]]]))
 	out <- lapply(seq_along(x), function(i) 

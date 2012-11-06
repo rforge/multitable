@@ -23,18 +23,18 @@ Maintainer: Steve Walker <steve.walker@utoronto.ca>
 \keyword{ package }
 \examples{
 ######################################################
-# The following examples appear in the package
-# vignette, and the sections below correspond to
-# that document
+# The package vignette (Walker et al. 2012 JSS) is a
+# useful place to start
 ######################################################
 vignette("multitable")
 
+
 ######################################################
-# SECTION 2: The structure of data lists
+# The structure of data lists
 ######################################################
 
 # load the example data set in data list form.
-data("fake.community")
+data(fake.community)
 fake.community
 
 # print a summary of the relational structure
@@ -42,7 +42,7 @@ fake.community
 summary(fake.community)
 
 ######################################################
-# SECTION 3: Subscripting data lists
+# Subscripting data lists
 ######################################################
 
 # extract two years of data.
@@ -60,7 +60,7 @@ fake.community[1:3, "1537", 1]
 ?`[.data.list`
 
 ######################################################
-# SECTION 4: Transforming variables in data lists
+# Transforming variables in data lists
 ######################################################
 
 # transformation occurs much like it would with
@@ -72,7 +72,7 @@ fake.community$body.size["moss"] <- 1
 fake.community
 
 ######################################################
-# SECTION 5: Simple analysis functions
+# Simple analysis functions
 ######################################################
 
 # we can pass data lists to lm just as we would pass
@@ -87,7 +87,7 @@ library("MASS")
 rlm(abundance ~ body.size*temperature, data = fake.community)
 
 ######################################################
-# SECTION 6: Coercing data lists to data frames
+# Coercing data lists to data frames
 ######################################################
 
 # data frames are easily coerced to data frames via
@@ -98,14 +98,14 @@ fake.community.df[, -6]
 # therefore, data list objects can easily be passed to
 # any R function accepting a data frame, after they
 # have been converted to a data frame.
-library("lattice")
+library(lattice)
 xyplot(abundance ~ temperature | body.size, data = fake.community.df)
 
 # for further information about coercing in multitable:
 ?as.data.list
 
 ######################################################
-# SECTION 7: How data lists are made
+# How data lists are made
 ######################################################
 
 # here are three example objects to be combined into
@@ -142,7 +142,7 @@ trait
 # shared among tables.  the fill argument tells 
 # dlcast how to fill in any structural missing 
 # values.
-dl <- dlcast(list(abundance,environment,trait),
+dl <- dlcast(list(abundance, environment, trait),
 	dimids=c("sites", "species"),
 	fill=c(0, NA, NA)
 )
