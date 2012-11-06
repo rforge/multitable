@@ -1,0 +1,22 @@
+citHeader("To cite multitable in publications use:")
+
+citEntry(entry = "Article",
+  title        = "Multiple-Table Data in {R} with the {multitable} Package",
+  author       = personList(as.person("Steven C Walker"),
+                   as.person("Guillaume Gu\\'{e}nard"),
+                   as.person("P\\'{e}ter S\\'{o}lymos"),
+                   as.person("Pierre Legendre")),
+  journal      = "Journal of Statistical Software",
+  year         = "2012",
+  volume       = "51",
+  number       = "8",
+  pages        = "1--38",
+  url          = "http://www.jstatsoft.org/v51/i08/",
+
+  textVersion  =
+  paste("Steven C Walker, Guillaume Guenard, Peter Solymos, Pierre Legendre (2012).",
+        "Multiple-Table Data in R with the multitable Package.",
+        "Journal of Statistical Software, 51(8), 1-38.",
+        "URL http://www.jstatsoft.org/v51/i08/.")
+)
+
