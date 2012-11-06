@@ -30,25 +30,3 @@ License: GPL-2
 URL: http://multitable.r-forge.r-project.org/
 LazyLoad: yes
 BuildVignettes: false
-Collate:
-    'Extract.data.list.R'
-    'accessor.functions.R'
-    'aperm.R'
-    'as.R'
-    'data.list.R'
-    'dims_to_vars.R'
-    'dlapply.R'
-    'dlcast.R'
-    'dlmelt.R'
-    'drop.R'
-    'fc.data.list.R'
-    'merge.data.list.R'
-    'print.data.list.R'
-    'read.multitable.R'
-    'simple.scale.R'
-    'summary.data.list.R'
-    'utilities.R'
-    'variablearithmetic.R'
-    'variablize.R'
-    'with.R'
-    'zzz.R'
