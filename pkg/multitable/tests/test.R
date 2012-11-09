@@ -496,6 +496,8 @@ test_that("data.list doesn't fail for standard fourth-corner problems with dim n
 
 	Y <- X %*% C %*% t(Z)
 	dimnames(Y) <- list(letters[1:n], letters[1:m])
+	rownames(X) <- dimnames(Y)[[1]]
+	rownames(Z) <- dimnames(Y)[[2]]
 
 	dl <- data.list(as.data.frame(X), as.data.frame(Z), Y)	
 })
@@ -554,7 +556,6 @@ test_that("dlapply works for simple fourth-corner data",{
 	dl2 <- dlapply(dl, 2, sum)
 })
 
-
 test_that("make.dimnames.consistent is in the right places",{
 
 	library(multitable)
@@ -570,4 +571,52 @@ test_that("make.dimnames.consistent is in the right places",{
 	
 	df <- as.data.frame(dl)
 	dl11 <- dl[1,1]
+})
+
+test_that("make.match.dimids works",{
+	
+	library(multitable)
+	data(fake.community)
+
+	### FIRST HOW I DISCOVERED THE PROBLEM ###
+	l <- lapply(fake.community[-6], simple.scale)
+
+	as.data.list(l)
+	data.list(l[[1]], l[[2]], l[[3]], l[[4]], l[[5]])
+	
+	### NOW A MINIMAL EXAMPLE ###
+	# reveals that the problem relates to properly named
+	# dimensions with the same number of replicates
+	set.seed(1)
+	Y <- matrix(rnorm(4), 2, 2)
+	x <- rnorm(2)
+	z <- rnorm(2)
+
+	rownames(Y) <- names(x) <- letters[1:2]
+	colnames(Y) <- names(z) <- letters[3:4]
+
+	data.list(Y, x, z)
+	data.list(Y, data.frame(x), data.frame(z))
+	data.list(data.frame(x), data.frame(z), Y)
+	
+})
+
+test_that("dropdl works",{
+	library(multitable)
+
+	data(fake.community)
+	fc <- fake.community
+
+	dl1 <- fc[,1,]
+	dl1 <- dropdl(dl1)[1:3]
+
+	dl2 <- dl1[,1, drop = FALSE]
+	dropdl(dl2)
+	
+	set.seed(1)
+	Y <- matrix(rnorm(6), 3, 2)
+	x <- rnorm(3)
+	z <- rnorm(2)
+	dl3 <- data.list(Y, x, z)
+	dropdl(dl3[,1])
 })

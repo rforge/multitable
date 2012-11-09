@@ -1,6 +1,7 @@
 \name{as.data.list}
 \alias{as.data.list}
 \alias{is.data.list}
+\alias{is.4th.corner}
 \alias{as.data.list.default}
 \alias{as.data.frame.data.list}
 \alias{as.matrix.data.list}
@@ -13,6 +14,8 @@ These functions coerce lists and data frame objects to data lists and vice versa
 as.data.list(x, ...)
 
 is.data.list(x)
+
+is.4th.corner(x)
 
 data.list.mold(x)
 
@@ -48,6 +51,8 @@ Ultimately, all functions that create \code{data.list} objects (i.e. \code{\link
 }
 
 The \code{is.data.list} function tests if an object inherits from class \code{data.list}.
+
+The \code{is.4th.corner} function tests if an object is both a data list and has all the properties of a data set with a fourth corner problem.
 
 By default, \code{as.data.frame.data.list} works in two steps.  First, a \code{mold} of the coercion process is created with \code{data.list.mold}.  The \code{mold} is a list of vectors, each with \code{\link{length}} equal to the number of rows in the coerced data frame.  Each vector is associated with a particular variable in \code{x} and contains indices that point to the elements of that variable.  Second, the \code{mold} is 'filled with' (i.e. used to subscript) \code{x} thereby producing the coerced data frame.
 
@@ -108,4 +113,9 @@ as.list(fake.community)
 as.list(fake.community, drop.attr = FALSE)
 unclass(fake.community)
 lapply(fake.community, I)
+	
+is.4th.corner(fake.community) ## FALSE	
+dl <- dropdl(fake.community[,1,])
+is.4th.corner(dl) ## TRUE
+is.4th.corner(dl[1:3]) ## FALSE
 }

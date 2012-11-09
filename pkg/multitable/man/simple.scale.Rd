@@ -1,7 +1,7 @@
 \name{simple.scale}
 \alias{simple.scale}
-\title{(Simple) Scaling and Centering}
-\description{Simpler version of the \code{\link{scale}} function}
+\title{'Simple' Scaling and Centering}
+\description{Simpler version of the \code{\link{scale}} function, which works better for variables in data lists.}
 \usage{
 simple.scale(x, center = TRUE, scale = TRUE, simplify = TRUE)
 }

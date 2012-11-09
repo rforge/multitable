@@ -9,6 +9,10 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 
 NEW FEATURES
 
+	new function, is.4th.corner, tests if a
+	data list has all the properties of a
+	data set with a fourth corner problem.
+
 	new function, simple.scale, that provides
 	a version of the scale function that treats
 	matrices as whole variables rather than
@@ -27,6 +31,9 @@ NEW FEATURES
 	
 
 BUG FIXES
+
+	added test and bug fix for a problem
+	with dropdl.
 
 	fixed bug that led to dimnames being
 	inconsistent amongst variables in a data

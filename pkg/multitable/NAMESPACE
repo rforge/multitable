@@ -6,7 +6,7 @@
 
 # functions
 
-export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, is.data.list, repdim, aperm.data.list, variablize, read.multitable, read.multicsv, read.multidelim, read.fourthcorner, multifile.choose, dlcast, dlmelt, dropdl, dropl, within.data.list, dims_to_vars, variable, variableGroup, dlapply, sdlapply, variable_margins, read.matrix, simple.scale)
+export(data.list, bm, nvar, varnames, "varnames<-", data.list.mold, as.data.list, is.data.list, repdim, aperm.data.list, variablize, read.multitable, read.multicsv, read.multidelim, read.fourthcorner, multifile.choose, dlcast, dlmelt, dropdl, dropl, within.data.list, dims_to_vars, variable, variableGroup, dlapply, sdlapply, variable_margins, read.matrix, simple.scale, is.4th.corner)
 
 # S3 methods
 

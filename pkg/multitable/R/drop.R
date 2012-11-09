@@ -13,7 +13,7 @@ dropdl <- function(x){
 	dimids <- attrx$match.dimids[[attrx$bm]][!todrop]
 	
 	# drop dimensions and variables that lost their dimensions
-	x <- lapply(unclass(x),dropdla,todrop)
+	x <- lapply(unclass(x), dropdla, todrop)
 	x <- dropl(x)	# drop null variables (i.e. that lost all dims)
 	
 	# figure out the new match.dimids
@@ -21,10 +21,11 @@ dropdl <- function(x){
 	names(match.dimids) <- names(x)
 	
 	# adjust the attributes
-	attr(x,"bm") <- multitable:::which.fully.replicated(x)
-	attr(x,"match.dimids") <- match.dimids
-	attr(x,"repdim") <- attrx$repdim[!todrop]
-	class(x) <- "data.list"
+	#attr(x,"bm") <- multitable:::which.fully.replicated(x)
+	#attr(x,"match.dimids") <- match.dimids
+	x <- as.data.list(x, match.dimids = match.dimids)
+	#attr(x,"repdim") <- attrx$repdim[!todrop]
+	#class(x) <- "data.list"
 
 	return(x)
 }
@@ -49,4 +50,5 @@ dropdla <- function(a, todrop){
 }
 
 # list drop -- drops null list elements
-dropl <- function(x) x[!sapply(x,is.null)]
+# BUG HERE:  drops dims and dimnames from 1-d varibles
+dropl <- function(x) x[!sapply(x, is.null)]
