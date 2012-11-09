@@ -229,11 +229,11 @@ into a data list)")
 		# match them.
 		if(length(unique(indims.wfr)) < length(indims.wfr)){
 			stop(
-"Some dimensions are unnamed and some are 
-of the same length and therefore require
-specification of match.dimids. Type
-?data.list and see the details section
-of the help file for data.list.")
+"Dimensions could not be matched by names 
+and some dimensions are of the same length 
+and therefore require specification of 
+match.dimids. Type ?data.list and see the
+details section of the help file for data.list.")
 		}
 		
 		# see the explanation above for mat.ndims
@@ -255,7 +255,11 @@ of the help file for data.list.")
 	# recursively calls make.match.dimids and tries
 	# one more time to match the dimids
 	if(check.full.rep(match.dimids) && check){
-		names(x[[1]]) <- dimnames(x[[1]]) <- NULL
+		#names(x[[1]]) <- dimnames(x[[1]]) <- NULL
+		# following line is slower but more explicit than the previous one
+		for(i in seq_along(x)) names(x[[i]]) <- dimnames(x[[i]]) <- NULL
+		# maybe reinstate the following explicit message???
+		#message('matching dimids failed, trying one more time with dimension names deleted')
 		match.dimids <- make.match.dimids(x, dimids)
 	}
 	
