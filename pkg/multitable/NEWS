@@ -3,6 +3,23 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 
 *************************************
 **				   **
+**	multitable version 1.6	   **
+**				   **
+*************************************
+
+NEW FEATURES
+
+BUG FIXES
+
+	checked to see if packageVersion
+	and packageStartupMessage exist before
+	using them in .onAttach().  caused
+	problems on older versions of r
+	because these functions are
+	apparently new.
+
+*************************************
+**				   **
 **	multitable version 1.5	   **
 **				   **
 *************************************

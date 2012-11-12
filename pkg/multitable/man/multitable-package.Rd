@@ -11,7 +11,7 @@ Data frames are integral to \code{R}.  They provide a standard format for passin
 Package: \tab multitable\cr
 Type: \tab Package\cr
 Version: \tab 1.5\cr
-Date: \tab 2012-07-10\cr
+Date: \tab 2012-11-09\cr
 Suggests: \tab MASS, lattice, testthat, arm, ggplot2, rbenchmark, scales, vegan\cr
 License: \tab GPL-2\cr
 URL: \tab \url{http://multitable.r-forge.r-project.org/}\cr
