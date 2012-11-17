@@ -1,4 +1,8 @@
 export(msr)
+export(r4norm)
+export(r4norm1)
 export(rcov)
 export(rfa)
+export(rmnorm)
+export(rmnorm1)
 export(rmv)

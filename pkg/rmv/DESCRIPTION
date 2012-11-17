@@ -10,3 +10,5 @@ License: GPL-2
 LazyLoad: yes
 Collate:
     'rmv.R'
+    'rmnorm.R'
+    'r4norm.R'
