@@ -620,3 +620,13 @@ test_that("dropdl works",{
 	dl3 <- data.list(Y, x, z)
 	dropdl(dl3[,1])
 })
+
+test_that("bm attribute gets renamed properly when variables are renamed",{
+	library(multitable)
+	data(fake.community)
+	names(fake.community) <- LETTERS[seq_along(fake.community)]
+	bm1 <- attr(fake.community, 'bm')
+	bm2 <- 1
+	names(bm2) <- 'A'
+	expect_that(bm1, equals(bm2))
+})

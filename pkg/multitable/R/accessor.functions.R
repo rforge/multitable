@@ -11,6 +11,7 @@ function(dl, value){
 	if(length(value) != length(varnames(dl))) stop("number of names must equal number of variables")
 	names(attr(dl, "match.dimids")) <- value
 	attr(dl, "names") <- value
+	names(attr(dl, "bm")) <- names(dl)[attr(dl, "bm")]
 	return(dl)
 }
 
