@@ -9,6 +9,10 @@ svn log svn://svn.r-forge.r-project.org/svnroot/multitable
 
 NEW FEATURES
 
+  MARGIN in dlapply can now be set 
+  by specifying names of dimensions
+  (suggested by ben bolker)
+
 BUG FIXES
 
 	checked to see if packageVersion
