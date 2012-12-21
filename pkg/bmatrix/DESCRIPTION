@@ -1,0 +1,12 @@
+Package: bmatrix
+Type: Package
+Title: Block matrix
+Version: 0.1
+Date: 2012-12-18
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Make matrices out of blocks.
+License: GPL-2
+LazyLoad: yes
+Collate:
+    'bmatrix.R'
