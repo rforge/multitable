@@ -19,6 +19,10 @@ dlapply <- function(X, MARGIN, FUN, ...){ #, LFUN, VMODE){
 	if(!is.data.list(X))
 		stop("X must be a data list")
 	
+	# allow dimensions to be specified by dim ids -- i.e. names of dimensions
+  # (suggested by ben bolker)
+	if(is.character(MARGIN)) MARGIN <- pmatch(MARGIN, dimids(X))
+  
 	# what to call a new dimension that could
 	# be induced by FUN
 	newdimname <- as.character(substitute(FUN))
