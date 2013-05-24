@@ -1,5 +1,17 @@
+#' Bin for \code{\link{make.catch}}
+#' 
+#' Creates histogram bins suitable for use with \code{\link{make.catch}}
+#' 
+#' @param lens vector of fish lengths (e.g. fork length)
+#' @param binsize size of histogram bins with which to categorize fish 
+#'   by their length
+#' 
+#' @return a vector of the breakpoints between bins, suitable for
+#'   inputing as the breaks argument in \code{\link{hist}}.
+#' 
+#' @export
 fish.bins <-
-function(lens,binsize){
+function(lens, binsize){
 	
 	#####################################################################
 	#

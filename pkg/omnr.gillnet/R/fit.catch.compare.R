@@ -1,4 +1,52 @@
-fit.catch.compare <- function(catch, perimeter.factor = 2, tol = 1e-8, omega0 = 0.1){
+#'Fit catch data to several size-selectivity models
+#'
+#'Compare the fit of catch data to several size-selectivity models fitted by
+#'\code{\link{fit.catch}}.
+#'
+#'
+#'@aliases fit.catch.compare plot.fit.catch.compare
+#'deviance.fit.catch.compare AIC.fit.catch.compare print.fit.catch.compare
+#'summary.fit.catch.compare print.summary.fit.catch.compare
+#'@param catch an object of class \code{catch} created using
+#'\code{\link{make.catch}}.
+#'@param perimeter.factor Factor by which to multiply the inputted mesh sizes
+#'to obtain mesh perimeters.
+#'@param x an object of class \code{fit.catch.compare} or
+#'\code{summary.fit.catch.compare}.
+#'@param object an object of class \code{fit.catch.compare}.
+#'@param y not used. only for consistency with S3 plot method.
+#'@param k not used.  only for consistency with default S3 method.
+#'@param tol tolerance used to decide on whether fitted values are numerically
+#'zero. used to correct AIC values. this correction depends on sample size, and
+#'the standard way to calculate sample size is as the number of mesh sizes
+#'times the number of fish length categories and then to subtract from this
+#'number the number of zero fitted counts
+#'@param omega0 initial value for the tangle parameter
+#'@param digits number of digits to round to
+#'@param \dots additional arguments to be passed
+#'@return An object of class \code{fit.catch.compare} with components:
+#'@returnItem norm.loc \code{fit.catch} object using the \code{norm.loc} selection curve
+#'@returnItem norm \code{fit.catch} object using the \code{norm} selection curve
+#'@returnItem lognorm \code{fit.catch} object using the \code{lognorm} selection curve
+#'@returnItem gamm \code{fit.catch} object using the \code{gamm} selection curve
+#'@returnItem inv.gau \code{fit.catch} object using the \code{inv.gau} selection curve
+#'@author Steve Walker
+#'@export
+#'@references J.F. Bromaghin (2005) A versatile net selectivity model, with
+#'application to Pacific salmon and freshwater species of the Yukon River,
+#'Alaska. Fisheries Research 74: 157-168.
+#'
+#'R.B. Millar & R.J. Fryer (1999) Estimating the size-selection curves of towed
+#'gears, traps, nets and hooks. Reviews in Fish Biology and Fisheries 9:
+#'89-116.
+#'@examples
+#'
+#'np <- make.catch(north.pike$MESH, north.pike$FLEN)
+#'fms <- fit.catch.compare(np)
+#'fms
+#'plot(fms)
+#'
+fit.catch.compare <- function(catch, perimeter.factor = 1, tol = 1e-8, omega0 = 0.1){
 	
 	data(sel.curves, package = 'omnr.gillnet')
 	
@@ -140,8 +188,16 @@ dispparam <- function(fits, tol){
 	return(list(chat = chat, chi = chi, df = df))
 }
 
+#' @S3method deviance fit.catch.compare
+#' @method deviance fit.catch.compare
+#' @rdname fit.catch.compare
+#' @export deviance.fit.catch.compare
 deviance.fit.catch.compare <- function(object, ...) sapply(object, deviance, ...)
 
+#' @S3method AIC fit.catch.compare
+#' @method AIC fit.catch.compare
+#' @rdname fit.catch.compare
+#' @export AIC.fit.catch.compare
 AIC.fit.catch.compare <- function(object, ..., k = 2){
 	
 	# this method always uses correction...user has no choice
@@ -158,6 +214,10 @@ AIC.fit.catch.compare <- function(object, ..., k = 2){
 	return(aics)
 }
 
+#' @S3method print fit.catch.compare
+#' @method print fit.catch.compare
+#' @rdname fit.catch.compare
+#' @export print.fit.catch.compare
 print.fit.catch.compare <- function(x, digits = max(3, getOption("digits") - 3), ...){
 	
 	comparisonresults <- attr(x, "comparisonresults")
@@ -174,11 +234,15 @@ print.fit.catch.compare <- function(x, digits = max(3, getOption("digits") - 3),
             quote = FALSE)
 	
 	cat("\n\nBEST SELECTION CURVE(S): ")
-	print(x[comparisonresults$curveindicator])
+	print(get.best(x))
 	
 	invisible(x)
 }
 
+#' @S3method plot fit.catch.compare
+#' @method plot fit.catch.compare
+#' @rdname fit.catch.compare
+#' @export plot.fit.catch.compare
 plot.fit.catch.compare <- function(x, y, ...){
 	comparisonresults <- attr(x, "comparisonresults")
 	x <- x[comparisonresults$curveindicator]

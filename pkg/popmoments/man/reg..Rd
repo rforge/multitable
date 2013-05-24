@@ -15,7 +15,7 @@
   equal weights are used.}
 }
 \value{
-  The correlation of \code{x} \code{y}.
+  The regression of \code{y} and \code{x}.
 }
 \description{
   Regression of one vector on another in a bivariate

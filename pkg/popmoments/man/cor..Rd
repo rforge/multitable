@@ -15,7 +15,7 @@
   equal weights are used.}
 }
 \value{
-  The correlation of \code{x} \code{y}.
+  The correlation of \code{x} and \code{y}.
 }
 \description{
   Correlation of two vectors giving the elements of a

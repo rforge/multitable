@@ -1,5 +1,15 @@
-summary.fit.catch.compare <- function(object, ...){
+#' @param l Lengths
+#' @param m Mesh sizes
+#' @method summary fit.catch.compare
+#' @S3method summary fit.catch.compare
+#' @rdname fit.catch.compare
+#' @export summary.fit.catch.compare
+summary.fit.catch.compare <- function(object, l = get.lens(object), m = get.mesh(object), ...){
 	
+  l.m <- l.m.mats(l, m)
+  l <- l.m$l
+  m <- l.m$m
+  
 	### QAICc ANALYSIS
 	
 	aics <- aicalt <- AIC(object)
@@ -21,14 +31,14 @@ summary.fit.catch.compare <- function(object, ...){
 	modlikes <- exp(-0.5*aics)
 	aweights <- modlikes/sum(modlikes)
 
-	scs <- cbind(1, sapply(object, getTotalSelcurve, tangle = FALSE),
-		sapply(object, getTotalSelcurve, tangle = TRUE))
+	scs <- cbind(1, sapply(object, getTotalSelcurve, l = l, m = m, tangle = FALSE),
+		sapply(object, getTotalSelcurve, l = l, m = m, tangle = TRUE))
 	
 	ma.selcurve <- rowSums(sweep(scs, 2, aweights, FUN = "*"))
 	ma.selcurve <- ma.selcurve/max(ma.selcurve)
 	
 	dim(ma.selcurve) <- c(length(ma.selcurve), 1)
-	rownames(ma.selcurve) <- object[[1]]$catch$l
+	rownames(ma.selcurve) <- l[,1] # object[[1]]$catch$l
 	colnames(ma.selcurve) <- ""
 	
 	aweightsout <- matrix(aweights[-1], 2,5, byrow = TRUE)

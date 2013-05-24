@@ -1,34 +1,48 @@
-######################################
-#
-# NAMESPACE FOR omnr.gillnet
-#
-######################################
-
-# functions
-
-export(make.catch, plot.catch)
-
-export(fit.catch, plot.fit.catch, deviance.fit.catch, AIC.fit.catch, print.fit.catch, coef.fit.catch, coefficients.fit.catch)
-
-export(norm.loc, norm, lognorm, gamm, inv.gau)
-
-export(getSelcurve, getTotalSelcurve, modelaverageTotalSelcurve)
-
-export(fit.catch.compare, AIC.fit.catch.compare, deviance.fit.catch.compare, plot.fit.catch.compare, print.fit.catch.compare, summary.fit.catch.compare, print.summary.fit.catch.compare)
-
-#S3method(plot, fit.catch}
-#S3method(deviance, fit.catch}
-#S3method(AIC, fit.catch}
-#S3method(print, fit.catch}
-#S3method(coef, fit.catch}
-#S3method(coefficients, fit.catch}
-#S3method(plot, fit.catch.compare}
-#S3method(deviance, fit.catch.compare}
-#S3method(AIC, fit.catch.compare}
-#S3method(print, fit.catch.compare}
-#S3method(summary, fit.catch.compare}
-#S3method(print, summary.fit.catch.compare}
-
-# import other packages
-
-import(stats)
+S3method(AIC,fit.catch)
+S3method(AIC,fit.catch.compare)
+S3method(coef,fit.catch)
+S3method(deviance,fit.catch)
+S3method(deviance,fit.catch.compare)
+S3method(get.lens,catch)
+S3method(get.lens,fit.catch)
+S3method(get.lens,fit.catch.compare)
+S3method(get.mesh,catch)
+S3method(get.mesh,fit.catch)
+S3method(get.mesh,fit.catch.compare)
+S3method(plot,catch)
+S3method(plot,fit.catch)
+S3method(plot,fit.catch.compare)
+S3method(print,fit.catch)
+S3method(print,fit.catch.compare)
+S3method(summary,fit.catch.compare)
+export(AIC.fit.catch)
+export(AIC.fit.catch.compare)
+export(cbind.rep)
+export(coef.fit.catch)
+export(coefficients.fit.catch)
+export(deviance.fit.catch)
+export(deviance.fit.catch.compare)
+export(fish.bins)
+export(fit.catch)
+export(fit.catch.compare)
+export(gamm)
+export(get.best)
+export(get.lens)
+export(get.mesh)
+export(getSelcurve)
+export(getTotalSelcurve)
+export(inv.gau)
+export(l.m.mats)
+export(l.m.vecs)
+export(lognorm)
+export(make.catch)
+export(modelaverageTotalSelcurve)
+export(norm)
+export(norm.loc)
+export(plot.catch)
+export(plot.fit.catch)
+export(plot.fit.catch.compare)
+export(print.fit.catch)
+export(print.fit.catch.compare)
+export(rbind.rep)
+export(summary.fit.catch.compare)

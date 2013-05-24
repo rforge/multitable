@@ -26,7 +26,8 @@ rmnorm1 <- function(
 	m <- ncol(M)
 	
 	OxS <- Omega %x% Sigma
-	E <- rmv(1, OxS)
+	E <- rmv(1, OxS) # can be very inefficient if OxS is big!
+                   # there's got to be a kronecker product trick here.
 
 	vecM <- as.numeric(M)
 	vecE <- as.numeric(E)
@@ -34,3 +35,12 @@ rmnorm1 <- function(
 
 	matrix(vecY, n, m)	
 }
+
+#' Random uncorrelated matrix
+#' 
+#' @param p Number of rows
+#' @param q Number of columns
+#' @param rfunc Random function
+#' @return A random matrix
+#' @export
+rmat <- function(p, q, rfunc = rnorm, ...) matrix(rfunc(p*q, ...), p, q)
