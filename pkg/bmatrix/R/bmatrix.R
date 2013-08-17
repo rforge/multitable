@@ -20,6 +20,8 @@ NULL
 #' @export
 bmatrix <- function(data, nrow = 1, ncol = 1, byrow = FALSE){
  
+
+  # TODO: what is the meaning of firstbind, secondbind
   if(byrow){
     firstbind <- cbind
     secondbind <- rbind
@@ -28,7 +30,7 @@ bmatrix <- function(data, nrow = 1, ncol = 1, byrow = FALSE){
     firstbind <- rbind
     secondbind <- cbind
   }
-  
+
   ind <- rep(1:ncol, rep(nrow, ncol))
   n <- ncol
   
