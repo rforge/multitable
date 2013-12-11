@@ -18,7 +18,7 @@ function(..., dimids, match.dimids, check = TRUE, drop = TRUE, unique = TRUE){
 	x <- as.data.list(x, dimids, match.dimids, check = check, drop = drop)
 
 	# process the names
-	names(x) <- make.names(names(x), unique = unique)
+	varnames(x) <- make.names(names(x), unique = unique)
 
 	return(x)
 }

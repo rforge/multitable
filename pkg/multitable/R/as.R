@@ -44,8 +44,21 @@ from each other")
 	# this spliting. it then combines the result with
 	# the match.dimids list in a two-element list of
 	# lists (1) x and (2) match.dimids. 
-	x <- split.dfs(x, match.dimids)
-	
+        if(all(sapply(x,is.atomic)) &
+           all(!sapply(x,is.factor)) &
+           all(sapply(x,is.numeric))) {
+          x <- list(x = x, match.dimids = match.dimids)
+          #names(x$match.dimids) <- NULL # don't think this is necessary
+          x$x <- lapply(x$x, rdims)
+        } else{
+          # the split.dfs function plays an important role
+          # that i forgot about: adds a dim attribute to
+          # atomic objects without dim attributes.
+          # this is the reason for the lapply of rdims
+          # above.
+          x <- split.dfs(x, match.dimids)
+        }
+        
 	# one of the rules of data lists is that each data
 	# list must have at least one variable that is
 	# replicated along all dimensions. we store the
@@ -59,11 +72,11 @@ from each other")
 	# simply the dimensions of the benchmark variable.
 	repdim <- dim(x$x[[bm]])
 	names(repdim) <- x$match.dimids[[bm]] # fixed a bug here by the 'x$'
-										  # previously, for data with a
-										  # 'late' benchmark variable
-										  # without dimnames, 
-										  # match.dimids was an 'older'
-										  # version of x$match.dimids
+                                              # previously, for data with a
+					      # 'late' benchmark variable
+                                              # without dimnames, 
+                                              # match.dimids was an 'older'
+                                              # version of x$match.dimids
 	
 	# all data list variables MUST have names, so if
 	# you won't do it...i will. its just good practice
@@ -97,7 +110,7 @@ from each other")
 	
 	# it is important to make sure that all variables
 	# have the same dimnames for shared dimensions.
-	x <- make.dimnames.consistent(x, bm)
+	if(check) x <- make.dimnames.consistent(x, bm)
 	
 	# data lists with only one dimension of replication
 	# are conceptually equivalent to data frames.
@@ -279,6 +292,11 @@ details section of the help file for data.list.")
 	return(match.dimids)
 }
 
+rdims <- function(xx){
+  if(is.null(dim(xx))) attr(xx, "dim") <- length(xx)
+  xx
+}
+
 get.input.dims <- function(xi){
 
 	if(is.null(dim(xi)) & is.atomic(xi))
@@ -357,7 +375,7 @@ function(x, match.dimids){
 	x.alt <- list()
 	match.dimids.alt <- list()
 	
-	# loop over all data frames in x
+	# loop over all lists/data frames in x
 	for(i in seq_along(x)){
 		
 		# all x[[i]] must be lists...
@@ -387,7 +405,10 @@ not allowed in data lists")
 			# convert characters to factors
 			if(is.character(x[[i]][[j]])){
 				x.attr <- attributes(x[[i]][[j]])
-				which.other.attr <- !(names(x.attr) %in% c("dim", "levels", "dimnames", "class"))
+				which.other.attr <- !(names(x.attr) %in% c("dim",
+                                                                           "levels",
+                                                                           "dimnames",
+                                                                           "class"))
 				other.attr <- x.attr[which.other.attr]
 				x[[i]][[j]] <- as.factor(x[[i]][[j]])
 				dim(x[[i]][[j]]) <- dx

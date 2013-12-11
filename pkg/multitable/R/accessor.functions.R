@@ -8,23 +8,23 @@ varnames <- function(dl) names(dl)
 
 `varnames<-` <-
 function(dl, value){
-	if(length(value) != length(varnames(dl))) stop("number of names must equal number of variables")
+	if(length(value) != length(dl)) stop("number of names must equal number of variables")
 	names(attr(dl, "match.dimids")) <- value
 	attr(dl, "names") <- value
 	names(attr(dl, "bm")) <- names(dl)[attr(dl, "bm")]
 	return(dl)
 }
 
-names.data.list <- function(x) names(unclass(x))
+names.data.list <- function(x) names(unclass(x))  #.Primitive("names")(x)
 
 `names<-.data.list` <- function(x, value) `varnames<-`(x, value)
 
-dimnames.data.list <- function(x){
-	ans <- dimnames(bm(x))
+dimnames.data.list <- function(x) dimnames(bm(x))
+#	ans <- dimnames(bm(x))
 	#if(is.list(ans))
 	#	names(ans) <- dimids(x)
-	return(ans)
-}
+#	return(ans)
+#}
 
 "dimnames<-.data.list" <- function(x, value){
 	x <- unclass(x)
