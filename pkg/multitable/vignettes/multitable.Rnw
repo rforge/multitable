@@ -1,0 +1,1178 @@
+\documentclass[article, shortnames, nojss]{jss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usepackage{rotating}
+%\usepackage{lineno}
+
+\usetikzlibrary{positioning,petri}
+
+%% almost as usual
+\author{Steven C Walker\\Universit\'{e} de Montr\'{e}al \And Guillaume Gu\'{e}nard\\Universit\'{e} de Montr\'{e}al \AND P\'{e}ter S\'{o}lymos\\University of Alberta \And Pierre Legendre\\Universit\'{e} de Montr\'{e}al}
+\title{Multiple-Table Data in \proglang{R} with the \pkg{multitable} Package}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Steven C Walker, Guillaume Guenard, Peter Solymos, Pierre Legendre} %% comma-separated
+\Plaintitle{Multiple-Table Data in R with the multitable Package} %% without formatting
+\Shorttitle{Multiple-Table Data in R} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{
+Data frames are integral to \proglang{R}.  They provide a standard format for passing data to model-fitting and plotting functions, and this standard makes it easier for experienced users to learn new functions that accept data as a single data frame.  Still, many data sets do not easily fit into a single data frame; data sets in ecology with a so-called fourth-corner problem provide important examples.  Manipulating such inherently multiple-table data using several data frames can result in long and difficult-to-read workflows.  We introduce the \proglang{R} \pkg{multitable} package to provide new data storage objects called \code{data.list} objects, which extend the \code{data.frame} concept to explicitly multiple-table settings.  Like data frames, data lists are lists of variables stored as vectors; what is new is that these vectors have dimension attributes that make accessing and manipulating them easier.  As \code{data.list} objects can be coerced to \code{data.frame} objects, they can be used with all \proglang{R} functions that accept an object that is coercible to a \code{data.frame}.
+}
+\Keywords{data organisation, ecology, fourth-corner problem, \proglang{R}}
+\Plainkeywords{data organisation, ecology, fourth-corner problem, R} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Steven C Walker\\
+  D\'{e}partement de Sciences Biologiques\\
+  Universit\'{e} de Montr\'{e}al\\
+  C.P.6128, Succursale Centre-ville\\
+  Montr\'{e}al, Qu\'{e}bec, H3C 3J7 Canada\\
+  E-mail: \email{steve.walker@utoronto.ca}\\
+  URL: \url{http://sites.google.com/site/stevencarlislewalker/}
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%% include your article here, just as usual
+%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
+
+%\linenumbers
+
+<<change the prompt symbol, echo = FALSE>>=
+options(prompt = "R> ")
+@
+
+<<packages to install, echo = FALSE>>=
+### install.packages(c('multitable', 'rbenchmark', 'ggplot2', 'arm', 'vegan','scales'), repos="http://probability.ca/cran")
+@
+
+<<required packages, echo = FALSE>>=
+require(multitable)
+require(rbenchmark)
+require(ggplot2)
+require(arm)
+require(vegan)
+require(scales)
+@
+
+\section{Introduction}
+
+The standard data management paradigm in \proglang{R} is based on \code{data.frame} objects, which are two-dimensional data tables with rows and columns representing replicates (sometimes also called objects) and variables \citep{R2012}.  Standard \proglang{R} workflows require that the data to be analysed are organised into a data frame \citep{ChambersAndHastie1992}.  Hypotheses about the relationships between variables in the data frame are expressed using \code{formula} objects.  Data frames and formulas are combined by passing them to functions that produce analyses (e.g., plots; fitted models; summary statistics).  This framework allows scientists to concentrate on their primary interests---the relationships between variables---without explicit reference to mathematical and algorithmic details.  It also provides access to those details, which are required for effective analyses and to develop new methods of analysis within the framework.  As new methods are developed, researchers simply pass their data frames to new functions in much the same way they would pass them to older functions.
+
+
+Research in community ecology---the study of the distribution and abundance of multiple interacting species---sometimes involves data sets that do not easily fit within a single data frame.  A common example is the fourth-corner problem \citep{LegendreEtAl1997}, in which three data tables are to be analysed: a sites-by-species table of abundances or occurrences; a table of environmental variables at each site; and a table of traits for each species (Figure~\ref{fig:fourth}).  Such data are characterised by a conspicuous (lower-right) `fourth-corner', where there are no data.  The missing data in the fourth corner are not caused by the usual problems (e.g., broken field equipment; budget restrictions; bad weather; dead subjects), but are part of the study design itself.  The fourth-corner problem is a special case of a general `multiple-table problem', which can be much more complex (e.g., could involve three-dimensional `cubes' of data, Figure~\ref{fig:beatrix}).  The challenge of analysing such multiple-table data sets in \proglang{R} is that it is not obvious how to organise them into a single \code{data.frame}, which is required in standard \proglang{R} workflows.  Our goal with the \proglang{R} \pkg{multitable} package is to provide tools that make analysing multiple-table data sets easier.
+
+\begin{figure}
+\vspace{0.5cm}
+\begin{tikzpicture} [
+	% transform shape makes scale 'work'
+	scale=0.6, transform shape, 
+	text centered,
+	node distance=0.2cm,
+	Y/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=7cm,minimum height=12cm,
+		label=above:\Large species},
+	X/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=4cm,minimum height=12cm,
+		label={
+		[text width=5cm]above:\Large environmental variables
+		}},
+	Z/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=7cm,minimum height=2cm},
+	C/.style={
+		rectangle,draw=red!0,fill=red!0,thick,
+		minimum width=4cm,minimum height=2cm,
+		text width=2cm},
+	nm/.style={rectangle,minimum height=8cm,
+	minimum width=0cm,draw opacity=0}
+	]
+\node [place,Y] 		(com)			{\Large abundance};
+\node [place,X]	 	(env)[right=of com]	{};
+\node [place,Z] 		(trt)[below=of com]	{};
+\node [place,C]		(fc)[right=of trt]		{\Large fourth corner};
+\node [place,nm]	(anm)[left=of com]	{\begin{turn}{90}
+									\Large sites
+								\end{turn}
+								};
+\node [place,nm]	(tnm)	[left=of trt]		{\begin{turn}{90}
+									\Large traits
+								\end{turn}
+								};
+\end{tikzpicture}
+\vspace{-1.5cm}
+\caption{Schematic diagram of a data structure with a fourth-corner problem.} 
+\label{fig:fourth}
+\end{figure}
+
+One possible solution is to develop new \proglang{R} analysis functions---or new software packages altogether---that are specifically designed to accept several tables as input.  There have been several such methods developed in ecology, focusing on data with a fourth-corner problem \citep{DoledecEtAl1996,LegendreEtAl1997,DrayAndLegendre2008,PillarEtAl2010,LeiboldEtAl2010,IvesAndHelmus2011}.  However, these methods do not apply to data sets that have other more complex multiple-table data structures \citep[e.g., the zooplankton communities in Lac Croche, which are described in Figure~\ref{fig:beatrix};][]{CantinEtAl2011}.  One approach to such issues would be to develop suites of data analysis functions for each new data structure.  But such an approach is less than ideal as it would require that new methods be developed for each new structure, which does not take advantage of the large number of tools developed for standard \proglang{R} workflows \citep{ChambersAndHastie1992}.  The \pkg{multitable} package provides an alternative approach, by introducing a multiple-table generalisation of data frames---called data lists---which can be analysed with virtually any function that can be used to analyse a data frame.  Thus, instead of providing new methods of analysis, \pkg{multitable} provides new methods of data management and organisation.
+
+\begin{figure}
+\begin{tikzpicture} [
+	% transform shape makes scale 'work'
+	scale=0.6, transform shape, 
+	text centered,
+	node distance=0cm,
+	yfront/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=4cm,minimum height=6cm},
+	time/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=4cm,minimum height=2.5cm,
+		label=below:\Large time},
+	ytop/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=4cm,minimum height=3cm,
+		xslant=1},
+	xtop/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=4cm,minimum height=4cm,
+		xslant=1},
+	yside/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=3cm,minimum height=6cm,
+		yslant=1},
+	xside/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=4cm,minimum height=6cm,
+		yslant=1},
+	trts/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		minimum width=3cm,minimum height=3cm,
+		xslant=1,label=below:\Large traits},
+	frnm/.style={
+		rectangle,minimum height=8cm,
+		minimum width=0cm,draw opacity=0,
+		text width=0.8cm},
+	tpnm/.style={
+		rectangle,minimum height=8cm,
+		minimum width=0cm,draw opacity=0,
+		xslant=0,text width=0.7cm}
+	]
+\node [place,yfront]		(front)			{\Large abundance};
+\node [place,ytop]		(top)[above=of front]	{};
+\node [place,yside]		(side)[right=of front]	{};
+\node [place,trts]		(trts)[left=of top]	{};
+\node [place,xtop]		(xtop)[above=of top]	{};
+\node [place,xside]		(xside)[right=of side]	{};
+\node [place,time]		(time)[below=of front]{};
+\node [place,frnm]		(frnm)[left=of front]	{\begin{turn}{90}
+										\Large sites
+									\end{turn}
+									};
+\node [place,frnm]		(frnm)[left=of time]	{\begin{turn}{90}
+										\Large time 
+										scales
+									\end{turn}
+									};
+\node [place,tpnm]		(tpnm)[left=of trts]	{\begin{rotate}{45}
+										\hspace{-0.8cm}
+										\Large
+										\textbf{species}
+									\end{rotate}
+									};
+\node [place,tpnm]		(tpnm)[left=of xtop]	{\begin{rotate}{45}
+										\hspace{-2.1cm}
+										\Large
+										\textbf{
+											envrnmntl 
+											vrbls
+										}
+									\end{rotate}
+									};
+\end{tikzpicture}
+\vspace{-1.5cm}
+\caption{The structure of the Lac Croche zooplankton community data.  The abundances of zooplankton species and several environmental variables were measured every two weeks in the summer at various basins (i.e., sites) in the lake over two years---yielding two temporal scales at which sampling took place: week within year and year.  In addition, the species were characterised by a suite of traits.}
+\label{fig:beatrix}
+\end{figure}
+
+\begin{figure*}
+\begin{tikzpicture} [
+	node distance=0cm,
+	stand/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	new/.style={
+		rectangle,draw=red!0,fill=red!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	otpt/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	plus/.style={
+		rectangle,draw=blue!0,fill=blue!0,
+		minimum width=0.64cm},
+	bel/.style={
+		rectangle,draw=blue!0,fill=blue!0,
+		minimum height=1.1cm},
+	tip/.style={
+		->,shorten >=1pt},
+	skip loop1/.style={to path={-- ++(0,-0.2) -| (\tikztotarget)}},
+	skip loop2/.style={to path={-- ++(0,0.2) -| (\tikztotarget)}},
+	skip loop3/.style={to path={-- ++(0,-0.1) -| (\tikztotarget)}}]
+\node [place,new]	(data files) 				{data sources};
+\node [place,plus]	(blank1) [right=of data files]	{};
+\node [place,new]	(data list) [right=of blank1] 	{data list};
+\node [place,plus]	(blank2) [right=of data list]		{};
+\node [place,stand]	(data frame) [right=of blank2]	{data frame};
+\node [place,plus]	(plus1) [right=of data frame]	{\Large +};
+\node [place,stand]	(function) [right=of plus1]		{functions};
+\node [place,plus]	(equal) [right=of function]		{\Large =};
+\node [place,otpt]	(analysis) [right=of equal]		{analysis};
+\node [place,bel]	(section1) [below=of blank1]	{Section \ref{sec:multiple_table}};
+\node [place,bel]	(section2) [above=of blank2]	{Section \ref{sec:coerce}};
+\node [place,bel]	(section3) [below=of plus1]	{Section \ref{sec:analysis}};
+\draw[tip] (data list.east) -- (data frame.west);
+\draw[tip] (data files.east) -- (data list.west);
+\path (data files.south west) edge [-, skip loop1=-1mm] (data list.south east);
+\path (data list.north west) edge [-, skip loop2=-1mm] (data frame.north east);
+\path (data list.south west) edge [-, skip loop3=-1mm] (analysis.south east);
+\end{tikzpicture}
+\caption{The \pkg{multitable} framework for using multiple-table data (in red) in \proglang{R} workflows (in blue).  Hyper-linked section numbers indicate portions of the workflow covered by sections in this article.  Data lists are used to organise and manipulate multiple-table data as a single \proglang{R} object, even though such data will typically be originally stored in several other sources (e.g., \proglang{R} objects; spreadsheets; text-based data files; database queries).  When such data are ready for analysis, they can be coerced into a data frame.  With the data in data frame form, they can be analysed and visualised by combining them with any \proglang{R} function that accepts \code{data.frame} objects.}
+\label{fig:model}
+\end{figure*}
+
+How can data lists make data organisation easier?  Although practically any data set can be forced into a single \code{data.frame} by either repeating some of the data or adding missing values, other structures exist that would make a particular data set easier to understand, manipulate, and analyse.  Accordingly, we have designed \code{data.list} objects to provide a richer structure than \code{data.frame} objects for representing our data `as we understand them'.  This structure furnishes intuitive tools for operating on several data tables simultaneously, thereby saving time and effort that could be better spent thinking about relationships between variables.  As we have discussed, there are important advantages to organising data in \code{data.frame} objects---perhaps the most important advantage being the powerful catalogue of \proglang{R} functions that accept data in such a form.  The \pkg{multitable} package provides methods for coercing \code{data.list} objects into \code{data.frame} objects, thus making standard \proglang{R} tools available to multiple-table data organised as a \code{data.list} object.  In summary, the \pkg{multitable} model of data organisation is to manipulate, transform, and extract subsets of our data in \code{data.list}-form, and then to coerce them into \code{data.frame}-form when we are ready to pass them to analysis functions (Figure~\ref{fig:model}).  
+
+There are several existing \proglang{R} packages that are designed to make data organisation easier (e.g., \pkg{reshape2}; \citeauthor{Wickham2007}, \citeyear{Wickham2007}).  The \pkg{mefa} and \pkg{mefa4} packages have been developed to organise data with a slight generalisation of the fourth-corner problem \citep{Solymos2009}; this generalisation permits several community matrices---called segments---with identical dimensions.  The \pkg{multitable} package has much in common with \pkg{mefa}, but there are noticeable differences.  For example, \pkg{multitable} is designed to handle more general data structures than \pkg{mefa} or \pkg{mefa4}; in particular, \pkg{mefa} is not able to represent the relational structure of the Lac Croche data depicted in Figure~\ref{fig:beatrix}.  On the other hand, \pkg{mefa} provides more extensive tools for data summarisation than \pkg{multitable} and \pkg{mefa4} integrates tools for sparse-matrix computations.  We therefore expect \pkg{mefa} and \pkg{multitable} to often be complementary in practice.
+
+Our purpose is to introduce the \pkg{multitable} package, and demonstrate its utility.  There are three main organisational sections, each corresponding to a part of Figure~\ref{fig:model}.  Section~\ref{sec:multiple_table} describes the structure of a simple \code{data.list} object (\ref{sec:structure}); how to create other data lists (\ref{sec:creation}); a simple theoretical framework for understanding data lists (\ref{sec:concepts}); and techniques for manipulating them (\ref{sec:subscript}, \ref{sec:assign}, \ref{sec:transform}, \ref{sec:dims_to_vars}, \ref{sec:recast}).  Section~\ref{sec:coerce} illustrates the coercion of data lists to data frames.  Section~\ref{sec:analysis} illustrates how to use \pkg{multitable} in \proglang{R} workflows by summarising (\ref{sec:summaries}); visualising (\ref{sec:visualise}); and modelling (\ref{sec:glm}, \ref{sec:randomise}, \ref{sec:multivariate}) a real stream fish data set (\ref{sec:fish}).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\section{Understanding, creating, and manipulating data lists}
+\label{sec:multiple_table}
+\begin{center}
+\begin{tikzpicture} [
+	node distance=0cm,
+	new/.style={
+		rectangle,draw=red!0,fill=red!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	plus/.style={
+		rectangle,draw=blue!0,fill=blue!0,
+		minimum width=0.67cm},
+	tip/.style={
+		->,shorten >=1pt}]
+\node [place,new]	(data files) 				{data sources};
+\node [place,plus]	(blank1) [right=of data files]	{};
+\node [place,new]	(data list) [right=of blank1] 	{data list};
+\draw[tip] (data files.east) -- (data list.west);
+\end{tikzpicture}
+\end{center}
+
+\subsection{The structure of data lists}
+\label{sec:structure}
+
+The \pkg{multitable} package comes with a fictitious \code{data.list}, to illustrate how these objects work.
+<<the structure of data lists, eval=TRUE>>=
+library("multitable")
+data("fake.community")
+fake.community
+@
+
+At first sight, this \code{data.list} object looks very different from standard \code{data.frame} objects, but on second look we can see that they are really quite similar.  Just like data frames, data lists are composed of a number of variables---in this case, we have six variables (\code{abundance}; \code{temperature}; \code{precipitation}; \code{body.size}; \code{metabolic.rate}; and \code{homeotherm}) each identified in the printed object above by underlined names.  The variables in data lists must be printed in this sequential manner, rather than as columns neatly lined up in a data frame, precisely because the variables in multiple-table data sets do not line up neatly; this is the problem \pkg{multitable} seeks to address.
+
+Also as with data frames, the replication of variables in data lists are represented as vectors of values.  The main difference between the two objects in this regard is that the vectors that represent variables in data lists have \code{dim} (i.e., dimension) attributes.  These \code{dim} attributes give \code{data.list} objects further structure.  In \proglang{R}, vectors with \code{dim} attributes are best thought of as matrices and arrays of numbers.  For example, the \code{abundance} variable is replicated along three dimensions (sites; years; and species), and therefore is a three dimensional array of data.  This information is displayed after the data whenever a \code{data.list} object is printed.  Some variables are only replicated along two dimensions (e.g., \code{temperature} and \code{precipitation}) and others only have one dimension (e.g., \code{body.size}; \code{metabolic.rate}; and \code{homeotherm}).  
+
+<<unimportant, echo=false>>=
+options(width=60)
+@
+
+Importantly however, although the variables are not replicated along all of the same dimensions, they do share dimensions; and it is this dimension sharing that allows us to relate variables to each other.  To appreciate the dimension sharing of this example, we can use the \code{summary} method for \code{data.list} objects:
+<<the summary function reveals the structure of a data list, eval=TRUE>>=
+summary(fake.community)
+@
+This method returns a logical matrix with dimensions of replication as rows and variables as columns.  A value of \code{TRUE} appears in cells corresponding to variables that are replicated along a particular dimension, and a value of \code{FALSE} appears otherwise.  We can see that the \code{sites} and \code{years} dimensions relate \code{abundance}, \code{temperature}, and \code{precipitation}; whereas, the \code{species} dimension relates \code{abundance}, \code{body.size}, \code{metabolic.rate}, and \code{homeotherm}.
+
+Note that some \code{FALSE} entries are biophysical necessities, whereas others are properties of the study design.  For example, suppose that later in the study, the researchers decided that it was necessary to get some idea of the spatial variation in metabolic rates.  It would then be possible to measure metabolic rates of the species at different sites, thereby changing the \code{FALSE} associated with the metabolic rate-sites cell to a \code{TRUE}.  To the contrary, it is both physically and logically impossible to measure the precipitation of a species, so this \code{FALSE} is mandatory.
+
+\subsection{How data lists are made}
+\label{sec:creation}
+
+
+Although there are several ways to create data lists, one way in particular provides a simple framework for understanding the difference between variables and dimensions of replication---an important distinction to understand in order to use \pkg{multitable} effectively.
+
+
+Consider the following data frame of species abundances counted at various sites.
+<<an example matrix-valued variable to include in a new data list, eval=TRUE,echo=FALSE>>=
+abundance <- data.frame(
+	sites=c(
+		"midlatitude","subtropical","tropical","equatorial",
+		"arctic","midlatitude","tropical","equatorial",
+		"subtropical"
+	),
+	species=c(rep("capybara",4),rep("moss",4),"vampire"),
+	abundance=c(4,10,8,7,5,6,9,3,1)
+)
+@
+<<what the abundance matrix looks like, eval=TRUE>>=
+abundance
+@
+We have six sites and three species, but each species is not present at each site and so there are missing site-species combinations.
+
+Related to this \code{abundance} data frame we have a data frame of environmental variables at each site and a data frame of traits for each species.
+<<data frames of vector-valued variables to include in a new data list, eval=TRUE,echo=FALSE>>=
+environment <- data.frame(
+	sites=c(
+		"subarctic","midlatitude","subtropical",
+		"tropical","equatorial"
+	),
+	temperature=c(0,10,20,50,30),
+	precipitation=c(40,20,100,150,200)
+)
+trait <- data.frame(
+	species=c("capybara","moss","vampire"),
+	body.size=c(140,5,190),
+	metabolic.rate=c(20,5,0)
+)
+@
+<<what the environment and traits data frames look like, eval=TRUE>>=
+environment
+trait
+@
+To make things interesting to scientists with real data, we assume that our environmental data are missing from the arctic site (perhaps because data loggers did not endure harsh conditions).
+
+The three data frames are related because they share two columns:  sites and species.  The specific pattern of sharing for these data can be illustrated with a bipartite graph (i.e., matching diagram; Figure~\ref{fig:bipartite}).  Columns that are shared between data frames are called \emph{dimensions of replication} and those that are not are called \emph{variables}.  The reason for this terminology is that in standard single-table statistical settings, we are able to relate variables because they are replicated along some common dimension.  For example, one can relate pH and temperature if they are both replicated along the same set of lakes.  Similarly, we can relate the variables in several tables together if they share columns (i.e., dimensions of replication).
+
+\begin{figure}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.1cm,
+	ndims/.style={
+		rectangle,minimum width=1.5cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=2.2cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,nblank]	(asites)					{};
+\node [place,ndims]	(sites)[below=of asites]		{sites};
+\node [place,nblank]	(bsites)[below=of sites]		{};
+\node [place,ndims]	(species)[below=of bsites]		{species};
+\node [place,nblank]	(bspecies)[below=of species]	{};
+\node [place,nvars]	(environment)[right=of asites]	{environment}
+	edge [-]		(sites);
+\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
+	edge [-]		(sites)
+	edge [-]		(species);
+\node [place,nvars]	(traits)[right=of bspecies]		{traits}
+	edge [-]		(species);
+\end{tikzpicture}
+\caption{Bipartite graph of the multiple-table structure of data with a standard fourth-corner structure (Figure~\ref{fig:fourth}).  Dimensions of replication are in blue (on the left) and tables are in red (on the right).}
+\label{fig:bipartite}
+\end{figure}
+
+<<unimportant, echo=FALSE>>=
+options(width=80)
+@
+
+To create a data list out of these data frames we use the data list cast, \code{dlcast}, function from \pkg{multitable}, which was inspired by the \code{acast} function in the \pkg{reshape2} package \citep{Wickham2007}.
+<<create a new data list, eval=TRUE>>=
+l <- list(abundance, environment, trait)
+dl <- dlcast(l, fill = c(0, NA, NA))
+summary(dl)
+dl
+@
+This \code{dlcast} function takes one mandatory argument:  a list of data frames to be combined into a data list.  The optional \code{fill} argument accepts a vector with one element for each data frame, giving the value with which to fill in any structural missing values.  This argument is useful because we can both (1) fill missing abundances with zeros because those site-species combinations were not observed and (2) fill missing traits and environmental variables with \code{NA} values.  
+
+
+
+\subsubsection{Making data lists out of `wide format' data}
+
+Researchers will often have text files or spreadsheets of data that are not stored in the same format as the three data frames in the previous example.  These three data frames have two types of columns---some columns represent dimensions of replication and others represent variables.  This data storage format is sometimes called `long format' (see \code{?reshape}), because more sampling results in a lengthening of the data (i.e., the addition of rows) without any widening (i.e., the addition of columns).  In contrast, it is common in community ecology for example to store abundance data as spreadsheets with sites as rows and species as columns (e.g., as in Figure~\ref{fig:fourth}).  Such a data storage format is often called `wide format', because more sampling may result in a widening of the data (e.g., more columns are required as further sampling reveals a greater diversity of species).  Fortunately, the \pkg{multitable} package provides tools for reading data stored in a variety of different formats into a data list.  The \code{as.data.list}, \code{data.list}, \code{variable}, \code{variableGroup}, \code{read.multitable}, and \code{read.fourthcorner} functions are all alternatives to \code{dlcast} for creating data lists.
+
+
+
+The \code{variable} function provides a convenient way to add data stored in wide format to an existing data list.  Consider for example, a matrix \code{allele} containing the frequencies of a particular allele (i.e., alternate form of a gene) for each species at each site,
+<<a wide-format variable to add to a data list, echo = FALSE>>=
+allele <- matrix(c(
+	NA, 0.4, 0, 0.1, 0, NA,
+	0, 0, 0, NA, 0.2, NA,
+	NA,NA,NA,0,NA,NA
+), 6, 3)
+dimnames(allele) <- dimnames(dl)
+@
+<<what the wide-format example looks like>>=
+allele
+@
+
+Note that this \code{allele} variable is in wide format, because additional sampling could lead to a widening of the matrix.  One can add such wide data to an existing data list using the \code{+} operator and the \code{variable} function,
+<<adding a wide-format variable to an existing data list>>=
+dl.with.allele <- dl + variable(allele, c("sites", "species"))
+@
+The \code{variable} function creates a data list with a single variable (i.e., \code{allele}) and the \code{+} operator `adds' it to \code{dl}.  Notice that the \code{+} operator here does not have its usual arithmetic meaning, but instead means `merge two data lists together'.  The two arguments of \code{variable} give the data to be converted into a variable (the vector \code{allele} in this case) and identifies the dimensions along which the variable is replicated (which are \code{"sites"} and \code{"species"} in this case).  The result of this addition of two data lists contains one more variable than \code{dl},  
+<<structure of the modified data list>>=
+summary(dl.with.allele)
+@
+
+
+
+
+\subsection{Multiple-table concepts}
+\label{sec:concepts}
+
+The \pkg{multitable} package is based on a distinction between dimensions of replication and variables.  One benefit of this distinction is that it provides a common framework for understanding both simple and more complex multiple-table data structures.  In particular, the framework allows one to visualise the structure of complex data using bipartite graphs; for example the Lac Croche zooplankton community data (Figure~\ref{fig:beatrix}) \citep{CantinEtAl2011} has a structure given by Figure~\ref{fig:bipartitebeatrix}.  To store these data in a format amenable to \code{dlcast} (i.e., `long format'), we would create one data frame for each of the groups of variables (red boxes on the right) and add a column for each dimension of replication (blue boxes on the left) associated with those variables.
+
+\begin{figure}
+\vspace{0.1cm}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.1cm,
+	ndims/.style={
+		rectangle,minimum width=1.5cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=2.2cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,nblank]	(asites)					{};
+\node [place,ndims]	(sites)[below=of asites]		{sites};
+\node [place,nblank]	(bsites)[below=of sites]		{};
+\node [place,ndims]	(time)[below=of bsites]		{time};
+\node [place,nblank]	(btime)[below=of time]		{};
+\node [place,ndims]	(species)[below=of btime]		{species};
+\node [place,nblank]	(bspecies)[below=of species]	{};
+\node [place,nvars]	(environment)[right=of asites]	{environment}
+	edge [-]		(sites)
+	edge [-]		(time);
+\node [place,nvars]	(abundance)[right=of bsites]	{abundance}
+	edge [-]		(sites)
+	edge [-]		(time)
+	edge [-]		(species);
+\node [place,nvars]	(scales)[right=of btime]		{time scales}
+	edge [-]		(time);
+\node [place,nvars]	(traits)[right=of bspecies]		{traits}
+	edge [-]		(species);
+\end{tikzpicture}
+\caption{Bipartite graph of the Lac Croche data in Figure~\ref{fig:beatrix}.  Dimensions of replication are in blue (on the left) and tables are in red (on the right).} 
+\label{fig:bipartitebeatrix}
+\end{figure}
+
+Visualising the structure of data in this way will help to clarify how it should be both organised and analysed.  One of the central themes of \pkg{multitable} is that thinking about data organisation goes a long way towards clarifying how analysis should proceed.  The names of what we store as variables will appear in formula objects, so that we can study the relationships between these variables.  On the other hand, the information that we have for inferring these relationships will come from what we store as dimensions of replication.  In single-table settings we keep these two elements of data analysis separate by storing variables as columns and replicates as rows in a \code{data.frame}.  The \code{data.list} concept is very similar except that replication now has a dimensionality, which allows for the storage of more complex data structures.  The basic distinction between variables and replicates guides analysis in multiple-table settings just as it does in single-table settings.
+
+To store data as a \code{data.frame} object, all variables must have the same length.  This requirement ensures that the variables can be related to each other along the single dimension of replication defined by the rows of the data frame.  The analogous requirement for storing data in a \code{data.list} object is that at least one variable must be replicated along all of the dimensions present in the data set.  This requirement ensures two important properties:  (1) every variable can be related to at least one other variable along at least one dimension of replication and (2) at least one variable will be relatable to all other variables, a property that is necessary for a response variable.  For example, the Lac Croche data (Figure~\ref{fig:bipartitebeatrix}) meets this requirement because the abundance variable is replicated along all three dimensions of replication.  Therefore, all other variables must at least share one dimension with the abundance variable (e.g., the traits and abundance share the species dimension).
+
+
+\subsection{Subscripting data lists}
+\label{sec:subscript}
+
+When analysing data, it is often of interest to extract a part of the data.  For example, examining the data suggests that 1537 might have been an outlying year relative to 2008 and 2009.  We can exclude data from 1537 just as we would with a single \proglang{R} array:
+<<array-like data list subscripting example, eval=TRUE>>=
+fake.community[,c("2008","2009"),]
+@
+This command returns the same data list of variables but without the data from 1537.  Note that every variable replicated along the \code{years} dimension is subscripted appropriately, while variables that are not replicated along this dimension are unchanged.  As another example, perhaps we want all of the data from the first three sites, in 1537, for the first species (i.e., capybara).  The following line would produce such a data list:
+<<another array-like data list subscripting example, echo=TRUE,eval=FALSE>>=
+fake.community[1:3, "1537", c(TRUE, FALSE, FALSE)]
+@
+This example illustrates that data list subscripting can be done with integers (e.g., \code{1:3}), character strings (e.g., \code{"1537"}), and logical vectors (e.g., \code{c(TRUE, FALSE, FALSE)}).
+
+The previous subscripting examples operated on all variables in the data list simultaneously.  However, it is often useful to be able to extract subsets of the variables themselves.  Such variable extraction can be done by passing a single subscripting vector that refers to variables instead of dimensions of replication,
+<<list-like data list subscripting example>>=
+fake.community[c("temperature", "precipitation")]
+@
+If subscripting results in a data list with only a single dimension of replication, then the default behaviour is to coerce to a data frame; for example,
+<<if resulting data list has only a single dimension it is dropped>>=
+fake.community[5:6]
+@
+To suppress this behaviour, use,
+<<this dropping behaviour can be suppressed>>=
+fake.community[5:6, drop = FALSE]
+@
+The \code{drop} argument refers to whether or not the the dimensional structure of the data list should be dropped, because a data frame is sufficient to organise the results of a data list with only a single dimension of replication.
+
+It is important to distinguish between the two ways in which data lists can be subscripted: extraction of subsets of (1) dimensions of replication and (2) variables.  We refer to these two subscripting techniques as array-like and list-like---array-like because when \proglang{R} arrays are subscripted, subsets of dimensions are extracted; and list-like because when \proglang{R} lists are subscripted, subsets of variables are extracted.  Both the array-like and list-like subscripting functions are designed to behave as similarly as possible to standard \pkg{base} \proglang{R} array and list subscripting.  See the \code{Extract.data.list} help file for more details.
+
+
+\subsection{Assigning new values to variables in data lists}
+\label{sec:assign}
+
+Often we need to alter the values of variables before passing data frames to functions.  This is easily done with variables in data lists as well.  For example, we note that \code{fake.community} has a lot of missing values.  Suppose that these missing measurements were observed in a subsequent sampling campaign.  We can replace these missing values with the new observations using the standard logic of \proglang{R} replacement.
+<<assigning new values to variables in data lists, eval=TRUE>>=
+fake.community$precipitation[is.na(fake.community$precipitation)] <- 
+  c(30, 5, 50, 75, 50, 2, 7)
+@
+
+\subsection{Creating transformed variables in data lists}
+\label{sec:transform}
+
+Another common task in data analysis is to create new variables that are transformed versions of older variables in the data set.  For example, suppose we want to make a $\log$ transformation of the abundance data.  If \code{fake.community} was a data frame, one could create a new logged version of \code{abundance} with the following command,
+<<transforming variables in data lists, eval = FALSE>>=
+fake.community$log.precipitation <- log(fake.community$precipitation)
+@
+However, because \code{fake.community} is a data list rather than a data frame, this command results in the following error:  \color{red}\code{can't add variables this way...try using [[ instead of $...and don't forget to specify match.dimids or shape}\color{black}.  The reason why this command works for data frames but not data lists, is that the dimensional structure of data lists must also be specified for this new variable.  A simple approach to such a specification is to use the \code{shape} argument, which identifies an existing variable with the same shape (i.e., dimensions of replication) as the new variable,
+<<specifying the shape of a transformed variable>>=
+fake.community[['log.precipitation', shape = 'precipitation']] <- 
+  log(fake.community$precipitation)
+fake.community['log.precipitation']
+@
+
+\subsection{Creating variables to identify replicates}
+\label{sec:dims_to_vars}
+
+It is often useful to construct variables that identify replicates.  For example, if one of the dimensions of replication of a data list varies across spatial locations (e.g., sites), it is often of interest to examine potential site effects.  A site ID variable will be required to construct models with such a site effect.  Therefore, \code{site} must be considered both a dimension of replication and a variable.  The \code{dims_to_vars} function in the \pkg{multitable} package is a convenience function for creating variables out of dimensions of replication,
+<<creating variables to identify replicates>>=
+fake.community <- dims_to_vars(fake.community)
+summary(fake.community)
+@
+Note that this manipulated data list now contains variables associated with the three dimensions of replication (i.e., \code{sites}; \code{years}; and \code{species}).  For example, here is the variable associated with the \code{species} dimension,
+<<here are some variables that were created from dimensions of replication>>=
+fake.community['species', drop = FALSE]
+@
+
+
+
+\subsection{Melting and recasting data lists}
+\label{sec:recast}
+
+We now describe a fairly advanced technique.  Occasionally it is difficult to manipulate a data list into the desired form.  For example, note that an identical set of variables are replicated along both \code{sites} and \code{years} in the following subset of the \code{fake.community} data,
+<<simplifying the example to illustrate melt-recast techniques>>=
+data("fake.community")
+fake.community <- fake.community[1:3, 1:2, 1:2][1:4]
+summary(fake.community)
+@
+When two dimensions share the same variables it is always possible to collapse them into a single dimension, without loss of information.  In other words, instead of three dimensions (e.g., \code{sites}; \code{years}; and \code{species}) one could have two dimensions (e.g., \code{sites.years} and \code{species}).  Below in Section~\ref{sec:multivariate} we will give an example of where it would be useful to collapse dimensions in this way.  Here we show how to actually do the collapsing.
+
+In future versions of \pkg{multitable} there may be a \code{collapse} function.  In the meantime, we can use a \pkg{multitable} implementation of the melt-cast approach to complex data manipulations that has become popular via the \pkg{reshape2} package \citep{Wickham2007}.  The basic principle of \pkg{reshape2} is that it is often difficult to go from one type of structure to another---rather it can be easier to `melt' away the structure and then `cast' the molten data into a new form.
+
+The \code{dlmelt} function in \pkg{multitable} allows one to remove structure from data lists.  This function is similar to the \code{melt} function in the \pkg{reshape2} package, which converts many different kinds of data into `long' (i.e., database-like) format (see Section~\ref{sec:creation}).  However, it is not possible to melt a data list into a single long-format data frame without repeating many of its entries---a result of the multiple-table structure of data lists.  Therefore, \code{dlmelt} first separates variables into groups such that all variables in a group can be stored together in a single data frame.  The common feature that variables in such a group share is that they are all replicated along the same dimensions.  For example,
+<<melting a data list>>=
+dlm <- dlmelt(fake.community)
+@
+This \code{dlm} object is a list of three data frames,
+<<summary of a melted data list>>=
+summary(dlm)
+@
+each containing the variables replicated along the dimensions indicated by the names of the data frames.  The first two lines of the three data frames are,
+<<the first two lines of the data frames in the melted data list>>=
+lapply(dlm, head, n = 2)
+@
+The columns of each of these data frames give both variables and dimensions of replication.
+
+We could recast this melted multiple-table data set and get the original data list back, with the following command,
+<<dlcast is an approximate inverse to dlmelt, eval = FALSE>>=
+dlcast(dlm)
+@
+But what we want is to collapse the \code{sites} and \code{years} dimensions together before recasting.  To do this, we need to make new columns representing the collapsed dimension of replication, and delete the columns associated with original un-collapsed dimensions.  These new columns can be created with the \code{interaction} and \code{within} functions in \pkg{base} \proglang{R},
+<<manipulating dimensions of replication in melted form>>=
+dlm$sites.years.species <- within(dlm$sites.years.species, {
+  sites.years <- interaction(sites, years, drop = TRUE)
+  sites <- years <- NULL
+})
+dlm$sites.years <- within(dlm$sites.years, {
+  sites.years <- interaction(sites, years, drop = TRUE)
+  sites <- years <- NULL
+})
+@
+Recasting can then be applied to produce the reshaped data list,
+<<recasting can now be applied to produce a reshaped data list>>=
+dl <- dlcast(dlm)
+summary(dl)
+@
+
+
+
+\section{Coercing data lists to data frames}
+\label{sec:coerce}
+\begin{center}
+\begin{tikzpicture} [
+	node distance=0cm,
+	stand/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	new/.style={
+		rectangle,draw=red!0,fill=red!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	otpt/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm,
+		minimum height=1.3cm},
+	plus/.style={
+		rectangle,draw=blue!0,fill=blue!0,
+		minimum width=0.67cm},
+	tip/.style={
+		->,shorten >=1pt}]
+\node [place,new]	(data list) [right=of blank1] 	{data list};
+\node [place,plus]	(blank2) [right=of data list]		{};
+\node [place,stand]	(data frame) [right=of blank2]	{data frame};
+\draw[tip] (data list.east) -- (data frame.west);
+\end{tikzpicture}
+\end{center}
+
+<<unimportant, echo=FALSE>>=
+options(width=100)
+@
+
+
+A pivotal point in any workflow using \pkg{multitable} is the coercion of a data list to a data frame---this is the point at which the variety of \proglang{R} tools for single-table data, become available to multiple-table data.  Because this coercion is so pivotal, the syntax required to execute it is as simple as possible,
+<<coercing a data list to data frame, eval=TRUE>>=
+data("fake.community")
+fake.community.df <- as.data.frame(fake.community)
+@
+\begin{table*}
+\footnotesize
+<<looking at the data list in data frame form, eval=TRUE,echo=FALSE>>=
+fake.community.df[,-6]
+@
+\normalsize
+\caption{The \code{fake.community} \code{data.list} object that has been coerced into a \code{data.frame}.  The final column (\code{homeotherm}) is omitted so that only one page is required.}
+\label{tab:dataframe}
+\end{table*}
+
+The resulting data frame contains one column for each variable and one row for each combination of replicates across the three dimensions of replication; Table~\ref{tab:dataframe} shows this data frame, without the last column so that it can fit on one page.  This \code{as.data.frame} method for data lists is essentially a database join operation.  Notice that the row names are automatically generated to be informative about the dimensions of replication that have been collapsed into a single dimension.  Unlike the corresponding data list object, the data frame has redundancy.  For example, because \code{body.size} is only replicated along \code{species} there are only three unique \code{body.size} values, one for each of the three species.  These three values are repeated so that all of the variables can be stored side-by-side in a single data frame.
+
+\subsection{Faster iterative coercion of data lists to data frames}
+\label{sec:mold}
+
+<<unimportant, echo=FALSE>>=
+options(width=70)
+@
+
+On occasion, one may wish to iteratively coerce a sequence of data lists to data frames.  For example, in a randomisation test one might loop over a number of random subscripts of a data list (Section~\ref{sec:randomise}).  One may find that such an iterative procedure takes too long to run.  Fortunately, we can exploit the fact that each replicated data list has the same relational structure (i.e., the same replication dimensions and variables) to reduce computation times.  In particular, much of the computational effort involved in coercing data lists to data frames can be done once for all data lists with the same structure; we refer to this initial computation as `molding'.
+
+
+Molding begins by taking a `mold' of the original data list, 
+<<the molding technique to speed up data list to data frame coercion>>=
+data("fake.community")
+fc.mold <- data.list.mold(fake.community)
+@
+With such a mold, the \code{as.data.frame} operation can be computed much faster than without one.  In particular, this command,
+<<coercion with a mold, eval = FALSE>>=
+as.data.frame(fake.community, mold = fc.mold)
+@
+is faster than this one,
+<<coercion without a mold, eval = FALSE>>=
+as.data.frame(fake.community)
+@
+To demonstrate the computational savings of molding, consider the following two simple functions that each coerce the \code{fake.community} data list to a data frame one hundred times.
+<<functions for benchmarking the molding technique>>=
+with_molding <- function(){
+  fake.community.mold <- data.list.mold(fake.community)
+  for(i in 1:100)
+    as.data.frame(fake.community, mold = fake.community.mold)
+}
+without_molding <- function(){
+  for(i in 1:100)
+    as.data.frame(fake.community)
+}
+@
+The only difference between these functions is that a mold is created outside of the loop, and therefore should be faster.  This first function is indeed faster as the following timing shows,
+<<benchmarking molding>>=
+library("rbenchmark")
+benchmark(with_molding(), without_molding(),
+  replications = 10, 
+  columns = c("test", "replications", "relative"))
+@
+This output indicates that the function without molding took $\approx 1.5$ times as long.  For more on this technique see the help file for \code{data.list.mold} in the \pkg{multitable} package, and the randomisation test in Section~\ref{sec:randomise}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Analysing data lists}
+\label{sec:analysis}
+\begin{center}
+\begin{tikzpicture} [
+	node distance=0cm,
+	stand/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	new/.style={
+		rectangle,draw=red!0,fill=red!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	otpt/.style={
+		rectangle,draw=blue!0,fill=blue!20,thick,
+		rounded corners=2mm,
+		minimum width=2.5cm},
+	plus/.style={
+		rectangle,draw=blue!0,fill=blue!0,
+		minimum width=0.64cm},
+	tip/.style={
+		->,shorten >=1pt}]
+\node [place,new]	(data list)					{data list};
+\node [place,plus]	(blank2) [right=of data list]		{};
+\node [place,stand]	(data frame) [right=of blank2]	{data frame};
+\node [place,plus]	(plus1) [right=of data frame]	{\Large +};
+\node [place,stand]	(function) [right=of plus1]		{functions};
+\node [place,plus]	(equal) [right=of function]		{\Large =};
+\node [place,otpt]	(visual) [right=of equal]		{analysis};
+\draw[tip] (data list.east) -- (data frame.west);
+\end{tikzpicture}
+\end{center}
+
+\subsection{Stream fish data}
+\label{sec:fish}
+
+Now that we have described how data lists are created and manipulated using a simple example, we move on to analysing a small yet real data set on stream fish communities in Texas \citep{Higgins2009} that comes pre-loaded with \pkg{multitable},
+<<unimportant, echo=FALSE>>=
+options(width=70)
+@
+<<a real example data list>>=
+data("higgins")
+@
+The relational structure of this data set is given in Figure~\ref{fig:higgins}, and can be accessed in more detail using the \code{summary} and \code{dim} functions,
+<<structure of the higgins fish data>>=
+summary(higgins)
+dim(higgins)
+@
+One 100-m stretch of each of three rivers (tributaries of the Colorado River) were sampled once in each of the four seasons.  Abundances of 24 fish species were measured as numbers of individuals captured by electro-fishing; we abbreviate species names following \citet{Higgins2009}.  Two categorical traits (trophic status and life history) were obtained from the stream fish literature to characterise each of the 24 species.  Trophic status characterises species' diet and is described by four levels in this data set (herbivore; omnivore; insectivore; and piscivore).  Life history describes the strategy by which a species' individuals allocate limited resources amongst themselves, and is based on a three-way classification of strategies (equilibrium, or large investment in relatively few individual offspring; opportunistic, or small size and rapid maturation; and periodic, or pulsed production of large numbers of small offspring); some species are also described as intermediate between two categories.  Six environmental variables (stream width (m), temperature ($^{\circ}$C), depth (cm), and velocity (m s$^{-1}$), and two dimensionless measures of river bed substrate and fish habitat) were measured at each river in each season.
+
+\begin{figure}
+\vspace{0.1cm}
+\begin{tikzpicture} [
+	text centered,
+	node distance=0.8cm,
+	ndims/.style={
+		rectangle,minimum width=3cm,draw=blue!=0,
+		fill=blue!20
+	},
+	nvars/.style={
+		rectangle,minimum width=4cm,draw=red!=0,
+		fill=red!20
+	},
+	nblank/.style={
+		rectangle,draw=red!=0,fill=red!0,draw opacity=0,
+		minimum width=4cm
+	}
+]
+\node [place,ndims]	(species)				{species ($n = 24$)};
+\node [place,ndims]	(seasons)[below=of species]{seasons ($n = 4$)};
+\node [place,ndims]	(rivers)[below=of seasons]{rivers ($n = 3$)};
+
+\node [place,nvars]	(traits)[right=of species]	{traits ($m = 2$)}
+	edge [-]		(species);
+\node [place,nvars]	(abundance)[right=of seasons]	{abundance ($m = 1$)}
+	edge [-]		(species)
+	edge [-]		(seasons)
+	edge [-]		(rivers);
+\node [place,nvars]	(env)[right=of rivers]	{environment ($m = 6$)}
+	edge [-]		(seasons)
+	edge [-]		(rivers);
+\end{tikzpicture}
+\caption{Bipartite graph of the \code{higgins} stream fish data.  Dimensions of replication are in blue (on the left) and tables are in red (on the right).  Sample sizes along each dimension of replication are given as $n$; and numbers of variables in each variable group are given as $m$.} 
+\label{fig:higgins}
+\end{figure}
+
+\subsection{Marginal summaries}
+\label{sec:summaries}
+
+A common task in data exploration is to compute marginal summaries (e.g., means and quantiles).  In \proglang{R} this is commonly done using the \code{apply} family of functions or more recently with packages such as \pkg{plyr} \citep{Wickham2011}.  In general these functions `apply' another function to various parts of an \proglang{R} object.  Here we demonstrate how to use existing apply functions to summarise data lists and introduce a new function:  data list apply, \code{dlapply}.
+
+The \code{dlapply} function is designed to be intuitive for anyone familiar with the standard \code{apply} function in \pkg{base} \proglang{R}---the arguments for the two functions are identical,
+\begin{itemize}
+\item \code{apply(X, MARGIN, FUN, ...)}
+\item \code{dlapply(X, MARGIN, FUN, ...)}
+\end{itemize}
+The \code{dlapply} function attempts to use \code{apply} on each variable in a data list, in order to return another data list replicated along the marginal dimensions of replication (i.e., the dimensions specified in \code{MARGIN}).  However, the rich structure of data lists often makes it impossible to completely marginalise in this way.  Still, \code{dlapply} is extremely useful because it not only marginalises as many of the variables in a data list as possible, but also provides informative messages about why some variables are unable to be marginalised, allowing our thoughts to be centred on data analysis rather than the details of marginalisation.  For example, to obtain the median values of the variables in \code{higgins} for each species, we set \code{MARGIN = 1} because \code{species} is the first dimension and set \code{FUN = median},
+<<introducing dlapply, eval = FALSE>>=
+dlapply(higgins, 1, median)
+@
+\color{red} \code{omitting width because it is not replicated along MARGIN \\
+omitting temp because it is not replicated along MARGIN \\
+omitting depth because it is not replicated along MARGIN \\
+omitting velocity because it is not replicated along MARGIN \\
+omitting substrate because it is not replicated along MARGIN \\
+omitting habitat because it is not replicated along MARGIN \\
+omitting trophic because of the following error: \\
+ Error in median.default(newX[, i], ...) : need numeric data \\
+omitting life.history because of the following error: \\
+ Error in median.default(newX[, i], ...) : need numeric data}\color{black}
+<<introducing dlapply, echo = FALSE>>=
+dlapply(higgins, 1, median)
+@
+The species median abundances are given as a single-variable data list and the messages in \color{red} red \color{black} explain why the other variables did not marginalise.  All of the environmental variables are not replicated along \code{species} and so it is impossible to find species medians for them.  While the \code{trophic} and \code{life.history} traits are replicated along \code{species}, their medians cannot be computed because they are factors.  Note that these messages are \emph{not} errors, even though the word `error' frequently appears in them; reporting on which variables were unable to be marginalised because of an error in the function, \code{FUN}, being applied is part of the normal behaviour of \code{dlapply}.
+
+<<unimportant, echo=FALSE>>=
+options(width=75)
+@
+
+Sometimes results are more visually pleasing when \code{dlapply} is wrapped in a call to \code{as.data.frame}, particularly when the resulting data list is large,
+<<simplifying the results of a dlapply using as.data.frame, eval = FALSE>>=
+as.data.frame(dlapply(higgins, c(2, 3), median))
+@
+\color{red}
+\code{omitting trophic because it is not replicated along MARGIN \\
+omitting life.history because it is not replicated along MARGIN}
+\color{black}
+<<simplifying the results of a dlapply using as.data.frame, echo = FALSE>>=
+as.data.frame(dlapply(higgins, c(2, 3), median))
+@
+The result here gives the median values of several variables for each season-river combination.  One clear pattern in the median \code{abundance}s is that the three rivers have more fish in fall and winter than in spring and summer.
+
+While \code{median} returns a single value, we often want to apply a function that returns several values in a vector (e.g., the \code{quantile} function).  This is easily done with \code{dlapply} (omitting several variables to save space),
+<<dlapply error>>=
+dlapply(higgins[1:2], 3, quantile)
+@
+We see that when the length of the return value of \code{FUN} is greater than one, a new dimension of replication is created with the name of \code{FUN} to store this additional information.  However, if this new dimension of replication is not the same length for each variable, then a data list cannot be created that contains all of the results.  For example, the following command results in an error,
+<<dlapply error, eval = FALSE>>=
+dlapply(higgins[1:2], 3, summary)
+@
+\color{red} \code{Error in dlapply(higgins[c(1, 2, 8)], 3, summary) : \\
+results could not be combined into a data list} \color{black}
+
+The reason for this error is that the \code{summary} function does not summarise each type of object in the same way.  In this example, summary is applied along a margin of a numerical array, a numerical matrix, and a factor; the output in each of these cases is too different to be combined back into a single data list.  However, data lists are also standard \proglang{R} lists,
+<<data lists are also lists>>=
+is.list(higgins) && is.data.list(higgins)
+@
+Therefore, functions such as \code{summary} can be applied to complex data lists using the standard list apply function, \code{lapply}, in \pkg{base} \proglang{R},
+<<using lapply with data lists>>=
+lapply(higgins[c('abundance', 'width', 'trophic')], summary)
+@
+The \code{summary} function gives different types of results depending on the class of the object being summarised.  For matrices such as \code{higgins$width}, \code{summary} returns various quantiles and means of the matrix columns, representing the three tributaries in this case.  For other arrays such as \code{higgins$abundance}, \code{summary} gives these statistics over the entire array.  For factors such as \code{higgins$trophic}, \code{summary} counts the number of observations in each category.
+
+
+
+In short, \code{dlapply} attempts to repeatedly summarise data list margins by passing each variable to the standard \code{apply} function and then combining the successfully marginalised variables back into a data list.  If this combination fails, \code{dlapply} will throw an error; in such a case, consider using the \pkg{base} \proglang{R} apply functions for lists (i.e., \code{lapply}; \code{sapply}; \code{rapply}) or the \pkg{plyr} package (i.e., \code{laply}; \code{ldply}; \code{llply}; \code{l_ply}).
+
+
+
+
+
+
+
+\subsection{Data list visualisation}
+\label{sec:visualise}
+
+\setkeys{Gin}{width=1\textwidth}
+
+
+
+
+Many standard plotting functions in the base \proglang{R} \pkg{graphics} package combine \code{formula} and \code{data.frame} objects to produce plots.  Because \code{data.list} objects are readily coerced into data frames, these functions can also be used to visualise data lists.  For example, the \code{boxplot} command can be used to visualise the variation in the abundances of each of the species across seasons and rivers (Figure~\ref{fig:boxplot}),
+<<a boxplot from a data list, eval = FALSE>>=
+data("higgins")
+boxplot(
+  formula = sqrt(abundance) ~ species,
+  data = as.data.frame(dims_to_vars(higgins)),
+  horizontal = TRUE, las = 1, xaxt = 'n',
+  xlab = "abundance (square-root scale)", ylab = "species")
+tickmarks <- with(higgins, pretty(sqrt(abundance)))
+axis(1, at = tickmarks, labels = tickmarks^2)
+@
+Note the use of the \code{dims_to_vars} function, which is required because a dimension of replication (i.e., \code{species}) is referred to in the \code{formula} (see Section~\ref{sec:dims_to_vars}).  Figure~\ref{fig:boxplot} shows that while many species are rare across all rivers and seasons (e.g., pyol; amna), some vary widely in abundance (e.g., dini; cyve).
+\setkeys{Gin}{width=0.9\textwidth}
+\begin{figure}
+<<boxplot, fig = TRUE, echo = FALSE, eps = FALSE, pdf = TRUE, width = 7, height = 7>>=
+data("higgins")
+boxplot(
+  sqrt(abundance) ~ species, 
+  as.data.frame(dims_to_vars(higgins)), 
+  horizontal = TRUE, las = 1, xaxt = 'n',
+  xlab = "abundance (square-root scale)", ylab = "species")
+tickmarks <- with(higgins, pretty(sqrt(abundance)))
+axis(1, at = tickmarks, labels = tickmarks^2)
+@
+\caption{Boxplots showing spatio-temporal variation of the abundances of species in the \code{higgins} data.}
+\label{fig:boxplot}
+\end{figure}
+\setkeys{Gin}{width=1\textwidth}
+
+One of the most challenging aspects of data with more than one dimension of replication is visualising this higher dimensional structure.  For example, a single dimension of replication is naturally represented on a scatterplot as variation in the $x$-$y$ position of the points.  But other aesthetics beyond $x$-$y$ position---such as colour or shape---are required to visualise multidimensional replication on a single scatterplot.  We have found that the faceting (i.e., trellising) technique is an effective tool for visualising multiple dimensions of replication, when at least one of the dimensions is short (i.e., less than 30 replicates).  Faceting is used to display subsets of the data in different panels, so that differences between the subsets can be more easily perceived \citep{Wickham2009}.  In the multiple-table context, dimensions of replication may be used to define these subsets.
+
+To illustrate faceting in a multiple-table context, we ask whether environmental variables interact with species traits to affect abundance in the \code{higgins} data set.  Visualising all of the possible trait-by-environment interactions is virtually impossible, and so we begin by considering a trait and environmental variable that have been hypothesised to interact in many stream fish communities:  stream width and fish species life history \citep{GoldsteinAndMeador2004}.  Figure~\ref{fig:facet} provides a visualisation of the dependence of \code{abundance} ($y$-position) on both \code{width} ($x$-position) and \code{life.history} (point shape).  Each panel is associated with a particular species---therefore, faceting represents the \code{species} dimension of replication.  Within panels, each point represents a particular river in a particular season---therefore, the position of the points within each scatterplot represents both the \code{seasons} and \code{rivers} dimensions of replication.  Fitted model curves are also plotted for each species to help visualise any systematic trends in the scatterplots.
+\begin{figure}
+<<a faceted ggplot scatterplot from a data list, echo = FALSE>>=
+data("higgins")
+higgins <- dims_to_vars(higgins)
+higgins$species <- with(higgins, 
+  reorder(species, rank(life.history)))
+higgins.df <- as.data.frame(higgins)
+library("ggplot2")
+library("arm")
+p <- ggplot(higgins.df)
+p <- p + facet_wrap( ~ species, ncol = 4)
+p <- p + geom_point(aes(x = width, y = abundance, shape = life.history))
+p <- p + stat_smooth(aes(x = width, y = abundance), se = FALSE, 
+    method = 'bayesglm', family = poisson, form = y ~ x + I(x^2),
+    colour = 'black', alpha = 0.4, geom = 'line')
+p <- p + scale_y_continuous(
+  trans = 'sqrt', 
+  breaks = trans_breaks('sqrt', function(x) x^2))
+@
+<<ggplot, fig = TRUE, echo = FALSE, width = 7, height = 8>>=
+print(p)
+@
+\caption{Visual exploration of the interaction between \code{width} and \code{life.history} on \code{abundance} in the \code{higgins} data.  Faceting is used to represent the \code{species} dimension of replication.}
+\label{fig:facet}
+\end{figure}
+
+
+
+Figure~\ref{fig:facet} illustrates that the \code{width}-\code{abundance} relationship is variable along the \code{species} dimension of replication.  However, this variation is not clearly related to the \code{life.history} trait that characterises \code{species}, although perhaps equilibrium-periodic species appear more likely than other species to have a flat width-abundance relationship.  This possibility is investigated further in Sections~\ref{sec:glm}-\ref{sec:randomise} on statistical analysis.
+
+The code for producing Figure~\ref{fig:facet} follows the same pattern as most applications of \pkg{multitable}:  a data list is manipulated, it is converted to a data frame, and another \proglang{R} function is used to operate on the resulting data frame.  Figure~\ref{fig:facet} requires two manipulations.  Because we intend to use dimensions of replication to define the pattern of faceting, the \code{dimnames} of the data list must be accessible as variables; therefore, the \code{higgins} data must first be passed through the \code{dims_to_vars} function (Section~\ref{sec:dims_to_vars}),
+<<create variables out of higgins dimensions of replication>>=
+data("higgins")
+higgins <- dims_to_vars(higgins)
+@
+The order of the panels in Figure~\ref{fig:facet} is not arbitrary; the \code{species} dimension is ordered by \code{life.history}.  This ordering helps to clarify whether certain types of species have similar \code{width}-\code{abundance} relationships, because the panels for similar species are adjacent in the faceted plot.  To do this, the \code{species} variable must be converted into an ordered factor, with ordering determined by \code{life.history}; the \code{with} and \code{reorder} functions are useful for this purpose,
+<<reorder the species dimension according to life history>>=
+higgins$species <- with(higgins, reorder(species, life.history))
+@
+
+
+
+The \code{higgins} data are now ready to be coerced into a data frame.  Before doing so, we load the \pkg{ggplot2} package,
+<<ggplot2>>=
+library("ggplot2")
+@
+which we used to produce Figure~\ref{fig:facet}.  Because our focus is on describing \pkg{multitable}, we will not explain each \pkg{ggplot2} command in detail.  However, the syntax of \pkg{ggplot2} functions should be readable to anyone familiar with \proglang{R} in general.  One of the benefits of \pkg{ggplot2} is that the code for producing a plot can be broken into manageable pieces, which are added together to create the full plot \citep{Wickham2009}.  We begin by producing a \code{ggplot} object, \code{p}, for the \code{higgins} data,
+<<create ggplot object, eval = FALSE>>=
+p <- ggplot(as.data.frame(higgins))
+@
+In the next step we specify the pattern of faceting, which will represent replication along the \code{species} dimension,
+<<add faceting, eval = FALSE>>=
+p <- p + facet_wrap( ~ species, ncol = 4)
+@
+Here the \code{+} operator does not have its usual arithmetic meaning, but rather indicates that the property of faceting by species should be added to the plot object, \code{p}.  Setting \code{ncol = 4} reflects a purely aesthetic choice to organise the scatterplots into four columns of six species each.  Having specified that replication along the \code{species} dimension will be represented by faceting, we now specify that the remaining dimensions (\code{seasons} and \code{rivers}) will be represented by points,
+<<add the points, eval = FALSE>>=
+p <- p + geom_point(aes(x = width, y = abundance, shape = life.history))
+@
+This command also indicates that the $x$-$y$ position of the points will describe the \code{width} and \code{abundance} variables, whereas the shape of the points will describe \code{life.history}.  To help guide the eye we plot a fitted quadratic predictive model of the \code{width}-\code{abundance} relationship in each panel using the \code{bayesglm} function from the \pkg{arm} package \citep{GelmanEtAl2011}; the standard \code{glm} function in the \pkg{stats} package yielded unrealistically large coefficients, whereas \code{bayesglm} automatically shrinks coefficients towards zero resulting in a much better smoothing of the data.  
+<<fit the smoother, eval = FALSE>>=
+library("arm")
+p <- p + stat_smooth(aes(x = width, y = abundance), se = FALSE, 
+    method = 'bayesglm', family = poisson, form = y ~ x + I(x^2),
+    colour = 'black', alpha = 0.4, geom = 'line')
+@
+Finally, the \code{abundance} data are put on a square-root scale, to help visually homogenise residual variance.
+<<use sqrt y-axis, eval = FALSE>>=
+p <- p + scale_y_continuous(
+  trans = 'sqrt', 
+  breaks = trans_breaks('sqrt', function(x) x^2))
+@
+And then the plot is produced (Figure~\ref{fig:facet}),
+<<plot the graph, eval = FALSE>>=
+print(p)
+@
+
+
+
+<<unimportant, echo=FALSE>>=
+options(width=80)
+@
+
+\setkeys{Gin}{width=0.8\textwidth}
+
+
+
+
+\subsection{Generalised linear model example}
+\label{sec:glm}
+
+<<unimportant, echo=FALSE>>=
+options(width=80)
+@
+
+Figure~\ref{fig:facet} suggested that \code{abundance} might have been affected by an interaction between \code{width} and \code{life.history}, because the abundances of species with an equilibrium-periodic life history had weaker relationships with \code{width} than other species.  To explore this possibility we conducted a variety of formal statistical analyses, which also help to demonstrate how models can be fitted to data lists in much the same way that they are fitted to data frames. 
+
+For most model fitting functions in \proglang{R}, the hypothesised relationships between variables is specified via a \code{formula} object.  For example, a simple formula including the effect of the interaction between \code{width} and \code{life.history} on \code{abundance} is given by,
+<<formula with hypothesised relationships among variables in higgins data list>>=
+form <- abundance ~ -1 + life.history + (scale(width):life.history)
+@
+The overall intercept has been removed (with \code{-1}) so that each \code{life.history} class has its own intercept.  The \code{scale} command was used to standardise \code{width} to have mean zero and standard deviation one, which simplifies the interpretation of the estimated coefficients.  We fitted this formula to the \code{higgins} data using the \code{glm} function with a \code{poisson} error distribution, which is a good first choice for count data.  Because \code{glm} takes data in the form of a data frame, data lists can also be fitted by first passing them through \code{as.data.frame},
+<<fit a model to a data list>>=
+higgins.glm <- glm(
+  form, family = poisson, 
+  data = as.data.frame(higgins))
+printCoefmat(summary(higgins.glm)$coefficients, signif.stars = FALSE)
+@
+
+
+
+A striking aspect of this fitted model is that all of the coefficients are significant, and most are highly significant.  However, these strong results are caused by inflated type I error rates related to the fact that repeated measurements have been taken on each species.  Repeated measurements are \emph{always} an important consideration when analysing data with multiple dimensions of replication; in a three-dimensional data list, such as ours for example, replication along two of the dimensions (e.g., \code{seasons} and \code{rivers}) induces repeated measurements of the replicates along the other (i.e., \code{species}).  However, these inevitable repeated measurements will only inflate type I error if the deviations from model expectations tend to be more similar for observations associated with the same replicate along a particular dimension of replication---a form of autocorrelation.  To visually explore this possibility, a good option is to plot the expected versus observed values of the response variable, faceted by a dimension of replication.  For example, we plot \code{abundance} against its fitted values and facet by \code{species} (with 1:1 lines to guide the eye) (Figure~\ref{fig:fitted}),
+<<plot observed versus expected graph, eval = FALSE>>=
+higgins[['fitted', shape = 'abundance']] <- 
+  array(fitted.values(higgins.glm), dim(higgins))
+ggplot(as.data.frame(higgins)) + 
+  facet_wrap( ~ species, ncol = 4) + 
+  geom_point(aes(x = fitted, y = abundance)) + 
+  geom_abline(intercept = 0, slope = 1) + 
+  scale_y_continuous(trans = 'sqrt', 
+    breaks = trans_breaks('sqrt', function(x) x^2)) + 
+  scale_x_continuous(trans = 'sqrt', 
+    breaks = trans_breaks('sqrt', function(x) x^2))
+@
+Autocorrelation is clearly visible in the panels for species within which all observed abundances lie below the 1:1 line (i.e., amna; legu; mido; misa; pyol; caca).  The biological interpretation of this autocorrelation is that \code{life.history} does not completely determine each species' relationship with \code{width}, and therefore that \code{width} must interact with other traits to affect \code{abundance}.
+\begin{figure}
+<<obsvrsexp, fig = TRUE, echo = FALSE, width = 6, height = 8>>=
+higgins[['fitted', shape = 'abundance']] <- 
+  array(fitted.values(higgins.glm), dim(higgins))
+ggplot(as.data.frame(higgins)) + 
+  facet_wrap( ~ species, ncol = 4) + 
+  geom_point(aes(x = fitted, y = abundance)) + 
+  geom_abline(intercept = 0, slope = 1) + 
+  scale_y_continuous(trans = 'sqrt', 
+    breaks = trans_breaks('sqrt', function(x) x^2)) + 
+  scale_x_continuous(trans = 'sqrt', 
+    breaks = trans_breaks('sqrt', function(x) x^2))
+@
+\caption{Observed abundances in the \code{higgins} data versus the abundances expected from a fitted generalised linear model with Poisson error structure and formula, \code{abundance $\sim$ -1 + life.history + (scale(width):life.history)}.  Each panel is for a single species, with 1:1 lines to aide visual interpretation.}
+\label{fig:fitted}
+\end{figure}
+
+
+Despite this autocorrelation issue, the parameter estimates themselves suggest that there may in fact be an interaction between \code{life.history} and \code{width}.  In particular, the \code{width} coefficient for equilibrium-periodic species is smaller in magnitude than for the others.  Furthermore, some \code{life.history} strategies were associated with positive \code{width} coefficients (i.e., equilibrium; equilibrium-periodic; and opportunistic-periodic) whereas the other two were associated with negative \code{width} coefficients (i.e., opportunistic-equilibrium and periodic).  But, will this interaction be significant after properly accounting for autocorrelation?  There are two general approaches to addressing this question:  mixed modelling and randomisation testing, which is considered next. 
+
+
+\subsection{Randomisation tests}
+\label{sec:randomise}
+
+As in all randomisation tests, the first step is to compute the statistics of the observed data, which in this case are the five coefficients defining the interaction between \code{life.history} and \code{width}.
+<<store coefficients from the unrandomised data>>=
+coef.obs <- coefficients(higgins.glm)[6:10]
+@
+These observed coefficients will be compared with a distribution of coefficients for randomised data.  Next we decide on the number of randomisations,
+<<number of randomisations>>=
+B <- 500
+@
+and allocate an array to store the randomised coefficients,
+<<allocate an array to store randomised coefficients>>=
+coef.B <- array(0, c(B, length(coef.obs), 2))
+dimnames(coef.B) <- 
+list(1:B, names(coef.obs), c('species','seasons.rivers'))
+@
+This array, \code{coef.B}, has one dimension for the \code{B} randomisations of the data, one for the number of coefficients in the model, and a third dimension for the number of null models to be considered; with more than a single dimension of replication, several null models are often required (e.g., \citeauthor{DrayAndLegendre2008} \citeyear{DrayAndLegendre2008}; \citeauthor{CormontEtAl2011} \citeyear{CormontEtAl2011}).  When sample sizes are sufficiently large, it is ideal to compute one null model for each dimension of replication.  The null model for each dimension permutes the indices of the response variable (i.e., \code{abundance} in this case) for that dimension.  This is the approach suggested by \citet{DrayAndLegendre2008}.  However, the \code{seasons} and \code{rivers} dimensions are very short (i.e., 4 and 3), which translates into only 24 and 6 possible permutations for these dimensions.  Therefore, we consider only two null models:  permute the (1) \code{species} dimension and (2) \code{seasons} and \code{rivers} dimensions.
+
+Because randomisation tests involving data lists require the repeated coercion of data lists to data frames, we use the molding technique to speed up computation (Section~\ref{sec:mold}).  In this example, the savings in speed are modest, but they can be much greater in larger problems.  Molding begins by taking a mold of the initial data list,
+<<create a mold for the higgins data list>>=
+mold.higgins <- data.list.mold(higgins)
+@
+Both null models require a three-line loop over the \code{B} permutations,
+<<set the pseudo-random number generator seed for replicability, echo = FALSE>>=
+set.seed(1)
+@
+<<loop over permutations>>=
+higgins.tmp <- higgins
+for(i in 1:B){
+  higgins.tmp$abundance <- higgins$abundance[sample(24),,]
+  df.tmp <- as.data.frame(higgins.tmp, mold = mold.higgins)
+  coef.B[i, , 1] <- glm(form, family = poisson, df.tmp)$coefficients[6:10]
+}
+@
+The first line permutes the \code{species} dimension of the response variable; the second coerces the permuted data list to a data frame; and the third computes and stores the coefficients estimated from the permuted data.  The second null model is computed similarly,
+<<loop over permutations>>=
+higgins.tmp <- higgins
+for(i in 1:B){
+  higgins.tmp$abundance <- higgins$abundance[,sample(4),sample(3)]
+  df.tmp <- as.data.frame(higgins.tmp, mold = mold.higgins)
+  coef.B[i, , 2] <- glm(form, family = poisson, df.tmp)$coefficients[6:10]
+}
+@
+To avoid issues with two-sided tests, we assess the magnitudes of the coefficients irrespective of their signs,
+<<take the absolute values of the coefficients>>=
+coef.B.abs <- abs(coef.B)
+coef.obs.abs <- abs(coef.obs)
+@
+
+Simple estimates of p-values can now be computed by processing \code{coef.B.abs} using standard \proglang{R} commands,
+<<calculate pvalues>>=
+pvalues <- apply(sweep(coef.B.abs, 2, coef.obs.abs, '>='), c(2,3), mean)
+round(cbind(coef.obs, pvalues), 3)
+@
+With these more accurate p-values, we can see that there is very little evidence for an interaction between \code{width} and \code{life.history}.  A mixed-model approach that more directly accounts for repeated measurements on species might be beneficial here.  Although such an approach is beyond our scope here, the consistent logic of \pkg{multitable} applies: manipulate the data list, coerce it to a data frame, and pass the data frame to a mixed-model fitting function.
+
+\subsection{Analysing data lists with multivariate methods}
+\label{sec:multivariate}
+
+So far we have used data lists by manipulating them, converting to a data frame, and passing to a function to produce an analysis or visualisation.  In the context of multivariate analysis, it is often useful to cut out the middle step and pass a data list directly to a function.  In most univariate methods, both the response and explanatory variables are vectors; in contrast, the response variables of many multivariate methods are matrices while the explanatory variables are vectors.  Because data lists are---unlike data frames---able to store both matrix- and vector-valued variables, they are well suited for use in multivariate analyses.
+
+As an example of using a data list in a multivariate analysis, we use the \code{adonis} (analysis of dissimilarities) function \citep{Anderson2001, McArdleAndAnderson2001} in the \pkg{vegan} package \citep{OksanenEtAl2011} to analyse the relationships between \code{abundance} and the environmental variables in the \code{higgins} data.  However, \code{abundance} is a three dimensional array, and \code{adonis}---like many other multivariate methods requires a matrix-valued response variable.  Therefore, \code{higgins} must be manipulated before it is ready to be analysed.  In particular, we collapse the \code{seasons} and \code{rivers} dimensions of replication into a single dimension, \code{seasons.rivers}.  In Section~\ref{sec:recast} we described how to collapse dimensions using the melt-recast concept, and so we use this technique here,
+<<melt and recast higgins to collapse dimensions of replication>>=
+data("higgins")
+higgins.melt <- dlmelt(higgins)
+
+higgins.melt$species.seasons.rivers <- 
+  within(higgins.melt$species.seasons.rivers, {
+    seasons.rivers <- interaction(seasons, rivers, drop = TRUE)
+    seasons <- rivers <- NULL
+})
+higgins.melt$seasons.rivers <- 
+  within(higgins.melt$seasons.rivers, 
+    seasons.rivers <- interaction(seasons, rivers, drop = TRUE)
+)
+
+higgins <- dlcast(higgins.melt)
+@
+This new version of \code{higgins} has only two dimensions of replication, with \code{abundance} as a matrix and the environmental variables as one-dimensional vectors,
+<<summarise higgins with collapsed dimensions>>=
+summary(higgins)
+@
+We can now call \code{adonis} within an environment defined by \code{higgins},
+<<analysis of dissimilarities>>=
+library("vegan")
+dl.adonis <- with(higgins, adonis(
+  t(abundance) ~ width + temp + depth + velocity + substrate + habitat, 
+  strata = higgins$species
+))
+print(dl.adonis$aov.tab, signif.stars = FALSE)
+@
+The fact that \code{width} and \code{velocity} have significant effects indicate that these factors might be important in structuring these stream fish communities.  However, taken together with the previous results using Poisson generalised linear models, these results also indicate that these effects are not well understood in terms of the \code{life.history} trait.
+
+\section{Conclusion}
+
+The structure of \code{data.list} objects is sufficiently rich to give rise to a wider variety of uses than can be described in detail here.  Our intention was to illustrate the basic features and concepts of the \pkg{multitable} package, and to demonstrate its utility.  Our long-term goal with the \pkg{multitable} project in general is to make standard analyses in \proglang{R} simpler to conduct on complex multiple-table data.
+
+\section*{Acknowledgements}
+We thank Laura Timms and two anonymous reviewers for helpful comments on an earlier version of the manuscript; Levi Waldron, Ben Bolker, and Philip Dixon for discussions and suggestions about software design; and Beatrix Beisner for discussions about biology.  We also thank \citet{Higgins2009} for making his data freely available.
+
+%\bibliographystyle{jss}
+\bibliography{multitable}
+
+\end{document}
+
+%\section[About Java]{About \proglang{Java}}
+%% Note: If there is markup in \(sub)section, then it has to be escape as above.

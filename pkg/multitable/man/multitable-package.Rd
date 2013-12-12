@@ -3,9 +3,23 @@
 \alias{multitable}
 \docType{package}
 \title{Simultaneous manipulation of multiple arrays of data, with data.list objects}
-\description{
-Data frames are integral to \code{R}.  They provide a standard format for passing data to model-fitting and plotting functions, and this standard makes it easier for experienced users to learn new functions that accept data as a single data frame.  Still, many data sets do not easily fit into a single data frame; data sets in ecology with a so-called fourth-corner problem provide important examples.  Manipulating such inherently multiple-table data using several data frames can result in long and difficult-to-read workflows.  We introduce the \code{R} \pkg{multitable} package to provide new data storage objects called \code{data.list} objects, which extend the \code{data.frame} concept to explicitly multiple-table settings.  Like data frames, data lists are lists of variables stored as vectors; what is new is that these vectors have dimension attributes that make accessing and manipulating them easier.  As \code{data.list} objects can be coerced to \code{data.frame} objects, they can be used with all \code{R} functions that accept an object that is coercible to a \code{data.frame}.	
-}
+\description{ Data frames are integral to \code{R}.  They provide a
+standard format for passing data to model-fitting and plotting
+functions, and this standard makes it easier for experienced users to
+learn new functions that accept data as a single data frame.  Still,
+many data sets do not easily fit into a single data frame; data sets
+in ecology with a so-called fourth-corner problem provide important
+examples.  Manipulating such inherently multiple-table data using
+several data frames can result in long and difficult-to-read
+workflows.  We introduce the \code{R} \pkg{multitable} package to
+provide new data storage objects called \code{data.list} objects,
+which extend the \code{data.frame} concept to explicitly
+multiple-table settings.  Like data frames, data lists are lists of
+variables stored as vectors; what is new is that these vectors have
+dimension attributes that make accessing and manipulating them easier.
+As \code{data.list} objects can be coerced to \code{data.frame}
+objects, they can be used with all \code{R} functions that accept an
+object that is coercible to a \code{data.frame}.  }
 \details{
 \tabular{ll}{
 Package: \tab multitable\cr
@@ -18,15 +32,17 @@ URL: \tab \url{http://multitable.r-forge.r-project.org/}\cr
 LazyLoad: \tab yes\cr
 }
 }
-\note{
-Using \pkg{multitable} DOES NOT REQUIRE ANY OTHER PACKAGES, other than those that typically come with \code{R}.  The suggested packages are only for examples in the help files and vignette, and for package development (i.e. \pkg{testthat}).
-}
+\note{ Using \pkg{multitable} DOES NOT REQUIRE ANY OTHER PACKAGES,
+other than those that typically come with \code{R}.  The suggested
+packages are only for examples in the help files and vignette, and for
+package development (i.e. \pkg{testthat}).  }
 \author{
 Maintainer: Steve Walker <steve.walker@utoronto.ca>
 }
-\references{
-Steven C Walker, Guillaume Guenard, Peter Solymos, Pierre Legendre (2012). Multiple-Table Data in R with the multitable Package. Journal of Statistical Software, 51(8), 1-38. URL \url{http://www.jstatsoft.org/v51/i08/}
-}
+\references{ Steven C Walker, Guillaume Guenard, Peter Solymos, Pierre
+Legendre (2012). Multiple-Table Data in R with the multitable
+Package. Journal of Statistical Software, 51(8), 1-38. URL
+\url{http://www.jstatsoft.org/v51/i08/} }
 \keyword{ package }
 \examples{
 ######################################################
