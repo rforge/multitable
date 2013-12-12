@@ -12,6 +12,8 @@
 \usepackage{rotating}
 %\usepackage{lineno}
 
+%\VignetteIndexEntry{multitable}
+
 \usetikzlibrary{positioning,petri}
 
 %% almost as usual
