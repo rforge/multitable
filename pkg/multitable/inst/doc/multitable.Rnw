@@ -1,4 +1,0 @@
-%\VignetteIndexEntry{Multiple table data in R}
-\documentclass{article}
-\begin{document}
-\end{document} 
