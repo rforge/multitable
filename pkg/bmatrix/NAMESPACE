@@ -1,2 +1,4 @@
 export(bdmatrix)
 export(bmatrix)
+export(cbind.rep)
+export(rbind.rep)

@@ -25,6 +25,16 @@ r4norm <- function(n, ...) lapply(1:n, function(i) r4norm1(...))
 
 #' @rdname r4norm
 #' @export
+r4normstd <- function(n, rowsResp, colsResp, rowsPred, colsPred){
+    C <- matrix(rnorm((rowsPred+1)*(colsPred+1)), rowsPred+1, colsPred+1)
+    U <- matrix(rnorm(rowsResp*rowsPred), rowsResp, rowsPred)
+    V <- matrix(rnorm(colsResp*colsPred), colsResp, colsPred)
+    r4norm(n, C = C, U = U, V = V)
+}    
+    
+
+#' @rdname r4norm
+#' @export
 r4norm1 <- function(C, U, V, Omega, Sigma, Phi, Psi){
 	
 	p <- nrow(C) - 1

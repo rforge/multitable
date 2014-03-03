@@ -125,7 +125,7 @@ sdlapply <- function(X, MARGIN, FUN, simplify = TRUE, ...){
 
 variable_margins <- function(X, MARGIN){
 	
-	dimids.in <- multitable:::dimids(X)
+	dimids.in <- dimids(X)
 	dimids.out <- dimids.in[MARGIN]
 	match.dimids <- attr(X, "match.dimids")
 	

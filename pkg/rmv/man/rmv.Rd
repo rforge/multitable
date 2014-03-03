@@ -2,8 +2,7 @@
 \alias{rmv}
 \title{Multivariate random number generation}
 \usage{
-  rmv(n, covmat, rfunc = rnorm,
-    method = c("chol", "eigen"), ...)
+rmv(n, covmat, rfunc = rnorm, method = c("chol", "eigen"), ...)
 }
 \arguments{
   \item{n}{Number of random multivariate draws.}
@@ -24,21 +23,21 @@
   \item{...}{Further arguments to pass to \code{rfunc}.}
 }
 \value{
-  A matrix with rows giving observations and columns giving
-  correlated variables.
+A matrix with rows giving observations and columns giving
+correlated variables.
 }
 \description{
-  Generates correlated random variables by the matrix
-  square-root method.
+Generates correlated random variables by the matrix
+square-root method.
 }
 \details{
-  The number, \code{m}, of variables generated per each of
-  the \code{n} observations is equal to the number of rows
-  (or columns) of \code{covmat}.  \code{rfunc} is used to
-  fill an \code{n} by \code{m} matrix of uncorrelated
-  observations.  This matrix is multiplied by the matrix
-  square-root (\code{\link{msr}}) to obtain a matrix of
-  \code{m} correlated random variables.
+The number, \code{m}, of variables generated per each of
+the \code{n} observations is equal to the number of rows
+(or columns) of \code{covmat}.  \code{rfunc} is used to
+fill an \code{n} by \code{m} matrix of uncorrelated
+observations.  This matrix is multiplied by the matrix
+square-root (\code{\link{msr}}) to obtain a matrix of
+\code{m} correlated random variables.
 }
 \examples{
 set.seed(1)

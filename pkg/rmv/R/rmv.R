@@ -115,3 +115,22 @@ rfa <- function(n, Lambda, psi){
 #' @export
 rcov <- function(n, m, rfunc = rnorm, ...)
 	cov(matrix(rfunc(n * m, ...), n, m))
+
+##' Bivariate random number generation
+##'
+##' @param n Number of bivariate samples.
+##' @param rho Correlation between variables.
+##' @param mu Means for each variable.
+##' @param sigma standard deviations for each variable.
+##' @param rfunc Function that returns a vector of random draws from a
+##'      particular distribution.  The first argument of \code{rfunc} must
+##'      give the number of random draws to make.
+##' @return A bivariate sample.
+##' @export
+rbv <- function(n, rho, mu = c(0,0),
+                sigma = c(1,1), ...){
+    
+    cm <- diag(sigma^2)
+    cm[1,2] <- cm[2,1] <- rho
+    sweep(rmv(n, cm, ...), 2, mu)
+}    

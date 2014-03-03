@@ -1,5 +1,5 @@
 phi <-
-function(theta,l,m,sel.curve){
+function(theta,l,m,sel.curve,effort=NULL){
 	
 	#######################################################################
 	#
@@ -19,10 +19,9 @@ function(theta,l,m,sel.curve){
 	#######################################################################
 	
 	omega <- exp(theta[1])/(1+exp(theta[1]))
-	#omega <- theta[1]
 	theta <- theta[-1]
 	r <- sel.curve()$curv(l,m,theta)
 	r[(r<omega)&(l>sel.curve()$peak(m,theta))] <- omega
+        if(!is.null(effort)) r <- r*cbind.rep(effort,nrow(r))
 	sweep(r,1,rowSums(r,na.rm=TRUE),"/")
 }
-

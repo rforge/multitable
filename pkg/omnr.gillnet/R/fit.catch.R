@@ -75,11 +75,11 @@
 #'
 fit.catch <-
 function(catch, sel.curve = norm.loc, tangle = TRUE, perimeter.factor = 1, 
-	tol = 1e-8, omega0 = 0.1){
+	tol = 1e-8, omega0 = 0.1, effort = NULL){
 	
 	# store the command used to call fit.catch()
 	mc <- match.call()
-	
+        
 	# organize data
 	y <- vecy <- catch$counts	
 	lens <- catch$lens
@@ -89,9 +89,18 @@ function(catch, sel.curve = norm.loc, tangle = TRUE, perimeter.factor = 1,
 	l <- vecl <- cbind.rep(lens, n.mesh) # lens%x%t(rep(1,n.mesh))
 	m <- vecm <- rbind.rep(mesh, n.lens) # rep(1,n.lens)%x%t(mesh)
 	dimnames(l) <- dimnames(m) <- list(lens, mesh)
-	
+
+        # process effort if necessary
+        if(!is.null(NULL)){
+          if(any(effort<0)) stop("effort must be non-negative")
+          veceffort <- cbind.rep(effort/sum(effort), n.mesh)
+        }
+        else{
+          veceffort <- matrix(1/n.mesh,n.lens,n.mesh)
+        }
+        
 	# put counts in vector form, which is required by glm
-	attr(vecy,"dim") <- attr(vecl,"dim") <- attr(vecm,"dim") <- NULL 
+	attr(vecy,"dim") <- attr(vecl,"dim") <- attr(vecm,"dim") <- attr(veceffort,"dim") <- NULL 
 	
 	### DON'T USE THIS LITTLE CODE BIT ANYMORE ##########################
 	# calculate saturated model deviance terms (i.e. deviances for which
@@ -113,10 +122,10 @@ function(catch, sel.curve = norm.loc, tangle = TRUE, perimeter.factor = 1,
 	f0 <- as.factor(vecl)
 	f1 <- f$f1; f2 <- f$f2
 	f3 <- sel.curve()$off(vecl,vecm)
-	
+        
 	# fit the log-linear model
-	vecy.glm <- glm(vecy ~ -1 + f1 + f2 + f0 + offset(f3), family = poisson)
-	vecy.qglm <- glm(vecy ~ -1 + f1 + f2 + f0 + offset(f3), family = quasipoisson)
+	vecy.glm <- glm(vecy ~ -1 + f1 + f2 + f0 + offset(f3 + log(veceffort)), family = poisson)
+	vecy.qglm <- glm(vecy ~ -1 + f1 + f2 + f0 + offset(f3 + log(veceffort)), family = quasipoisson)
 
 	# store information about the fitted log-linear model
 	b1 <- vecy.glm$coefficients[1]  # correspond to millar's (1999) beta 1

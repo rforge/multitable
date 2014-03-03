@@ -2,7 +2,7 @@
 \alias{msr}
 \title{Square matrix square-root}
 \usage{
-  msr(sqrmat, method = c("chol", "eigen"))
+msr(sqrmat, method = c("chol", "eigen"))
 }
 \arguments{
   \item{sqrmat}{A square matrix.}
@@ -11,13 +11,13 @@
   square-root.}
 }
 \value{
-  The matrix square-root.
+The matrix square-root.
 }
 \description{
-  Calculate the square-root of a square matrix.
+Calculate the square-root of a square matrix.
 }
 \details{
-  A square-root, \code{S}, of a square matrix, \code{M},
-  satisfies, \code{M = t(S) \%*\% S}.
+A square-root, \code{S}, of a square matrix, \code{M},
+satisfies, \code{M = t(S) \%*\% S}.
 }
 

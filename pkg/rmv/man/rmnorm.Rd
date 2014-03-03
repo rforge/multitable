@@ -3,10 +3,10 @@
 \alias{rmnorm1}
 \title{Matrix normal distribution}
 \usage{
-  rmnorm(n, ...)
+rmnorm(n, ...)
 
-  rmnorm1(M, Omega = diag(1, ncol(M), ncol(M)),
-    Sigma = diag(1, nrow(M), nrow(M)))
+rmnorm1(M, Omega = diag(1, ncol(M), ncol(M)), Sigma = diag(1, nrow(M),
+  nrow(M)))
 }
 \arguments{
   \item{M}{Mean matrix.}
@@ -20,13 +20,13 @@
   \item{...}{Arguments to be passed to \code{rmnorm1}.}
 }
 \value{
-  Random matrix or a list of i.i.d. random matrices.
+Random matrix or a list of i.i.d. random matrices.
 }
 \description{
-  Simulate random matrix normal variates.
+Simulate random matrix normal variates.
 }
 \details{
-  \code{rmnorm} generates a list of \code{n} matrices,
-  whereas \code{rmnorm1} generates one matrix.
+\code{rmnorm} generates a list of \code{n} matrices,
+whereas \code{rmnorm1} generates one matrix.
 }
 

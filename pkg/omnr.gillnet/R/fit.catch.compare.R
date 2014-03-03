@@ -46,14 +46,14 @@
 #'fms
 #'plot(fms)
 #'
-fit.catch.compare <- function(catch, perimeter.factor = 1, tol = 1e-8, omega0 = 0.1){
+fit.catch.compare <- function(catch, perimeter.factor = 1, tol = 1e-8, omega0 = 0.1, effort = NULL){
 	
 	data(sel.curves, package = 'omnr.gillnet')
 	
 	# fit all models in sel.curves
 	fits <- lapply(sel.curves, function(x)
 		fit.catch(catch, eval(x),
-			perimeter.factor = perimeter.factor, omega0 = omega0
+			perimeter.factor = perimeter.factor, omega0 = omega0, effort = effort
 		)
 	)
 	names(fits) <- sapply(sel.curves, deparse)

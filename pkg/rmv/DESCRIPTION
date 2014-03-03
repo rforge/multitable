@@ -8,7 +8,3 @@ Maintainer: Steve Walker <steve.walker@utoronto.ca>
 Description: Package for making multivariate random draws.
 License: GPL-2
 LazyLoad: yes
-Collate:
-    'rmv.R'
-    'rmnorm.R'
-    'r4norm.R'

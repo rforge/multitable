@@ -1201,4 +1201,6 @@ fd.est.sim.cor <- function(m, q, q.step.size = 2, a.grid.size = 101){
 	return(simplify2array(cors))
 }
 
-
+#' @export
+rposta <- function(n, surf)
+  sample(surf$a, n, TRUE, surf$posterior)

@@ -630,3 +630,22 @@ test_that("bm attribute gets renamed properly when variables are renamed",{
 	names(bm2) <- 'A'
 	expect_that(bm1, equals(bm2))
 })
+
+test_that("no benchmark per se",{
+    library(multitable)
+    a <- data.frame(a = 1:5,  n = letters[1:5], m = rep("A",5))
+    b <- data.frame(b = 6:10, n = rep("a",5), m = LETTERS[1:5])
+    data.list(a = 1:5, b = 1:3, c = sparseMatrix(i=1,j=1,x=0,dims=c(10,5)))
+    dlcast(list(a,b))
+})
+
+test_that("reorder2 works",{
+    library(multitable)
+    vect <- 1:15
+    char <- as.character(vect)
+    fac1 <- as.factor(vect)
+    fac2 <- as.factor(char)
+    fac3 <- reorder2(fac2, char)
+    expect_equal(fac1, fac3)
+    ## expect_false(all.equal(fac1, fac2)) ## FIXME:  get negative case working with testthat
+})

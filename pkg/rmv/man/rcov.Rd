@@ -2,7 +2,7 @@
 \alias{rcov}
 \title{Random covariance matrices}
 \usage{
-  rcov(n, m, rfunc = rnorm, ...)
+rcov(n, m, rfunc = rnorm, ...)
 }
 \arguments{
   \item{n}{Number of multivariate samples.}
@@ -17,12 +17,11 @@
   \item{...}{Additional arguments to \code{rfunc}.}
 }
 \value{
-  A covariance matrix.
+A covariance matrix.
 }
 \description{
-  Simulate random covariance matrices by samping an
-  \code{n} by \code{m} matrix of iid variates from
-  \code{rfunc} and then passing that matrix to
-  \code{\link{cov}}.
+Simulate random covariance matrices by samping an \code{n}
+by \code{m} matrix of iid variates from \code{rfunc} and
+then passing that matrix to \code{\link{cov}}.
 }
 

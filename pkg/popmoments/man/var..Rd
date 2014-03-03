@@ -16,4 +16,9 @@
 \description{
   Variance of a vector giving the elements of a population.
 }
+\examples{
+# Note the difference between population and sample variance
+ var.(1:10)
+ var(1:10)
+}
 

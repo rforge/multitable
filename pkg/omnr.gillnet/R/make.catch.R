@@ -70,8 +70,9 @@ function(mesh, lens, counts, binsize=20, data.name = deparse(substitute(lens))){
 	else{
 		if(binsize!=20)warning("supplied binsize not used because counts is provided")
 		if(length(lens)!=dim(counts)[1])stop("counts must have as many rows as elements in size")
-		if(length(mesh)!=dim(counts)[2])stop("counts must have as many columns as elements in mesh")		
-		output <- list(counts=counts,lens=lens,mesh=meshes,data.name=data.name)
+		if(length(mesh)!=dim(counts)[2])stop("counts must have as many columns as elements in mesh")
+                
+		output <- list(counts=counts,lens=lens,mesh=mesh,data.name=data.name)
 	}
 	
 	class(output) <- "catch"

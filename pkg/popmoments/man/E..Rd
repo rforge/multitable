@@ -17,4 +17,8 @@
   Expectation of a vector giving the elements of a
   population.
 }
+\examples{
+E.(1:10)
+ E.(1:10, 10:1)
+}
 
