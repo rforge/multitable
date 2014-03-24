@@ -12,10 +12,10 @@
 The \code{yellow.perch}, \code{walleye}, and \code{north.pike} datasets each
 contain 6033, 13534, and 2948 observations (i.e. fish) respectively.}
 \source{
-  Ontario Ministry of Natural Resources
+Ontario Ministry of Natural Resources
 }
 \description{
-  Yellow Perch, Walleye, and Northern Pike gillnet data.
+Yellow Perch, Walleye, and Northern Pike gillnet data.
 }
 \examples{
 data(yellow.perch)

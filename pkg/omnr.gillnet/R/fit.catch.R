@@ -45,17 +45,18 @@
 #'@param omega0 initial value for the tangle parameter
 #'@param digits number of digits to round to
 #'@param \dots additional arguments to be passed
+#'@param effort TODO (sorry!)
 #'@return An object of class \code{fit.catch} with components:
-#'@returnItem catch the original \code{catch} object
-#'@returnItem sel.curve the original selection curve
-#'@returnItem theta the fitted parameters of the selection curve
-#'@returnItem mu the fitted values
-#'@returnItem res the deviance residuals (see Millar and Fryer 1999)
-#'@returnItem dev model deviance(s)
-#'@returnItem tangle TRUE if tangle parameter fitted, FALSE otherwise
-#'@returnItem call the matched call
-#'@returnItem l the 'length matrix'.
-#'@returnItem m the 'mesh matrix' (with input mesh sizes multiplied by \code{perimeter.factor}).
+#'@return catch the original \code{catch} object
+#'@return sel.curve the original selection curve
+#'@return theta the fitted parameters of the selection curve
+#'@return mu the fitted values
+#'@return res the deviance residuals (see Millar and Fryer 1999)
+#'@return dev model deviance(s)
+#'@return tangle TRUE if tangle parameter fitted, FALSE otherwise
+#'@return call the matched call
+#'@return l the 'length matrix'.
+#'@return m the 'mesh matrix' (with input mesh sizes multiplied by \code{perimeter.factor}).
 #'@author Steve Walker
 #'@export
 #'@references J.F. Bromaghin (2005) A versatile net selectivity model, with

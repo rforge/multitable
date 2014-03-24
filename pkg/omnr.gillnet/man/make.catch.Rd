@@ -3,14 +3,13 @@
 \alias{plot.catch}
 \title{Create dataset of class \code{catch}}
 \usage{
-  make.catch(mesh, lens, counts, binsize = 20,
-    data.name = deparse(substitute(lens)))
+make.catch(mesh, lens, counts, binsize = 20,
+  data.name = deparse(substitute(lens)))
 
-  \method{plot}{catch} (x, y, mesh.pos = "topleft",
-    y.incr = 200, cex.mesh = 1, cex.fork = 1,
-    cex.main = 1.5, cex.xaxis = 1, cex.yaxis = 1,
-    mar = c(1, 4, 0, 1), oma = c(4, 0, 4, 0),
-    line.fork = 2, line.main = 2, ...)
+\method{plot}{catch}(x, y, mesh.pos = "topleft", y.incr = 200,
+  cex.mesh = 1, cex.fork = 1, cex.main = 1.5, cex.xaxis = 1,
+  cex.yaxis = 1, mar = c(1, 4, 0, 1), oma = c(4, 0, 4, 0),
+  line.fork = 2, line.main = 2, ...)
 }
 \arguments{
   \item{mesh}{a vector of gillnet mesh sizes (one for each
@@ -63,29 +62,28 @@
   \code{\link{par}}.}
 }
 \value{
-  An object of class \code{catch} with components:
+An object of class \code{catch} with components:
 
-  \item{counts}{a number-of-length-bins by
-  number-of-mesh-sizes matrix of fish counts.}
+counts a number-of-length-bins by number-of-mesh-sizes
+matrix of fish counts.
 
-  \item{lens}{a vector of the mid-point lengths
-  corresponding to the rows of counts (note difference
-  between input lens).}
+lens a vector of the mid-point lengths corresponding to the
+rows of counts (note difference between input lens).
 
-  \item{mesh}{a vector of the raw (i.e. uncorrected by
-  \code{perimeter.factor} in \code{\link{fit.catch}}) mesh
-  sizes corresponding to the columns of counts (note
-  difference between input mesh).}
+mesh a vector of the raw (i.e. uncorrected by
+\code{perimeter.factor} in \code{\link{fit.catch}}) mesh
+sizes corresponding to the columns of counts (note
+difference between input mesh).
 }
 \description{
-  Creates \code{catch} objects out of information on
-  gillnet catches.  These objects are required for use with
-  the software in this package.
+Creates \code{catch} objects out of information on gillnet
+catches.  These objects are required for use with the
+software in this package.
 }
 \author{
-  Steve Walker
+Steve Walker
 }
 \seealso{
-  \code{\link{fit.catch}}, \code{\link{plot.catch}}
+\code{\link{fit.catch}}, \code{\link{plot.catch}}
 }
 

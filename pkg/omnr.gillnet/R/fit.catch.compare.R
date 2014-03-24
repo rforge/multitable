@@ -23,13 +23,14 @@
 #'number the number of zero fitted counts
 #'@param omega0 initial value for the tangle parameter
 #'@param digits number of digits to round to
+#'@param effort TODO (sorry!)
 #'@param \dots additional arguments to be passed
 #'@return An object of class \code{fit.catch.compare} with components:
-#'@returnItem norm.loc \code{fit.catch} object using the \code{norm.loc} selection curve
-#'@returnItem norm \code{fit.catch} object using the \code{norm} selection curve
-#'@returnItem lognorm \code{fit.catch} object using the \code{lognorm} selection curve
-#'@returnItem gamm \code{fit.catch} object using the \code{gamm} selection curve
-#'@returnItem inv.gau \code{fit.catch} object using the \code{inv.gau} selection curve
+#'@return norm.loc \code{fit.catch} object using the \code{norm.loc} selection curve
+#'@return norm \code{fit.catch} object using the \code{norm} selection curve
+#'@return lognorm \code{fit.catch} object using the \code{lognorm} selection curve
+#'@return gamm \code{fit.catch} object using the \code{gamm} selection curve
+#'@return inv.gau \code{fit.catch} object using the \code{inv.gau} selection curve
 #'@author Steve Walker
 #'@export
 #'@references J.F. Bromaghin (2005) A versatile net selectivity model, with

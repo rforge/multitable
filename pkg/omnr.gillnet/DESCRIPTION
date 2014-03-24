@@ -10,16 +10,3 @@ Description: Gillnet size selectivity analyses for Ontario
 License: GPL-2
 LazyLoad: yes
 LazyData: yes
-Collate:
-    'bind.rep.R'
-    'fish.bins.R'
-    'fit.catch.compare.R'
-    'fit.catch.R'
-    'getSelcurve.R'
-    'make.catch.R'
-    'multdev.R'
-    'omnr.gillnet-package.R'
-    'phi.R'
-    'summary.R'
-    'sel.curves.R'
-    'get.R'

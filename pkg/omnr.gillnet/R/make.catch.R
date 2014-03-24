@@ -27,11 +27,11 @@
 #'@param line.main line for the main title.
 #'@param \dots additional arguments to pass to \code{\link{par}}.
 #'@return An object of class \code{catch} with components:
-#'@returnItem counts a number-of-length-bins by number-of-mesh-sizes matrix of
+#'@return counts a number-of-length-bins by number-of-mesh-sizes matrix of
 #'fish counts.
-#'@returnItem lens a vector of the mid-point lengths corresponding to the rows
+#'@return lens a vector of the mid-point lengths corresponding to the rows
 #'of counts (note difference between input lens).
-#'@returnItem mesh a vector of the raw (i.e. uncorrected by \code{perimeter.factor}
+#'@return mesh a vector of the raw (i.e. uncorrected by \code{perimeter.factor}
 #'in \code{\link{fit.catch}}) mesh sizes corresponding to the columns of counts 
 #'(note difference between input mesh).  
 #'@author Steve Walker

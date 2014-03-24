@@ -8,28 +8,24 @@
 \alias{print.fit.catch}
 \title{Fit catch data to size-selectivity models}
 \usage{
-  fit.catch(catch, sel.curve = norm.loc, tangle = TRUE,
-    perimeter.factor = 1, tol = 1e-08, omega0 = 0.1)
+fit.catch(catch, sel.curve = norm.loc, tangle = TRUE,
+  perimeter.factor = 1, tol = 1e-08, omega0 = 0.1, effort = NULL)
 
-  \method{AIC}{fit.catch} (object, corrected = TRUE, ...,
-    k = 2)
+\method{AIC}{fit.catch}(object, corrected = TRUE, ..., k = 2)
 
-  \method{coef}{fit.catch} (object, ...)
+\method{coef}{fit.catch}(object, ...)
 
-  \method{coefficients}{fit.catch} (object, ...)
+\method{coefficients}{fit.catch}(object, ...)
 
-  \method{print}{fit.catch} (x,
-    digits = max(3, getOption("digits") - 3), ...)
+\method{print}{fit.catch}(x, digits = max(3, getOption("digits") - 3), ...)
 
-  \method{plot}{fit.catch} (x, y,
-    xlab = "Fork length (mm)",
-    ylab = "Relative selection probability",
-    resolution = 500,
-    plot.type = c("selcurve", "totalselcurve", "residuals", "observedvrsexpected"),
-    max.cex = 2, min.cex = 0.5, leg.pos = "topleft",
-    data.name = NULL, justtangle = TRUE, ...)
+\method{plot}{fit.catch}(x, y, xlab = "Fork length (mm)",
+  ylab = "Relative selection probability", resolution = 500,
+  plot.type = c("selcurve", "totalselcurve", "residuals",
+  "observedvrsexpected"), max.cex = 2, min.cex = 0.5, leg.pos = "topleft",
+  data.name = NULL, justtangle = TRUE, ...)
 
-  \method{deviance}{fit.catch} (object, ...)
+\method{deviance}{fit.catch}(object, ...)
 }
 \arguments{
   \item{catch}{an object of class \code{catch} created
@@ -102,40 +98,39 @@
   \item{digits}{number of digits to round to}
 
   \item{\dots}{additional arguments to be passed}
+
+  \item{effort}{TODO (sorry!)}
 }
 \value{
-  An object of class \code{fit.catch} with components:
+An object of class \code{fit.catch} with components:
 
-  \item{catch}{the original \code{catch} object}
+catch the original \code{catch} object
 
-  \item{sel.curve}{the original selection curve}
+sel.curve the original selection curve
 
-  \item{theta}{the fitted parameters of the selection
-  curve}
+theta the fitted parameters of the selection curve
 
-  \item{mu}{the fitted values}
+mu the fitted values
 
-  \item{res}{the deviance residuals (see Millar and Fryer
-  1999)}
+res the deviance residuals (see Millar and Fryer 1999)
 
-  \item{dev}{model deviance(s)}
+dev model deviance(s)
 
-  \item{tangle}{TRUE if tangle parameter fitted, FALSE
-  otherwise}
+tangle TRUE if tangle parameter fitted, FALSE otherwise
 
-  \item{call}{the matched call}
+call the matched call
 
-  \item{l}{the 'length matrix'.}
+l the 'length matrix'.
 
-  \item{m}{the 'mesh matrix' (with input mesh sizes
-  multiplied by \code{perimeter.factor}).}
+m the 'mesh matrix' (with input mesh sizes multiplied by
+\code{perimeter.factor}).
 }
 \description{
-  First fits selection curves by log-linear fitting using
-  \code{\link{glm}} and then (if tangle is TRUE) uses the
-  SELECT method (of Millar 1992) to fit a slightly modified
-  model with a tangle parameter (see Bromaghin 2005 for the
-  concept of tangle parameters).
+First fits selection curves by log-linear fitting using
+\code{\link{glm}} and then (if tangle is TRUE) uses the
+SELECT method (of Millar 1992) to fit a slightly modified
+model with a tangle parameter (see Bromaghin 2005 for the
+concept of tangle parameters).
 }
 \examples{
 data(north.pike)
@@ -145,16 +140,15 @@ plot(np)
 plot(np.fit)
 }
 \author{
-  Steve Walker
+Steve Walker
 }
 \references{
-  J.F. Bromaghin (2005) A versatile net selectivity model,
-  with application to Pacific salmon and freshwater species
-  of the Yukon River, Alaska. Fisheries Research 74:
-  157-168.
+J.F. Bromaghin (2005) A versatile net selectivity model,
+with application to Pacific salmon and freshwater species
+of the Yukon River, Alaska. Fisheries Research 74: 157-168.
 
-  R.B. Millar & R.J. Fryer (1999) Estimating the
-  size-selection curves of towed gears, traps, nets and
-  hooks. Reviews in Fish Biology and Fisheries 9: 89-116.
+R.B. Millar & R.J. Fryer (1999) Estimating the
+size-selection curves of towed gears, traps, nets and
+hooks. Reviews in Fish Biology and Fisheries 9: 89-116.
 }
 

@@ -8,20 +8,20 @@
 \alias{summary.fit.catch.compare}
 \title{Fit catch data to several size-selectivity models}
 \usage{
-  fit.catch.compare(catch, perimeter.factor = 1,
-    tol = 1e-08, omega0 = 0.1)
+fit.catch.compare(catch, perimeter.factor = 1, tol = 1e-08, omega0 = 0.1,
+  effort = NULL)
 
-  \method{deviance}{fit.catch.compare} (object, ...)
+\method{deviance}{fit.catch.compare}(object, ...)
 
-  \method{AIC}{fit.catch.compare} (object, ..., k = 2)
+\method{AIC}{fit.catch.compare}(object, ..., k = 2)
 
-  \method{print}{fit.catch.compare} (x,
-    digits = max(3, getOption("digits") - 3), ...)
+\method{print}{fit.catch.compare}(x, digits = max(3, getOption("digits") - 3),
+  ...)
 
-  \method{plot}{fit.catch.compare} (x, y, ...)
+\method{plot}{fit.catch.compare}(x, y, ...)
 
-  \method{summary}{fit.catch.compare} (object,
-    l = get.lens(object), m = get.mesh(object), ...)
+\method{summary}{fit.catch.compare}(object, l = get.lens(object),
+  m = get.mesh(object), ...)
 }
 \arguments{
   \item{catch}{an object of class \code{catch} created
@@ -54,6 +54,8 @@
 
   \item{digits}{number of digits to round to}
 
+  \item{effort}{TODO (sorry!)}
+
   \item{\dots}{additional arguments to be passed}
 
   \item{l}{Lengths}
@@ -61,27 +63,27 @@
   \item{m}{Mesh sizes}
 }
 \value{
-  An object of class \code{fit.catch.compare} with
-  components:
+An object of class \code{fit.catch.compare} with
+components:
 
-  \item{norm.loc}{\code{fit.catch} object using the
-  \code{norm.loc} selection curve}
+norm.loc \code{fit.catch} object using the \code{norm.loc}
+selection curve
 
-  \item{norm}{\code{fit.catch} object using the \code{norm}
-  selection curve}
+norm \code{fit.catch} object using the \code{norm}
+selection curve
 
-  \item{lognorm}{\code{fit.catch} object using the
-  \code{lognorm} selection curve}
+lognorm \code{fit.catch} object using the \code{lognorm}
+selection curve
 
-  \item{gamm}{\code{fit.catch} object using the \code{gamm}
-  selection curve}
+gamm \code{fit.catch} object using the \code{gamm}
+selection curve
 
-  \item{inv.gau}{\code{fit.catch} object using the
-  \code{inv.gau} selection curve}
+inv.gau \code{fit.catch} object using the \code{inv.gau}
+selection curve
 }
 \description{
-  Compare the fit of catch data to several size-selectivity
-  models fitted by \code{\link{fit.catch}}.
+Compare the fit of catch data to several size-selectivity
+models fitted by \code{\link{fit.catch}}.
 }
 \examples{
 np <- make.catch(north.pike$MESH, north.pike$FLEN)
@@ -90,16 +92,15 @@ fms
 plot(fms)
 }
 \author{
-  Steve Walker
+Steve Walker
 }
 \references{
-  J.F. Bromaghin (2005) A versatile net selectivity model,
-  with application to Pacific salmon and freshwater species
-  of the Yukon River, Alaska. Fisheries Research 74:
-  157-168.
+J.F. Bromaghin (2005) A versatile net selectivity model,
+with application to Pacific salmon and freshwater species
+of the Yukon River, Alaska. Fisheries Research 74: 157-168.
 
-  R.B. Millar & R.J. Fryer (1999) Estimating the
-  size-selection curves of towed gears, traps, nets and
-  hooks. Reviews in Fish Biology and Fisheries 9: 89-116.
+R.B. Millar & R.J. Fryer (1999) Estimating the
+size-selection curves of towed gears, traps, nets and
+hooks. Reviews in Fish Biology and Fisheries 9: 89-116.
 }
 
