@@ -1,5 +1,3 @@
-library(picante)
-
 #' Functional traits, phylogenies, communities, simulations
 #'
 #' Simulates the influence of functional traits and phylogenies on
@@ -7,8 +5,13 @@ library(picante)
 #' 
 #' @docType package
 #' @name funphylocom
+#' @import ape picante
 #' @aliases funphylocom package-funphylocom
 NULL
+
+#' should i use this ??
+#' http://stackoverflow.com/a/12429344/2047693
+if(getRversion() >= "2.15.1")  utils::globalVariables("pic3")
 
 #' Functional-phylogenetic community simulations
 #'
@@ -498,7 +501,12 @@ ConDivSim<-function(tab, Dist, Sim, Plot = TRUE, ord = TRUE, disp99 = FALSE){
 	
 	## Create the matrix in which to store the results
 	Randomiz <- matrix(0, length(SpRich), 11)
-	colnames(Randomiz)<-c("SpRich","ExpMeanMPD","ExpQ0.005MPD","ExpQ0.025MPD","ExpQ0.05MPD","ExpQ0.25MPD","ExpQ0.75MPD","ExpQ0.95MPD","ExpQ0.975MPD","ExpQ0.995MPD","ExpSdMPD")
+	colnames(Randomiz)<-c("SpRich","ExpMeanMPD",
+                              "ExpQ0.005MPD","ExpQ0.025MPD",
+                              "ExpQ0.05MPD","ExpQ0.25MPD",
+                              "ExpQ0.75MPD","ExpQ0.95MPD",
+                              "ExpQ0.975MPD","ExpQ0.995MPD",
+                              "ExpSdMPD")
 	row.names(Randomiz) <- 1:length(SpRich)
 	
 	## calculate the observed mean pairwise distance for the community
@@ -665,7 +673,12 @@ ConDivSimComm<-function(comm, PDist, FDist, Sim, p = 2,
 	
 	## Create the matrix in which to store the results
 	Randomiz<-matrix(0,length(a),12)
-	colnames(Randomiz)<-c("SpRich","ExpMeanMPD","ExpQ0.01MPD","ExpQ0.05MPD","ExpQ0.1MPD","ExpQ0.25MPD","ExpQ0.75MPD","ExpQ0.9MPD","ExpQ0.95MPD","ExpQ0.99MPD","ExpSdMPD","Obs,MPD")
+	colnames(Randomiz)<-c("SpRich","ExpMeanMPD",
+                              "ExpQ0.01MPD","ExpQ0.05MPD",
+                              "ExpQ0.1MPD","ExpQ0.25MPD",
+                              "ExpQ0.75MPD","ExpQ0.9MPD",
+                              "ExpQ0.95MPD","ExpQ0.99MPD",
+                              "ExpSdMPD","Obs,MPD")
 	row.names(Randomiz)<-1:length(a)
   
   
@@ -783,7 +796,8 @@ comm.traitgram <- function (x, phy, xaxt = "s", underscore = FALSE,
 	method = c("ace", "pic"), edge.color = c('black', 'light grey'), 
 	edge.lwd.in = 2, edge.lwd.out = 1, 
 	tip.color = c('black', 'light grey'), 
-	tip.cex = par("cex"), Group = NULL, ...)
+	tip.cex = par("cex"), Group = NULL,
+        name.jitter = 0, ...)
 {
 	
 	# comments indicate modifications to original traitgram function
@@ -899,7 +913,7 @@ comm.traitgram <- function (x, phy, xaxt = "s", underscore = FALSE,
     	## if no grouping, display normal tip labels
     	if(is.null(Group)){
         	text(
-        		sort(xx), max(ages), labels = names(xx)[order(xx)],
+        		sort(xx+name.jitter), max(ages), labels = names(xx)[order(xx)],
             	adj = -0, srt = 90, cex = tip.cex, col = tip.color[1])
 		}
 		## else if grouping, display tips with different colors 
@@ -909,12 +923,12 @@ comm.traitgram <- function (x, phy, xaxt = "s", underscore = FALSE,
 			tip.Group[Group] <- 1
 			tip.Group <- as.logical(tip.Group)
 			text(
-				sort(xx)[!tip.Group[order(xx)]],
+				sort(xx+name.jitter)[!tip.Group[order(xx)]],
 				max(ages), 
 				labels = names(xx)[order(xx)][!tip.Group[order(xx)]], 
 				adj = -0, srt = 90,cex = tip.cex, col = tip.color[2])
 			text(
-				sort(xx)[tip.Group[order(xx)]],
+				sort(xx+name.jitter)[tip.Group[order(xx)]],
 				max(ages),
 				labels = names(xx)[order(xx)][tip.Group[order(xx)]],
 				adj = -0, srt = 90, cex = tip.cex, col = tip.color[1])                            
@@ -985,49 +999,62 @@ FPDglm_ap <- function(ap, abundance.weighted = FALSE, ...){
 #' @param abundance.weighted Should mean pairwise distances be weighted
 #'  by species abundance? (default = FALSE).  Only relevant if 
 #'  \code{index = 'mpd'} and \code{tab} is an abundance matrix.
+#' @param saveGLMs Should GLMs for every point along the grid be saved as
+#'      an attribute, \code{glms}?
 #' @param ... Additional arguments to pass to \code{\link{FPDglm}}.
 #' @return TODO.
 #' @export
 FPDglm_grid <- function(tab, y, PDist, FDist, a = seq(0, 1, 0.01), 
-	p = 2, index = 'mpd', abundance.weighted = FALSE, ...){
+                        p = 2, index = 'mpd', abundance.weighted = FALSE,
+                        saveGLMs = FALSE, ...){
 	
-	aps <- merge(a, p)
-	glms <- lapply(as.data.frame(t(aps)),
-		FPDglm_ap,
-		tab = tab, y = y, 
-		PDist = PDist, FDist = FDist,
-		index = index, 
-		abundance.weighted = abundance.weighted, ...)
-	loglikes <- sapply(glms, logLik)
-	slopes <- sapply(glms, function(xx) xx$coefficients[2])
-	likelihood <- exp(loglikes - max(loglikes))
-	delta <- mean(diff(a))
-	posterior <- likelihood/(sum(delta*likelihood))
-	mean.a <- delta * sum(posterior * a)
-	mode.a <- a[which.max(posterior)]
-	var.a <- delta * sum(posterior * ((a - mean.a)^2))
-	surf <- data.frame(
-		a = aps$x, p = aps$y, # sorry for the x and y -- artifact of default merge behaviour
-		loglikes, slopes, posterior
-	)
-	out <- list(surf = surf, delta = delta,
-		mean.a = mean.a, mode.a = mode.a, var.a = var.a)
-	
-	class(out) <- 'FPDglm_grid'
-	return(out)
+    aps <- merge(a, p)
+    glms <- lapply(as.data.frame(t(aps)),
+                   FPDglm_ap,
+                   tab = tab, y = y, 
+                   PDist = PDist, FDist = FDist,
+                   index = index, 
+                   abundance.weighted = abundance.weighted, ...)
+    loglikes <- sapply(glms, logLik)
+    slopes <- sapply(glms, coef)[2]
+    likelihood <- exp(loglikes - max(loglikes))
+    delta <- mean(diff(a))
+    posterior <- likelihood/(sum(delta*likelihood))
+    mean.a <- delta * sum(posterior * a)
+    mode.a <- a[which.max(posterior)]
+    var.a <- delta * sum(posterior * ((a - mean.a)^2))
+    surf <- data.frame(
+        a = aps$x, p = aps$y, # sorry for the x and y -- artifact of default merge behaviour
+        loglikes, slopes, posterior)
+    out <- list(surf = surf, delta = delta,
+                mean.a = mean.a, mode.a = mode.a, var.a = var.a)
+    if(saveGLMs) attr(out, "glms") <- glms
+    class(out) <- 'FPDglm_grid'
+    return(out)
 }
 
 # TODO:  document this method!
 #'@export
 plot.FPDglm_grid <- function(x, y, ...){
-	xx <- x$surf$a
-	yy <- x$surf$posterior
+	## xx <- x$surf$a
+	## yy <- x$surf$posterior
 
-	plot(xx, yy, type = 'l', las = 1,
-		ylab = 'Posterior density',
-		xlab = 'Phylogenetic weighting parameter, a',
-		...)
-	rug(xx)
+	## plot(xx, yy, type = 'l', las = 1,
+	## 	ylab = 'Posterior density',
+	## 	xlab = 'Phylogenetic weighting parameter, a',
+	## 	...)
+	## rug(xx)
+    xlab <- expression(paste('Phylogenetic weighting parameter, ', italic(a)))
+    ylab <- 'Approximate posterior density'
+    ylim <- c(0, max(x$surf$posterior))
+    hpd <- with(x$surf, a.hpd(a, posterior))
+    par(mar = c(5, 5, 1, 1))
+    plot(posterior ~ a, data = x$surf,
+         las = 1, type = 'n',
+         xlab = xlab, ylab = ylab, ylim = ylim)
+    with(hpd, polygon(c(a, a[length(a):1]), c(posterior, rep(0, length(a))),
+                      col = grey(0.9), border = NA))
+    lines(posterior ~ a, data = x$surf)
 }
 
 
@@ -1201,6 +1228,5 @@ fd.est.sim.cor <- function(m, q, q.step.size = 2, a.grid.size = 101){
 	return(simplify2array(cors))
 }
 
-#' @export
 rposta <- function(n, surf)
   sample(surf$a, n, TRUE, surf$posterior)

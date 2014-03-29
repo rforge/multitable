@@ -2,7 +2,7 @@
 \alias{rao}
 \title{Rao's quadratic entropy}
 \usage{
-  rao(X, D, ord = TRUE)
+rao(X, D, ord = TRUE)
 }
 \arguments{
   \item{D}{A species by species distance matrix.}
@@ -14,10 +14,10 @@
   ordered.}
 }
 \value{
-  A vector of diversity indices (one for each site).
+A vector of diversity indices (one for each site).
 }
 \description{
-  Computes Rao's quadratic entropy from a distance matrix
-  and community matrix.
+Computes Rao's quadratic entropy from a distance matrix and
+community matrix.
 }
 

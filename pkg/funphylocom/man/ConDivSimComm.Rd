@@ -2,8 +2,8 @@
 \alias{ConDivSimComm}
 \title{Null models for (TODO:  better title)}
 \usage{
-  ConDivSimComm(comm, PDist, FDist, Sim, p = 2,
-    Plot = TRUE, ord = TRUE, disp99 = FALSE, num.a = 20)
+ConDivSimComm(comm, PDist, FDist, Sim, p = 2, Plot = TRUE, ord = TRUE,
+  disp99 = FALSE, num.a = 20)
 }
 \arguments{
   \item{comm}{A vector over the species in the regional
@@ -38,16 +38,16 @@
   \item{num.a}{Number of a-values to compute.}
 }
 \value{
-  TODO
+TODO
 }
 \description{
-  Check for a given community how the mean pairwise
-  distance changes with the parameter a in FPDist
+Check for a given community how the mean pairwise distance
+changes with the parameter a in FPDist
 }
 \details{
-  If \code{plot == TRUE}, then a surface is drawn giving
-  the null distribution.  Lighter shades of gray give
-  larger intervals with categories: 0.005-0.995 = 99\%,
-  0.025-0.975 = 95\%, 0.05-0.95 = 90\%, 0.25-0.75 = 50\%.
+If \code{plot == TRUE}, then a surface is drawn giving the
+null distribution.  Lighter shades of gray give larger
+intervals with categories: 0.005-0.995 = 99\%, 0.025-0.975
+= 95\%, 0.05-0.95 = 90\%, 0.25-0.75 = 50\%.
 }
 

@@ -2,7 +2,7 @@
 \alias{a.hpd}
 \title{Highest posterior density region for a}
 \usage{
-  a.hpd(a_grid, posterior, level = 0.95)
+a.hpd(a_grid, posterior, level = 0.95)
 }
 \arguments{
   \item{a_grid}{A vector of (preferably evenly spaced) 'a'
@@ -15,17 +15,17 @@
   region.}
 }
 \value{
-  A data frame with two columns: the values of the grid
-  within the hpd region and the value of the posterior at
-  each point in this grid.
+A data frame with two columns: the values of the grid
+within the hpd region and the value of the posterior at
+each point in this grid.
 }
 \description{
-  Find points on a grid within a 100\code{p}\% highest
-  posterior density region for the tuning parameter, a
+Find points on a grid within a 100\code{p}\% highest
+posterior density region for the tuning parameter, a
 }
 \details{
-  The 100\code{p}\% highest posterior density region for
-  'a' is the subset of the interval between 0 and 1, which
-  contains 100\code{p}\% of the probability.
+The 100\code{p}\% highest posterior density region for 'a'
+is the subset of the interval between 0 and 1, which
+contains 100\code{p}\% of the probability.
 }
 

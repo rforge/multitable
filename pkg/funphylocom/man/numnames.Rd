@@ -2,7 +2,7 @@
 \alias{numnames}
 \title{Generates numbered names}
 \usage{
-  numnames(n, prefix = "name")
+numnames(n, prefix = "name")
 }
 \arguments{
   \item{n}{Number of names.}
@@ -11,10 +11,10 @@
   numbers.}
 }
 \value{
-  A character vector of numbered names.
+A character vector of numbered names.
 }
 \description{
-  Generates numbered names based on a character prefix that
-  will be alphanumerically sorted as expected.
+Generates numbered names based on a character prefix that
+will be alphanumerically sorted as expected.
 }
 

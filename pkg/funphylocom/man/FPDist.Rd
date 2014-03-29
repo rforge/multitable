@@ -2,7 +2,7 @@
 \alias{FPDist}
 \title{Functional phylogenetic distance}
 \usage{
-  FPDist(PDist, FDist, a, p, ord = TRUE)
+FPDist(PDist, FDist, a, p, ord = TRUE)
 }
 \arguments{
   \item{PDist}{A phylogenetic distance matrix.}
@@ -19,15 +19,15 @@
   (defaults to \code{TRUE}).}
 }
 \value{
-  A distance matrix.
+A distance matrix.
 }
 \description{
-  Computates a functional phylogenetic distance matrix from
-  phylogenetic and functional distance matrices and two
-  weighting parameters.
+Computates a functional phylogenetic distance matrix from
+phylogenetic and functional distance matrices and two
+weighting parameters.
 }
 \note{
-  This function is not very user friendly yet.  There are
-  no doubt many use cases that I've ignored.
+This function is not very user friendly yet.  There are no
+doubt many use cases that I've ignored.
 }
 

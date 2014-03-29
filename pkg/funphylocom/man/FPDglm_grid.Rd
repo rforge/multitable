@@ -2,8 +2,8 @@
 \alias{FPDglm_grid}
 \title{Calculate  Grid search functional phylogenetic diversity generalised linear model}
 \usage{
-  FPDglm_grid(tab, y, PDist, FDist, a = seq(0, 1, 0.01),
-    p = 2, index = "mpd", abundance.weighted = FALSE, ...)
+FPDglm_grid(tab, y, PDist, FDist, a = seq(0, 1, 0.01), p = 2,
+  index = "mpd", abundance.weighted = FALSE, saveGLMs = FALSE, ...)
 }
 \arguments{
   \item{tab}{The community by species presence table.}
@@ -30,16 +30,18 @@
   Only relevant if \code{index = 'mpd'} and \code{tab} is
   an abundance matrix.}
 
+  \item{saveGLMs}{Should GLMs for every point along the
+  grid be saved as an attribute, \code{glms}?}
+
   \item{...}{Additional arguments to pass to
   \code{\link{FPDglm}}.}
 }
 \value{
-  TODO.
+TODO.
 }
 \description{
-  Calculate deviances over a grid of the phylogenetic
-  weighting parameter, a, for generalised linear models
-  using functional-phylogenetic diversity indices as
-  predictors.
+Calculate deviances over a grid of the phylogenetic
+weighting parameter, a, for generalised linear models using
+functional-phylogenetic diversity indices as predictors.
 }
 

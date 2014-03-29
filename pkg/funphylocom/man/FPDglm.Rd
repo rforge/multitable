@@ -2,8 +2,8 @@
 \alias{FPDglm}
 \title{Functional phylogenetic diversity generalised linear model}
 \usage{
-  FPDglm(tab, y, PDist, FDist, a, p = 2, index = "mpd",
-    abundance.weighted = FALSE, ...)
+FPDglm(tab, y, PDist, FDist, a, p = 2, index = "mpd",
+  abundance.weighted = FALSE, ...)
 }
 \arguments{
   \item{tab}{The community by species presence table.}
@@ -33,12 +33,12 @@
   \code{\link{glm}}.}
 }
 \value{
-  A \code{\link{glm}} object.
+A \code{\link{glm}} object.
 }
 \description{
-  Calculate a generalised linear model using
-  functional-phylogenetic diversity indices as predictors,
-  given a value for the phylogenetic weighting parameter,
-  \code{a}.
+Calculate a generalised linear model using
+functional-phylogenetic diversity indices as predictors,
+given a value for the phylogenetic weighting parameter,
+\code{a}.
 }
 

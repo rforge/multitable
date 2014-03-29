@@ -2,12 +2,11 @@
 \alias{comm.traitgram}
 \title{Community traitgram}
 \usage{
-  comm.traitgram(x, phy, xaxt = "s", underscore = FALSE,
-    show.names = TRUE, show.xaxis.values = TRUE,
-    method = c("ace", "pic"),
-    edge.color = c("black", "light grey"), edge.lwd.in = 2,
-    edge.lwd.out = 1, tip.color = c("black", "light grey"),
-    tip.cex = par("cex"), Group = NULL, ...)
+comm.traitgram(x, phy, xaxt = "s", underscore = FALSE, show.names = TRUE,
+  show.xaxis.values = TRUE, method = c("ace", "pic"),
+  edge.color = c("black", "light grey"), edge.lwd.in = 2,
+  edge.lwd.out = 1, tip.color = c("black", "light grey"),
+  tip.cex = par("cex"), Group = NULL, ...)
 }
 \arguments{
   \item{x}{See \code{\link{traitgram}}.}
@@ -46,18 +45,18 @@
   \code{\link{traitgram}}.}
 }
 \value{
-  No return value, but a traitgram is plotted.
+No return value, but a traitgram is plotted.
 }
 \description{
-  Displays a subset of species from a species pool within
-  an Ackerly traitgram (\code{\link{traitgram}}).
+Displays a subset of species from a species pool within an
+Ackerly traitgram (\code{\link{traitgram}}).
 }
 \details{
-  This function is a modification of the
-  \code{\link{traitgram}} function in the \code{picante}
-  package.
+This function is a modification of the
+\code{\link{traitgram}} function in the \code{picante}
+package.
 }
 \author{
-  David Ackerly, modified by Cecile Albert.
+David Ackerly, modified by Cecile Albert.
 }
 
