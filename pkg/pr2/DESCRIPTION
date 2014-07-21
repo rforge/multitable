@@ -1,0 +1,18 @@
+Package: pr2
+Depends:
+    abind,
+    vegan,
+    ggplot2
+Type: Package
+Title: Predictive R-squared
+Author: Steve Walker
+Maintainer: Steve Walker <steve.walker@utoronto.ca>
+Description: Tools for predictive R-square analysis
+License: GPL (>= 3)
+LazyLoad: yes
+URL: http://stevencarlislewalker.wordpress.com/
+Version: 0.1
+Date: 2013-03-05
+Collate:
+    'pr2-package.R'
+    'pr2.R'
