@@ -17,8 +17,8 @@
 #'@param tangle If TRUE, a tangle parameter is included in the fitted process
 #'(Bromaghin (2005).
 #'@param perimeter.factor Factor by which to multiply the inputted mesh sizes
-#'to obtain mesh perimeters, which are required by the analyses. % (if using bar
-#'mesh perimeter.factor = 4; if using stretch mesh perimeter.factor = 2, the
+#'to obtain mesh perimeters, which are required by the analyses.  (if using bar
+#'mesh perimeter.factor = 2; if using stretch mesh perimeter.factor = 1, the
 #'default).
 #'@param x an object of class \code{fit.catch}.
 #'@param object an object of class \code{fit.catch}.
