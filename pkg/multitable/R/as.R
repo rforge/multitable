@@ -476,16 +476,20 @@ subsetdim <-
 make.dimnames.consistent <-
     function(x, bm){
         dimnames(x) <- dimnames(bm(x))
+        return(make.required.dimnames(x, prefix = ""))
+    }
+
+make.required.dimnames <-
+    function(x, clear.names = FALSE, prefix = "name"){
+        if(clear.names) dimnames(x) <- NULL
         if(is.null(dimnames(x))){
-            dimnames(x) <- lapply(dim(x), function(di) seq_len(di))
+            dimnames(x) <- lapply(dim(x), function(di) numnames(di, prefix))
         } else {
             nullDims <- sapply(dimnames(x), is.null)
             if(any(nullDims)){
-                dimnames(x)[nullDims] <- lapply(dim(x)[nullDims], function(di) seq_len(di))
+                dimnames(x)[nullDims] <- lapply(dim(x)[nullDims], function(di) numnames(di, prefix))
             }
         }
-                                        # if(is.null(dimnames(x)))
-                                        # dimnames(x) <- lapply(dim(x), function(di) seq_len(di))
         return(x)
     }
 

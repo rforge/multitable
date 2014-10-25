@@ -1,4 +1,5 @@
-# SIMPLE ALGORITHM:  only accepts and returns data lists -- otherwise an error is thrown
+# SIMPLE ALGORITHM: only accepts and returns data lists -- otherwise
+# an error is thrown
 #
 # 1. only allow data lists as input
 # 2. loop over each variable
@@ -11,7 +12,8 @@
 # 2g.	skip variable if there is an error in variable
 # 2h.	add variable to an output list
 # 3. put all variables into a single data list
-# 4. return the marginalised data list unless its not possible, in which case throw an error
+# 4. return the marginalised data list unless its not possible,
+#    in which case throw an error
 
 dlapply <- function(X, MARGIN, FUN, ...){ #, LFUN, VMODE){
 
@@ -19,8 +21,8 @@ dlapply <- function(X, MARGIN, FUN, ...){ #, LFUN, VMODE){
 	if(!is.data.list(X))
 		stop("X must be a data list")
 	
-	# allow dimensions to be specified by dim ids -- i.e. names of dimensions
-  # (suggested by ben bolker)
+	# allow dimensions to be specified by dim ids -- i.e. names of
+	# dimensions (suggested by ben bolker)
 	if(is.character(MARGIN)) MARGIN <- pmatch(MARGIN, dimids(X))
   
 	# what to call a new dimension that could
@@ -144,31 +146,36 @@ variable_margins <- function(X, MARGIN){
 }
 
 
-##### Three functions for detecting when variables should be removed from dlapply output:
+##### Three functions for detecting when variables should be removed
+##### from dlapply output:
 
 replication.problem <- function(margini, Xnamesi){
-	if(length(margini) == 0){
-		message(paste("omitting", Xnamesi,"because it is not replicated along MARGIN"))
-		return(TRUE)
-	}
-	else
-		return(FALSE)
+    if(length(margini) == 0){
+        message(paste("omitting", Xnamesi,
+                      "because it is not replicated along MARGIN"))
+        return(TRUE)
+    }
+    else
+        return(FALSE)
 }
 
 apply.problem <- function(Xi, Xnamesi){
-	if(class(Xi) == "try-error"){
-		message(paste("omitting", Xnamesi,"because of the following error:\n",Xi[1]))
-		return(TRUE)
-	}
-	else
-		return(FALSE)
+    if(class(Xi) == "try-error"){
+        message(paste("omitting", Xnamesi,
+                      "because of the following error:\n",
+                      Xi[1]))
+        return(TRUE)
+    }
+    else
+        return(FALSE)
 }
 
 data.list.problem <- function(Xi, Xnamesi){
-	if(class(Xi) == "try-error"){
-		message("omitting", Xnamesi,"because it can't be added to a data list")
-		return(TRUE)
-	}
-	else
-		return(FALSE)
+    if(class(Xi) == "try-error"){
+        message("omitting", Xnamesi,
+                "because it can't be added to a data list")
+        return(TRUE)
+    }
+    else
+        return(FALSE)
 }
