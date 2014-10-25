@@ -50,3 +50,21 @@ reorder2 <- function(x, X){
 rbind.rep <- function(x, times) matrix(x, times, length(x), byrow = TRUE)
 
 cbind.rep <- function(x, times) matrix(x, length(x), times, byrow = FALSE)
+
+
+#' Generates numbered names
+#'
+#' Generates numbered names based on a character prefix that will
+#' be alphanumerically sorted as expected.
+#'
+#' @param n Number of names.
+#' @param prefix Character prefix to go in front of the numbers.
+#' @return A character vector of numbered names.
+#' @export
+numnames <- function(n, prefix = "name"){
+	n <- as.integer(n)
+	if(n < 1) stop("number of names must be one or more")
+	zeropad.code <- paste("%0", nchar(n), ".0f", sep = "")
+	numpart <- sprintf(zeropad.code, 1:n)
+	paste(prefix, numpart, sep = "")
+}
