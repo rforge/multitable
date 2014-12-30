@@ -34,8 +34,8 @@ NULL
 #' @return The expectation of \code{x}.
 #' @export
 #' @examples
-#'  E.(1:10)
-#'  E.(1:10, 10:1)
+#' E.(1:10)
+#' E.(1:10, 10:1)
 E. <- function(x, p){
 	if(missing(p)) return(mean(x))
 	if(any(p < 0)) stop('p must contain positive numbers only')
@@ -54,9 +54,11 @@ E. <- function(x, p){
 #' @return The variance of \code{x}.
 #' @export
 #' @examples
-#'  # Note the difference between population and sample variance
-#'  var.(1:10)
-#'  var(1:10)
+#' # Note the difference between population and sample variance
+#' var.(1:10)
+#' var(1:10)
+#' # But we can make up the difference with,
+#' var(1:10)*(9/10)
 var. <- function(x, p) E.(x^2, p) - (E.(x, p)^2)
 
 #' Population-level standard deviation
@@ -259,15 +261,61 @@ cm. <- function(df, p){
 #'  \code{support} is missing).
 #' @export
 #' @examples
-#'   Edist(dnorm) # exactly 0
-#'   Edist(dpois, lambda = 1, support = 0:3) # bad approximation to 1
-#'   Edist(dpois, lambda = 1, support = 0:100) # (numerically) exactly 1
-#'   Edist(dbinom, size = 4, prob = 0.51, support = 0:4)
-#'   Edist(dgamma, lower = 0, shape = 2.3, scale = 0.2)
-#'   Edist(sin, lower = -1, upper = 1)
+#' Edist(dnorm) # exactly 0
+#' Edist(dpois, lambda = 1, support = 0:3) # bad approximation to 1
+#' Edist(dpois, lambda = 1, support = 0:100) # (numerically) exactly 1
+#' Edist(dbinom, size = 4, prob = 0.51, support = 0:4)
+#' Edist(dgamma, lower = 0, shape = 2.3, scale = 0.2)
+#' Edist(sin, lower = -1, upper = 1)
 Edist <- function(dfunc, lower = -Inf, upper = Inf, support, ...){
   integrand <- function(x.){x. * dfunc(x. , ...)}
   if(missing(support)) out <- integrate(integrand, lower, upper)
   else out <- sum(integrand(support))
   return(out)
+}
+
+#' Conditional expectation
+#'
+#' @param x A numeric vector giving the population
+#' @param g An atomic vector on which to condition
+#' @param p weights
+#' @return The conditional expectation of \code{x}.
+#' @rdname cE.
+#' @export
+#' @examples
+#' n <- 100
+#' x <- rnorm(n)
+#' y <- rnorm(n)
+#' g <- rep(letters[1:10], 10)
+#'
+#' # law of total expectation
+#' E.(x)
+#' E.(cE.(x, g))
+#'
+#' # law of total variance
+#' var.(x)
+#' E.(cvar.(x, g)) + var.(cE.(x, g))
+#'
+#' # law of total covariance
+#' cov.(x, y) 
+#' E.(ccov.(x, y, g)) + cov.(cE.(x, g), cE.(y, g))
+cE. <- function(x, g, p) {
+    if(missing(p)) {
+        return(sapply(split(x, g), mean))
+    } else {
+        return(mapply(E., split(x, g), split(p, g)))
+    }
+}
+
+#' @rdname cE.
+#' @export
+cvar. <- function(x, g, p) {
+    cE.(x^2, g, p) - (cE.(x, g, p)^2)
+}
+
+#' @param y another vector
+#' @rdname cE.
+#' @export
+ccov. <- function(x, y, g, p) {
+    cE.(x*y, g, p) - (cE.(x, g, p) * cE.(y, g, p))
 }

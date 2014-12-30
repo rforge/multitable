@@ -8,5 +8,3 @@ Maintainer: Steve Walker <steve.walker@utoronto.ca>
 Description: Population-level moments
 License: GPL-2
 LazyLoad: yes
-Collate:
-    'popmoments.R'
