@@ -77,6 +77,7 @@ variable <- function(x, dimids, name){
 		x <- as.matrix(x)
 	if(is.recursive(x))
 		stop("lists not allowed -- perhaps try using variableGroup?")
+        if(missing(dimids)) dimids <- "D1"
 	out <- data.list(x, match.dimids = list(dimids), drop = FALSE)
 	if(!missing(name))
 		names(out) <- name[1]
