@@ -11,6 +11,10 @@
 #'@param binsize positive number giving the size of the histogram bins that
 #'fish lengths are categorized into.
 #'@param data.name name of the data set.
+#'@param additional_mesh vector of mesh sizes to be considered by the model, 
+#'which are not in the data .
+#'@param additional_lens vector of fish lengths to be considered by the model,
+#'which are not in the data.
 #'@param x an object of class \code{catch}.
 #'@param y not used...only present for consistency with default S3 method.
 #'@param mesh.pos a character string indicating where to print the mesh sizes.
@@ -38,7 +42,8 @@
 #'@seealso \code{\link{fit.catch}}, \code{\link{plot.catch}}
 #'@export
 make.catch <-
-function(mesh, lens, counts, binsize=20, data.name = deparse(substitute(lens))){
+function(mesh, lens, counts, binsize=20, data.name = deparse(substitute(lens)),
+         additional_mesh = numeric(), additional_lens = numeric()){
 	
 	if((!is.vector(mesh))|(!is.vector(lens)))stop("mesh and size must be vectors")
 	
@@ -49,8 +54,8 @@ function(mesh, lens, counts, binsize=20, data.name = deparse(substitute(lens))){
 		)
 		if(binsize<1)stop("binsize must be positive")
 			
-		breaks <- fish.bins(lens,binsize)
-		meshes <- sort(unique(mesh))
+		breaks <- fish.bins(c(lens, additional_lens), binsize)
+		meshes <- sort(unique(c(mesh, additional_mesh)))
 
 		n.bins <- length(breaks)-1
 		n.meshes <- length(meshes)

@@ -3,7 +3,7 @@
 #'Gillnet size selectivity analyses for Ontario Ministry of Natural Resources.
 #'
 #'\tabular{ll}{ Package: \tab omnr.gillnet\cr Type: \tab Package\cr Version:
-#'\tab 1.1\cr Date: \tab 2011-11-25\cr License: \tab GPL-2\cr LazyLoad: \tab
+#'\tab 1.2\cr Date: \tab 2018-02-27\cr License: \tab GPL-2\cr LazyLoad: \tab
 #'yes\cr LazyData: \tab yes\cr } The most important functions are
 #'\code{\link{make.catch}} and \code{\link{fit.catch}}.
 #'
@@ -22,10 +22,6 @@
 #'89-116.
 #'@keywords package
 NULL
-
-
-
-
 
 #'Gillnet data
 #'
@@ -49,6 +45,3 @@ NULL
 #'data(yellow.perch)
 #'
 NULL
-
-
-
