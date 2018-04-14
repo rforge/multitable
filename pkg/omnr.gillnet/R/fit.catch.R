@@ -5,7 +5,6 @@
 #'slightly modified model with a tangle parameter (see Bromaghin 2005 for the
 #'concept of tangle parameters).
 #'
-#'
 #'@aliases fit.catch plot.fit.catch deviance.fit.catch AIC.fit.catch
 #'print.fit.catch coef.fit.catch coefficients.fit.catch
 #'@param catch an object of class \code{catch} created using
